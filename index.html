@@ -38,7 +38,7 @@
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Intro PAGE -->
     <div date-role="page" id="intro_page" class="page_box">
         <h1>Intro Page</h1>
-        <div data-role="content">
+        <div data-role="main">
             우리는 홈페이지는 만드는 홈페이지이다.
             원하는 디자인을 골라서 문의해라.
         </div>
@@ -49,7 +49,7 @@
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Design PAGE -->
     <div data-role="page" id="design_page" class="page_box">
         <h1>Design Page</h1>
-        <div data-role="content" id="design_list">
+        <div data-role="main" id="design_list">
             <ul>
                 <li><a href="#design1" data-role="button" data-rel="dialog" data-transition="slideup">디자인1 보기</a></li>
                 <li><a href="#design2" data-role="button" data-rel="dialog" data-transition="slideup">디자인2 보기</a></li>
@@ -78,7 +78,27 @@
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Comm PAGE -->
     <div data-role="page" id="comm_page" class="page_box">
-        Comm Page
+        <h1>Comm Page</h1>
+        <div data-role="main">
+            <table data-role="table" id="comm_table" data-mode="">
+                <thead>
+                    <tr>
+                        <th data-priority="2">No</th>
+                        <th data-priority="2">Title</th>
+                        <th data-priority="2">Name</th>
+                        <th data-priority="2">Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th>1</th>
+                        <td><a href="">Title1</a></td>
+                        <td>admin</td>
+                        <td>201-03-25</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
 
