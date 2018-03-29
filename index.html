@@ -51,19 +51,23 @@
         <h1>Design Page</h1>
         <div data-role="main" id="design_list">
             <ul>
-                <li><a href="#design1" data-role="button" data-rel="dialog" data-transition="slideup">디자인1 보기</a></li>
+                <li>
+                    <a href="#design1"
+                    data-role="button"
+                    data-rel="popup"
+                    data-position-to="window"
+                    data-transition="pop">디자인1 보기</a>
+                </li>
                 <li><a href="#design2" data-role="button" data-rel="dialog" data-transition="slideup">디자인2 보기</a></li>
                 <li><a href="#design3" data-role="button" data-rel="dialog" data-transition="slideup">디자인3 보기</a></li>
             </ul>
         </div>
     </div>
 
-
-
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Design List -->
-    <div data-role="page" id="design1">
+    <div data-role="popup" id="design1">
         <h1>이미지 있는걸로</h1>
-        <a href="#design_page" data-role="button" data-rel="back">목록보기</a>
+        <a href="#" data-role="button" data-rel="back">목록보기</a>
     </div>
     <div data-role="page" id="design2">
         <h1>이미지 있는걸로2ㅇㅇㅇ</h1>
