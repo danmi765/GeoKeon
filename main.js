@@ -6,4 +6,3 @@ var footer = "<div data-role='footer' id='main_footer'>FOOTER</div>";
 
 $(".page_box").append(footer);
 $(".page_box").prepend(header);
-

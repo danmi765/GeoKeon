@@ -9,12 +9,14 @@
         <link rel="stylesheet" href="main.css">
 
         <!-- jQuery Mobile -->
-        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
+        <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
         <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
 
-        <script src="jquery-1.11.1.min.js"></script>
-        <script src="jquery.mobile-1.4.5.min.js"></script>
+        <!-- jQuery Mobile : Local -->
+        <link rel="stylesheet" href="./jquery.mobile-1.4.5.min.css" />
+        <script src="./jquery-1.11.1.min.js"></script>
+        <script src="./jquery.mobile-1.4.5.min.js"></script>
 
 
         <link rel="stylesheet" href="main.css" />
@@ -23,24 +25,28 @@
 
     <!-- Main PAGE -->
     <div data-role="page" id="main_page" class="page_box">
-        <h1>Main PAGE</h1>
-        <div class="main_banner">
-            <ul>
-                <li><a href="">banner</a></li>
-                <li><a href="">banner</a></li>
-                <li><a href="">banner</a></li>
-                <li><a href="">banner</a></li>
-            </ul>
+        <div role="main" class="ui-content">
+            <h1>Main PAGE</h1>
+            <div class="main_banner">
+                <ul>
+                    <li><a href="">banner</a></li>
+                    <li><a href="">banner</a></li>
+                    <li><a href="">banner</a></li>
+                    <li><a href="">banner</a></li>
+                </ul>
+            </div>
         </div>
     </div>
 
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Intro PAGE -->
     <div date-role="page" id="intro_page" class="page_box">
-        <h1>Intro Page</h1>
-        <div data-role="main">
-            우리는 홈페이지는 만드는 홈페이지이다.
-            원하는 디자인을 골라서 문의해라.
+        <div role="main" class="ui-content">
+            <h1>Intro Page</h1>
+            <div data-role="main">
+                우리는 홈페이지는 만드는 홈페이지이다.
+                원하는 디자인을 골라서 문의해라.
+            </div>
         </div>
     </div>
 
@@ -48,42 +54,62 @@
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Design PAGE -->
     <div data-role="page" id="design_page" class="page_box">
-        <h1>Design Page</h1>
-        <div data-role="main" id="design_list">
+        <div role="main" id="design_list" class="ui-content">
+            <h1>Design Page</h1>
             <ul>
                 <li>
                     <a href="#design1"
-                    data-role="button"
-                    data-rel="popup"
-                    data-position-to="window"
-                    data-transition="pop">디자인1 보기</a>
+                        data-rel="popup"
+                        data-position-to="window"
+                        data-transition="pop"
+                        class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">디자인1 보기</a>
                 </li>
-                <li><a href="#design2" data-role="button" data-rel="dialog" data-transition="slideup">디자인2 보기</a></li>
-                <li><a href="#design3" data-role="button" data-rel="dialog" data-transition="slideup">디자인3 보기</a></li>
+                <li>
+                    <!-- <a href="#design2" data-role="button" data-rel="dialog" data-transition="slideup">디자인2 보기</a> -->
+                    <a href="#design2"
+                        data-rel="popup"
+                        data-position-to="window"
+                        data-transition="pop"
+                        class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">디자인2 보기</a>
+                </li>
+                <li>
+                    <!-- <a href="#design3" data-role="button" data-rel="dialog" data-transition="slideup">디자인3 보기</a> -->
+                    <a href="#design3"
+                        data-rel="popup"
+                        data-position-to="window"
+                        data-transition="pop"
+                        class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">디자인3 보기</a>
+                </li>
             </ul>
+            <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Design List -->
+            <div data-role="popup" id="design1" data-dismissible="false">
+                <div role="main" class="ui-content">
+                    <h1>이미지 있는걸로</h1>
+                    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">목록보기</a>
+                </div>
+            </div>
+            <div data-role="popup" id="design2" data-dismissible="false">
+                <div role="main" class="ui-content">
+                    <h1>이미지 있는걸로2ㅇㅇㅇ</h1>
+                    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">목록보기</a>
+                </div>
+            </div>
+            <div data-role="popup" id="design3" data-dismissible="false">
+                <div role="main" class="ui-content">
+                    <h1>이미지 있는걸로하자3</h1>
+                    <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">목록보기</a>
+                </div>
+            </div>
         </div>
     </div>
 
- <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Design List -->
-    <div data-role="popup" id="design1">
-        <h1>이미지 있는걸로</h1>
-        <a href="#" data-role="button" data-rel="back">목록보기</a>
-    </div>
-    <div data-role="page" id="design2">
-        <h1>이미지 있는걸로2ㅇㅇㅇ</h1>
-        <a href="#design_page" data-role="button" data-rel="back">목록보기</a>
-    </div>
-    <div data-role="page" id="design3">
-        <h1>이미지 있는걸로하자3</h1>
-        <a href="#design_page" data-role="button" data-rel="back">목록보기</a>
-    </div>
 
 
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Comm PAGE -->
     <div data-role="page" id="comm_page" class="page_box">
         <h1>Comm Page</h1>
-        <div data-role="main">
+        <div role="main" class="ui-content">
             <table data-role="table" id="comm_table" data-mode="">
                 <thead>
                     <tr>
