@@ -6,25 +6,23 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <title>메인페이지</title>
         <meta name="description" content="An interactive getting started guide for Brackets.">
-        <link rel="stylesheet" href="main.css">
 
         <!-- jQuery Mobile -->
-        <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-        <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script>
-        <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
-
+        <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" /> -->
+        <!-- <script src="http://code.jquery.com/jquery-1.11.1.min.js"></script> -->
+        <!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
         <!-- jQuery Mobile : Local -->
-        <link rel="stylesheet" href="./jquery.mobile-1.4.5.min.css" />
-        <script src="./jquery-1.11.1.min.js"></script>
-        <script src="./jquery.mobile-1.4.5.min.js"></script>
-
-
-        <link rel="stylesheet" href="main.css" />
+        <link rel="stylesheet" href="./lib/jquery.mobile-1.4.5.min.css" />
+        <script src="./lib/jquery-1.11.1.min.js"></script>
+        <script src="./lib/jquery.mobile-1.4.5.min.js"></script>
+        <!-- Custom Stylesheet -->
+        <link rel="stylesheet" href="./css/main.css" />
     </head>
     <body>
 
     <!-- Main PAGE -->
     <div data-role="page" id="main_page" class="page_box">
+        <header class="header_main_page"></header>
         <div role="main" class="ui-content">
             <h1>Main PAGE</h1>
             <div class="main_banner">
@@ -36,11 +34,13 @@
                 </ul>
             </div>
         </div>
+        <footer class="footer_main_page"></footer>
     </div>
 
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Intro PAGE -->
     <div date-role="page" id="intro_page" class="page_box">
+        <header class="header_intro_page"></header>
         <div role="main" class="ui-content">
             <h1>Intro Page</h1>
             <div data-role="main">
@@ -48,12 +48,14 @@
                 원하는 디자인을 골라서 문의해라.
             </div>
         </div>
+        <footer class="footer_intro_page"></footer>
     </div>
 
 
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Design PAGE -->
     <div data-role="page" id="design_page" class="page_box">
+        <header class="header_design_page"></header>
         <div role="main" id="design_list" class="ui-content">
             <h1>Design Page</h1>
             <ul>
@@ -101,6 +103,7 @@
                 </div>
             </div>
         </div>
+        <footer class="footer_design_page"></footer>
     </div>
 
 
@@ -108,8 +111,9 @@
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Comm PAGE -->
     <div data-role="page" id="comm_page" class="page_box">
-        <h1>Comm Page</h1>
+        <header class="header_comm_page"></header>
         <div role="main" class="ui-content">
+            <h1>Comm Page</h1>
             <table data-role="table" id="comm_table" data-mode="">
                 <thead>
                     <tr>
@@ -129,6 +133,7 @@
                 </tbody>
             </table>
         </div>
+        <footer class="footer_comm_page"></footer>
     </div>
 
 
@@ -159,7 +164,7 @@
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●js -->
 
     <!-- js -->
-    <script src="main.js"></script>
+    <script src="./script/main.js"></script>
 
     </body>
 </html>
