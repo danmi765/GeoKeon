@@ -14,12 +14,12 @@ $(window).load(function(){
 
     $( 'header' ).load( 'header.html', function() {
         console.log( 'header.html' );
+        $('#main_page').enhanceWithin();
     });
     $( 'footer' ).load( 'footer.html', function() {
         console.log( 'footer.html' );
+        $('#main_page').enhanceWithin();
     });
 
 
 })
-
-
