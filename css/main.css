@@ -1,58 +1,26 @@
-/*
-    기본색상 (보,연,노,주,갈)
+/* PC */
+@media all and (min-width: 1024px) {
 
-#730046
-#B4BF3S
-#FFCD30
-#E88E34
-#C93F0F
+    /* 헤더 */
+    .main_logo{position: absolute;top:0;left: 150px;}
+    .main_logo>a:link, .main_logo>a:visited{text-indent:-9999em; background:url(../img/logo.png) left center no-repeat; display:block; width:150px; height:70px;}
 
-*/
+    .header_main_page{outline: 1px solid #000;}
+    .main_header{ height: 70px;padding: 0 120px;}
+    .main_header>ul{margin:0 0 0 150px; padding: 10px 0;}
+    .main_header>ul:after{content:''; display:block; clear: both;}
+    .main_header>ul>li{float:left;padding:0 15px;}
+    .main_header>ul>li>a:link, .main_header>ul>li>a:visited{text-decoration:none;display:block;height:50px;width:100px;text-indent:-9999em;}
+
+    .cate_intro{background:url(../img/intro.png) left center no-repeat;}
+    .cate_design{background:url(../img/design.png) left center no-repeat;}
+    .cate_comm{background:url(../img/comm.png) left center no-repeat;}
 
 
+    /* 배너 */
+    .main_banner{}
+    .main_banner_inner{position:relative; height:0; width:100% padding-top:0;}
+    .main_banner_inner>li{position:absolute;top:0;left:0; width:100%; height:100%;}
+    .banner_img{width:100%;height:auto;}
 
-/* RESET CSS*/
-body{
-    font-family: 'Nanum Gothic', sans-serif;
-    font-size:14px;
 }
-body, h1, h2, h3, h4, h5, h6, p, div, img, span, address, pre, form, fieldset, textarea, input, select, table, th, td{
-    margin:0;
-    padding:0;
-    font-style:normal;
-}
-fieldset, img{border:none;}
-ul, ol{
-    margin:0;
-    padding:0;
-    list-style:none;
-}
-table{border-collapse: collapse; }
-.removeitem{text-indent:-9999em; position:absolute;}
-legend{text-indent: -9999em;position:absolute;}
-
-
-
-     /* Main CSS */
-
-/* 헤더 */
-.main_logo{position: absolute;top: 15px;left: 150px;}
-.header_main_page{outline: 1px solid #000;}
-.main_header{ height: 70px;padding: 0 120px;}
-.main_header>ul{margin:0 0 0 150px; padding: 10px 0;}
-.main_header>ul:after{content:''; display:block; clear: both;}
-.main_header>ul>li{float:left;padding:0 15px;}
-.main_header>ul>li>a:link, .main_header>ul>li>a:visited{text-decoration:none;display:block;height:50px;width:100px;text-indent:-9999em;}
-
-.cate_intro{background:url(../img/intro.png) left center no-repeat;}
-.cate_design{background:url(../img/design.png) left center no-repeat;}
-.cate_comm{background:url(../img/comm.png) left center no-repeat;}
-
-
-/* 배너 */
-.main_banner{}
-.main_banner_inner:after{content:''; display:block; clear:both;}
-.main_banner_inner{position:relative;width:400%;}
-.main_banner_inner>li{float:left; width:25%;}
-.banner_img{width:100%;height:auto;}
-
