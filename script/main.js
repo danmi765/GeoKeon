@@ -7,15 +7,19 @@
 // $(".page_box").append(footer);
 // $(".page_box").prepend(header);
 $(window).load(function(){
+
+    /* PAGE 내에 HEADER,FOOTER 태그 추가 */
+    $(".page_box").prepend("<header class='header_main_page'></header>");
+    $(".page_box").append("<footer class='footer_main_page'></footer>");
+
     $( 'header' ).load( 'header.html', function() {
         console.log( 'header.html' );
     });
     $( 'footer' ).load( 'footer.html', function() {
         console.log( 'footer.html' );
     });
+
+
 })
 
 
-/* PAGE 내에 HEADER,FOOTER 태그 추가 */
-$(".h_page").prepend("<header class='header_main_page'></header>");
-$(".h_page").append("<footer class='footer_main_page'></footer>");
