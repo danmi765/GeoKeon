@@ -20,26 +20,28 @@
     </head>
     <body>
 
-    <!-- Main PAGE -->
-    <div data-role="page" id="main_page" class="page_box h_page">
-        <div role="main" class="ui-content">
-            <h1>Main PAGE</h1>
+
+ <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Main PAGE -->
+    <div data-role="page" id="main_page" class="page_box">
+        <div role="main" class="">
+            <!-- <h1 class="page_title">Main PAGE</h1> -->
             <div class="main_banner">
-                <ul>
-                    <li><a href="">banner</a></li>
-                    <li><a href="">banner</a></li>
-                    <li><a href="">banner</a></li>
-                    <li><a href="">banner</a></li>
+                <ul class="main_banner_inner">
+                    <li><img src="img/banner1.JPG" class="banner_img" /></li>
+                    <li><img src="img/banner2.jpg" class="banner_img" /></li>
+                    <li><img src="img/banner3.jpg" class="banner_img" /></li>
+                    <li><img src="img/banner4.jpg" class="banner_img" /></li>
                 </ul>
             </div>
         </div>
     </div>
 
 
+
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Intro PAGE -->
-    <div date-role="page" id="intro_page" class="page_box h_page">
+    <div date-role="page" id="intro_page" class="page_box">
         <div role="main" class="ui-content">
-            <h1>Intro Page</h1>
+            <h2 class="page_title">Intro Page</h2>
             <div>
                 우리는 홈페이지는 만드는 홈페이지이다.
                 원하는 디자인을 골라서 문의해라.
@@ -50,9 +52,9 @@
 
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Design PAGE -->
-    <div data-role="page" id="design_page" class="page_box h_page">
+    <div data-role="page" id="design_page" class="page_box">
         <div role="main" id="design_list" class="ui-content">
-            <h1>Design Page</h1>
+            <h2 class="page_title">Design Page</h2>
             <ul>
                 <li>
                     <a href="#design1"
@@ -78,7 +80,9 @@
                         class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">디자인3 보기</a>
                 </li>
             </ul>
-            <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Design List -->
+
+
+            <!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■Design List -->
             <div data-role="popup" id="design1" data-dismissible="false">
                 <div role="main" class="ui-content">
                     <h1>이미지 있는걸로</h1>
@@ -104,9 +108,9 @@
 
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Comm PAGE -->
-    <div data-role="page" id="comm_page" class="page_box h_page">
+    <div data-role="page" id="comm_page" class="page_box">
         <div role="main" class="ui-content">
-            <h1>Comm Page</h1>
+            <h2 class="page_title">Comm Page</h2>
             <table data-role="table" id="comm_table" data-mode="">
                 <thead>
                     <tr>
@@ -132,11 +136,10 @@
 
 
  <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●Comm List PAGE -->
-    <div data-role="page" id="comm_list1" class="page_box h_page">
-        <h1>Comm Page</h1>
+    <div data-role="page" id="comm_list1" class="page_box">
+        <h2 class="page_title">Comm Page</h2>
         <div>
-            <a href="#" data-rel="back" class="ui-btn">목록으로</a> 
-            <!-- 첫 index화면에서 뜨고 comm페이지에 title클릭하여 들어가서 클릭하면 돌아온 화면에서는 사라짐 -->
+            <a href="#" data-rel="back" class="ui-btn">목록으로</a>
         </div>
         <div>
             <div>Title</div>
