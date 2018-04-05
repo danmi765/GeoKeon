@@ -14,3 +14,8 @@ $(window).load(function(){
         console.log( 'footer.html' );
     });
 })
+
+
+/* PAGE 내에 HEADER,FOOTER 태그 추가 */
+$(".h_page").prepend("<header class='header_main_page'></header>");
+$(".h_page").append("<footer class='footer_main_page'></footer>");
