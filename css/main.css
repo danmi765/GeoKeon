@@ -17,13 +17,7 @@
     .cate_comm{background:url(../img/comm.png) left center no-repeat;}
 
 
-    /* 배너 */
-    .banner{position:relative;}
-    .banner_inner{width:500%;overflow:hidden;position:relative;}
-    .banner_inner:after{content:''; display:block; clear:both;}
-    .banner_inner > li{float:left;display:block; width:20%;}
-    .banner_img{width:100%;height:auto;}
-    .banner_btn{position:absolute; right:50%; bottom:20px;}
+
 
 
 
