@@ -2,6 +2,8 @@
 .banner{position:relative;}
 .banner_inner{width:500%;overflow:hidden;position:relative;}
 .banner_inner:after{content:''; display:block; clear:both;}
-.banner_inner > li{float:left;display:block; width:20%;}
+.banner_inner > li{float:left;display:block; width:20%;left:0;}
 .banner_img{width:100%;height:auto;}
-.banner_btn{position:absolute; right:50%; bottom:20px;}
+.banner_btn:after{content:''; display:block; clear:both;}
+.banner_btn{position:absolute; right:47%; bottom:20px;}
+.banner_btn > li{float:left;background:url(../img/slideBtn.png) left center no-repeat;width:15px;height:15px;background-size:15px;padding:0 3px;cursor:pointer;}
