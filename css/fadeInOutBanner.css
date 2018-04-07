@@ -1,7 +1,7 @@
 /* fadeInOut 배너 */
 .banner{position:relative; background: #000;}
 .banner_inner{position:relative;}
-.banner_inner>li{position:absolute;top:0;left:0;}
+.banner_inner>li{position:absolute;top:0;left:0;opacity:0;}
 .banner_img{width:100%;height:auto;}
 
 .banner_btn{z-index:10; position:absolute; top:0; left:0; width:100%;}
