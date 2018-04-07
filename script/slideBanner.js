@@ -79,13 +79,15 @@ $(".banner_btn > li").hover(function(){
     $(".banner_btn > li").not(this).removeAttr("style");
     $(this).css("background-image","url(img/slideBtnOver.png)");
 
-    $(".banner_inner").css("left", btnNo*-100 + "%").stop().animate({"left" : btnNo*-100 + "%"}, 3000, function(){ $(this).css("left", btnNo*-100 + "%")});
+    curPosi = btnNo * -100;
 
-// 마우스 내리면 모든 스타일 제거
-}, function(){
-     $(".banner_btn > li").removeAttr("style");
+    $(".banner_inner").stop().animate({"left" : curPosi + "%"}, 1000, function(){ $(this).css("left", curPosi + "%")});
 
-});
+    // 마지막 또는 처음 이미지일 경우 방향전환
+    if( curPosi == (curImg-1)*-100 ){ direction = -1; }
+    else if( curPosi == 0 ){ direction = 1; }
+
+}, function(){});
 
 
 
