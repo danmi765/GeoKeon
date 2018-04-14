@@ -1,11 +1,11 @@
+/* 게시판 에디터 활성화 */
+CKEDITOR.replace( 'editor1' );
 
-/* header,  footer 삽입 */
-// var header = "<div data-role='header' id='main_header'><ul><li><a href='#intro_page'>소개</a></li><li><a href='#design_page'>디자인</a></li><li><a href='#comm_page'>커뮤니티</a></li></ul></div>";
-//
-// var footer = "<div data-role='footer' id='main_footer'>FOOTER</div>";
-//
-// $(".page_box").append(footer);
-// $(".page_box").prepend(header);
+// 이미지업로드 활성화
+CKEDITOR.replace( 'editor1', {
+    filebrowserUploadUrl: '/topic/upload'
+});
+
 $(window).load(function(){
 
     /* PAGE 내에 HEADER,FOOTER 태그 추가 */
@@ -20,7 +20,6 @@ $(window).load(function(){
         console.log( 'footer.html' );
         $('#main_page').enhanceWithin();
     });
-
 
 
 
