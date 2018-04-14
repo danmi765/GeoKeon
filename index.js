@@ -5,11 +5,9 @@ const port = 8000;
 const express = require('express');
 const multer = require('multer');
 const app = express();
-const router = express.Router();
 const bodyParser = require('body-parser');
-const router = express.Router();
 
-const uploadSetting = multer({dest:"pages/uploads/"});
+const uploadSetting = multer({dest:"pages/img/upload/"});
 
 app.use(express.static('pages'));
 
@@ -27,22 +25,20 @@ app.post('/upload&responseType=json', uploadSetting.single('upload'), function(r
   var fileName = req.file.filename;
   var filePath = req.file.path;
   var originalName = req.file.originalname;
+  var newPath = "pages/img/upload/" + req.file.originalname;
 
-  console.log('upload tmpPath:', tmpPath, '/fileName:', fileName);
-  console.log('upload tmpPath:', req.file);
-  console.log('req.query:', req.query);
+  console.log('upload file:', req.file);
 
-  var newPath = "pages/uploads/" + originalName;
   fs.rename(tmpPath, newPath, function (err) {
-    if (err) {
-      console.log(err);
-    }
-    // var html;
-    // html = "잘됐다";
-    res.send({
-        "uploaded": 1,
-        "fileName": fileName,
-        "url": filePath
-    });
+      if (err) {
+        console.log(err);
+      }
+      var url = `'pages/img/upload/${req.file.originalname}'`;
+
+      res.send({
+          "uploaded": 1,
+          "fileName": fileName,
+          "url": url
+      });
   });
 });
