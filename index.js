@@ -21,24 +21,25 @@ app.listen(port);
 console.log(`Server running at http://127.0.0.1:${port}/`);
 
 app.post('/upload&responseType=json', uploadSetting.single('upload'), function(req,res) {
-  var tmpPath = req.file.path;
-  var fileName = req.file.filename;
-  var filePath = req.file.path;
-  var originalName = req.file.originalname;
-  var newPath = "pages/img/upload/" + req.file.originalname;
+    var tmpPath = req.file.path;
+    var fileName = req.file.filename;
+    var filePath = req.file.path;
+    var originalName = req.file.originalname;
+    var newPath = "pages/img/upload/" + req.file.originalname;
 
-  console.log('upload file:', req.file);
+    console.log('upload file:', req.file);
 
-  fs.rename(tmpPath, newPath, function (err) {
-      if (err) {
-        console.log(err);
-      }
-      var url = `'pages/img/upload/${req.file.originalname}'`;
+    fs.rename(tmpPath, newPath, function (err) {
+        if (err) {
+            console.log(err);
+            return res.send({error: err});
+        }
+        var url = `'pages/img/upload/${req.file.originalname}'`;
 
-      res.send({
-          "uploaded": 1,
-          "fileName": fileName,
-          "url": url
-      });
-  });
+        res.send({
+            "uploaded": 1,
+            "fileName": fileName,
+            "url": url
+        });
+    });
 });
