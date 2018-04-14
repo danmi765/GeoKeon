@@ -1,6 +1,7 @@
-/* 게시판 에디터 활성화 , 이미지 업로드 활성화 */
+
+/* 게시판 에디터 활성화 */
 CKEDITOR.replace( 'editor1', {
-    filebrowserUploadUrl: '../topic/upload'
+    filebrowserUploadUrl: '/upload'
 });
 
 $(window).load(function(){
@@ -21,16 +22,3 @@ $(window).load(function(){
 
 
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
