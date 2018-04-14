@@ -3,7 +3,7 @@
 
 // 이미지업로드 활성화
 CKEDITOR.replace( 'editor1', {
-    filebrowserUploadUrl: '/topic/upload'
+    filebrowserUploadUrl: '/upload'
 });
 
 $(window).load(function(){
