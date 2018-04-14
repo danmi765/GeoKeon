@@ -7,6 +7,7 @@ const multer = require('multer');
 const app = express();
 const router = express.Router();
 const bodyParser = require('body-parser');
+const router = express.Router();
 
 const uploadSetting = multer({dest:"pages/uploads/"});
 

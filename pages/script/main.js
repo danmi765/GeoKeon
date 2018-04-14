@@ -1,7 +1,6 @@
-/* 게시판 에디터 활성화 */
-// CKEDITOR.replace( 'editor1' );
 
-// 이미지업로드 활성화
+
+/* 게시판 에디터 활성화 */
 CKEDITOR.replace( 'editor1', {
     filebrowserUploadUrl: '/upload'
 });
