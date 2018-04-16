@@ -5,7 +5,7 @@
     </head>
     <body>
 
-       <div data-role="page" id="comm_list1" class="page_box">
+       <div data-role="page" id="" class="page_box">
             <!-- 주메뉴 호출 -->
             <% include ../partials/header %>
 
@@ -13,7 +13,7 @@
             <div>
                 <a href="#" data-rel="back" class="ui-btn">목록으로</a>
             </div>
-            <div>
+            <div class="comm_">
                 <div>Title</div>
                 <div>
                     <textarea name="editor1"></textarea>
@@ -25,16 +25,6 @@
              button:delete
             </div>
         </div>
-
-
-        <script>
-
-            /* 게시판 에디터 활성화 */
-            CKEDITOR.replace( 'editor1', {
-                filebrowserUploadUrl: '/upload'
-            });
-
-        </script>
 
     </body>
 </html>

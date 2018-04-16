@@ -31,19 +31,24 @@ app.get('/intro', function(req, res) {
     res.render('intro');
 });
 
-// comm
-app.get('/comm', function(req, res) {
-    res.render('comm');
-});
-
 // design
 app.get('/design', function(req, res) {
     res.render('design');
 });
 
-// comm_list
-app.get('/comm_list', function(req, res) {
-    res.render('comm_list');
+// comm
+app.get('/comm', function(req, res) {
+    res.render('comm');
+});
+
+// comm_view
+app.get('/comm_view', function(req, res) {
+    res.render('comm_view');
+});
+
+// comm_write
+app.get('/comm_write', function(req, res) {
+    res.render('comm_write');
 });
 
 /* ■■■■■■■■■■■■페이지 설정 끝■■■■■■■■■■■■ */
