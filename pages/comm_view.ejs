@@ -10,20 +10,35 @@
             <% include ../partials/header %>
 
             <h2 class="page_title">Comm Page</h2>
-            <div>
-                <a href="#" data-rel="back" class="ui-btn">목록으로</a>
-            </div>
-            <div class="comm_">
-                <div>Title</div>
-                <div>
-                    <textarea name="editor1"></textarea>
+
+            <div class="comm_view_box">
+                <table id="comm_v_table">
+                    <tbody>
+                        <tr class="comm_v_title">
+                            <th>제목</th>
+                            <td colspan="3">냉무</td>
+                        </tr>
+                        <tr>
+                            <th>작성자</th>
+                            <td>관리자</td>
+                            <th>작성일</th>
+                            <td>2018-04-16</td>
+                        </tr>
+                        <tr class="comm_v_content">
+                            <td colspan="4" class="v_textarea">ddd</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="comm_v_back_btn">
+                    <a href="#" data-rel="back" class="ui-btn ui-shadow ui-corner-all">목록</a>
                 </div>
-                <div>comment</div>
+
             </div>
-            <div>
-                $admiun
-             button:delete
-            </div>
+
+            <!--   footer 호출     -->
+            <% include ../partials/footer %>
+
         </div>
 
     </body>
