@@ -1,7 +1,7 @@
 'use strict';
-const dbconn = require('../db/conn');
-const queries = require('../db/queries');
-const tables = require('../db/tables');
+const dbconn = require('../dbconn/conn');
+const queries = require('../dbconn/queries');
+const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
 
 exports.addUser = (req, res) => {
