@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <% include ../partials/head %>
+    </head>
+    <body>
+
+      <div data-role="page" id="comm_page" class="page_box">
+
+            <!-- 주메뉴 호출 -->
+            <% include ../partials/header %>
+
+            <div role="main" class="page_main">
+                <h2 class="page_title">Comm Page</h2>
+                <div class="board_search_bar">
+                    <button onclick="" type="button" title="검색" class="search_btn"><span>검색</span></button>
+                    <input type="text" class="search_text" />
+                    <select class="search_select" data-role="none">
+                        <option>제목</option>
+                        <option>작성자</option>
+                        <option>내용</option>
+                    </select>
+                </div>
+                <table data-role="table" id="comm_table" data-mode="">
+                    <thead>
+                        <tr>
+                            <th data-priority="2">번호</th>
+                            <th data-priority="2">제목</th>
+                            <th data-priority="2">작성자</th>
+                            <th data-priority="2">작성일</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>1</th>
+                            <td class="b_title"><a href="/comm_list">Title1</a></td>
+                            <td>admin</td>
+                            <td>201-03-25</td>
+                        </tr>
+                        <tr>
+                            <th>2</th>
+                            <td class="b_title"><a href="#comm_list1">Title2</a></td>
+                            <td>admin</td>
+                            <td>201-03-28</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </body>
+</html>

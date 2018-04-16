@@ -17,6 +17,25 @@
     .cate_comm{background:url(../img/comm.png) left center no-repeat;}
 
 
+    /* 페이지 상단 */
+    .page_title{background:#ddd; width:100%; text-align: center;padding:20px 0;height:200px;line-height:200px;font-size:3em;margin-bottom:50px;}
+
+
+    /* 문의게시판 */
+    #comm_table{width:1100px; margin:0 auto; border-top:2px solid #000; border-bottom:2px solid #000;font-size:12px;}
+    #comm_table > thead > tr  {background:#eee;}
+    #comm_table > thead > tr > th  {text-align: center; padding:.4em 0;}
+    #comm_table > thead > tr > th:nth-child(1)  {width:90px;}
+    #comm_table > thead > tr > th:nth-child(2)  {width:640px;}
+    #comm_table > thead > tr > th:nth-child(3)  {width:130px;}
+    #comm_table > thead > tr > th:nth-child(4)  {width:130px;}
+    #comm_table > tbody > tr {border-bottom:1px solid #ddd;};}
+    #comm_table > tbody > tr > th{text-align: center; padding:.4em 0;}
+    #comm_table > tbody > tr > td{text-align: center; padding:.4em 0;}
+    #comm_table > tbody > tr > td.b_title {text-align:left; padding-left:10px;}
+
+    .board_search_bar{width:1100px; height:30px; margin:0 auto;}
+    .board_search_bar > .search_select{float:right; width:70px;}
 
 
 
