@@ -10,6 +10,7 @@ const bodyParser = require('body-parser');
 const uploadSetting = multer({dest:"pages/img/upload/"});
 
 const dbconn = require('./db/conn');
+var defaultDB;
 
 // 주소 입력을 통해 서버 내부 특정 폴더경로에 접근 가능하게 설정
 app.use(express.static('pages'));
@@ -59,19 +60,19 @@ app.get('/comm_write', function(req, res) {
 /* ■■■■■■■■■■■■페이지 설정 끝■■■■■■■■■■■■ */
 
 
-/* ■■■■■■■■■■■■커뮤니티 게시판 라우팅 시작■■■■■■■■■■■■ */
-
-app.use('/account', require('./routes/account'));  // 2. 회원 관리
-
-/* ■■■■■■■■■■■■커뮤니티 게시판 라우팅 끝■■■■■■■■■■■■ */
+/* ■■■■■■■■■■■■커뮤니티 게시판 라우팅■■■■■■■■■■■■ */
+app.use('/commboard', require('./routes/account'));
 
 // Express 서버 시작.
 app.listen(port, () => {
-    dbconn.createDBPool({db: defaultDB}, (result)=>{
+    // Database 종류 선택 (mysql) 및 해당 데이터베이스 커넥션 풀 생성 해 놓음
+    // 이렇게 생성된 커넥션 풀 객체는 쿼리를 사용하는 js에서 계속 커넥션 객체를 받아 돌려 쓰고 반납하는 식으로 한다.
+    dbconn.createDBPool({db: 'mysql'}, (result)=>{
         if(result.result === 0){
             console.error('[Express] Error: create DB Connection Pool');
         }else{
-            console.log('[Express] Study Game Web Server started at %d port', port);
+            defaultDB = 'mysql';    // 기본 Database 종류 정의. 해당 변수는 다른 곳에 널리 쓰기 위해 최하단의 exports 문법에서 다시 사용됨.
+            console.log('[Express] GK2018 Server started at %d port', port);
         }
     });
 });
@@ -99,3 +100,6 @@ app.post('/upload&responseType=json', uploadSetting.single('upload'), function(r
       });
   });
 });
+
+/* 기본 DB정보 다른 곳에 쓸 수 있게 export */
+module.exports.db = defaultDB;
