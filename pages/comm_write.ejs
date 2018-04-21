@@ -5,38 +5,37 @@
     </head>
     <body>
 
-       <div data-role="page" id="" class="page_box">
+       <div data-role="page" id="" class="wrapper">
             <!-- 주메뉴 호출 -->
             <% include ../partials/header %>
+           <div role="main" class="contets_wrapper">
+               <h2 class="contents_title">Comm Page</h2>
+               <div class="contents_area">
+                    <div class="comm_contents">
+                        <table id="comm_write_table">
+                            <tbody>
+                                <tr class="comm_write_pw">
+                                    <th>비밀번호</th>
+                                    <td colspan="3"><input type="password" class="posts_pw" name="" maxlength="4" data-role="none" /></td>
+                                </tr>
 
-            <h2 class="page_title">Comm Page</h2>
-            <div class="comm_write_box">
+                                <tr class="comm_write_title">
+                                    <th>제목</th>
+                                    <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" /></td>
+                                </tr>
 
-                <table id="comm_w_table">
-                    <tbody>
-
-                        <tr class="comm_w_pw">
-                            <th>비밀번호</th>
-                            <td colspan="3"><input type="password" class="posts_pw" name="" maxlength="4" data-role="none" /></td>
-                        </tr>
-
-                        <tr class="comm_w_title">
-                            <th>제목</th>
-                            <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" /></td>
-                        </tr>
-
-                        <tr class="comm_w_content">
-                            <td colspan="4" class="w_textarea"><textarea name="editor1"></textarea></td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="comm_w_btn">
-                    <button onclick="" type="button" title="작성" class="comm_w_btn" ><span>작성</span></button>
-                    <button onclick="location.href='/comm'" type="button" title="취소" class="comm_w_cancel" ><span>취소</span></button>
-                </div>
-
-            </div>
+                                <tr class="comm_write_content">
+                                    <td colspan="4" class="posts_textarea"><textarea name="editor1"></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="comm_write_btn_area">
+                            <button onclick="" type="button" title="작성" class="comm_write_wirte_btn" ><span>작성</span></button>
+                            <button onclick="location.href='/comm'" type="button" title="취소" class="comm_write_cancel_btn" ><span>취소</span></button>
+                        </div>
+                    </div> <!-- comm_contents End -->
+               </div> <!-- contents_area End -->
+           </div>
 
             <!--   footer 호출     -->
             <% include ../partials/footer %>

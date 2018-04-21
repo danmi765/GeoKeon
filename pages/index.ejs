@@ -5,10 +5,10 @@
     </head>
     <body>
 
-        <div data-role="page" id="main_page" class="page_box">
+        <div data-role="page" id="main_page" class="wrapper">
             <!-- 주메뉴 호출 -->
             <% include ../partials/header %>
-            <div role="main" class="page_main">
+            <div role="main" class="contets_wrapper">
                 <div class="banner">
                     <ul class="banner_inner">
                         <li><img src="img/banner1.JPG" class="banner_img" /></li>
@@ -25,7 +25,10 @@
                         <li></li>
                     </ul>
                 </div>
-            </div>
+                <div class="main_contents_wrapper">
+
+                </div> <!-- main_contents_wrapper End -->
+            </div> <!-- contets_wrapper End -->
             <!--   footer 호출     -->
             <% include ../partials/footer %>
         </div>

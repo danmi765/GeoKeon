@@ -1,11 +1,11 @@
 
 // 서브메뉴
-$(".main_menu > li > a, .sub_menu").hover(function(e){
-    $(".main_header").stop().animate({"height" : "175px"}, 400, function(){});
-    $(".sub_menu").removeClass("clocking");
+$(".header_main_menu > li > a, .header_sub_menu").hover(function(e){
+    $(".header_area_wrapper").stop().animate({"height" : "175px"}, 400, function(){});
+    $(".header_sub_menu").removeClass("clocking");
 }, function(){
-    $(".main_header").stop().animate({"height" : "70px"}, 400, function(){});
-    $(".sub_menu").addClass("clocking");
+    $(".header_area_wrapper").stop().animate({"height" : "70px"}, 400, function(){});
+    $(".header_sub_menu").addClass("clocking");
 });
 
 
