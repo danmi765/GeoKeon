@@ -37,16 +37,6 @@ app.get('/intro', function(req, res) {
     res.render('intro');
 });
 
-// design
-app.get('/design', function(req, res) {
-    res.render('design');
-});
-
-// comm
-// app.get('/comm', function(req, res) {
-//     res.render('comm');
-// });
-
 // comm_view
 app.get('/comm_view', function(req, res) {
     res.render('comm_view');
@@ -84,6 +74,8 @@ app.post('/upload&responseType=json', uploadSetting.single('upload'), function(r
 
 /* ■■■■■■■■■■■■커뮤니티 게시판 라우팅■■■■■■■■■■■■ */
 app.use('/comm', require('./routes/commboard'));
+/* ■■■■■■■■■■■■디자인 메뉴 라우팅■■■■■■■■■■■■ */
+app.use('/design', require('./routes/design'));
 
 // Express 서버 시작.
 app.listen(port, () => {

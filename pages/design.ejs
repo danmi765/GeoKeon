@@ -13,29 +13,18 @@
             <div role="main" id="design_list" class="page_main">
                 <h2 class="page_title">Design Page</h2>
                 <ul>
-                    <li>
-                        <a href="#design1"
-                            data-rel="popup"
-                            data-position-to="window"
-                            data-transition="pop"
-                            class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">디자인1 보기</a>
-                    </li>
-                    <li>
-                        <!-- <a href="#design2" data-role="button" data-rel="dialog" data-transition="slideup">디자인2 보기</a> -->
-                        <a href="#design2"
-                            data-rel="popup"
-                            data-position-to="window"
-                            data-transition="pop"
-                            class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">디자인2 보기</a>
-                    </li>
-                    <li>
-                        <!-- <a href="#design3" data-role="button" data-rel="dialog" data-transition="slideup">디자인3 보기</a> -->
-                        <a href="#design3"
-                            data-rel="popup"
-                            data-position-to="window"
-                            data-transition="pop"
-                            class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">디자인3 보기</a>
-                    </li>
+                    <% designs.forEach((design, idx) => { %>   
+                        <li>
+                            <p>ID: <%= design.POTRPOLIO_ID %></p>
+                            <p>NAME: <%= design.PORTPOLIO_NAME %></p>
+                            <p>BUSINESS: <%= design.PORTPOLIO_BUSINESS %></p>
+                            <a href="#<%= design.POTRPOLIO_ID %>"
+                                data-rel="popup"
+                                data-position-to="window"
+                                data-transition="pop"
+                                class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">이미지 보기 - <%= design.POTRPOLIO_ID %></a>
+                        </li>
+                    <% }); %>
                 </ul>
 
 

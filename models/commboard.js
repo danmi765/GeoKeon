@@ -13,13 +13,8 @@ exports.list = (req, res) => {
             console.log('[list]error', error);
             return res.send({'error': error});
         }
-        console.log('/commboard/list results', results, results.BOARD_INQUIRY_ID);
-        return res.render('comm', {
-            inquiry_id: results[0].BOARD_INQUIRY_ID,
-            inquiry_title: results[0].BOARD_INQUIRY_TITLE ,
-            inquiry_writer: results[0].BOARD_INQUIRY_WRITER ,
-            inquiry_date: results[0].BOARD_INQUIRY_DATE
-        });
+        console.log('/commboard/list results', results);
+        return res.render('comm', { comms : results });
     });
 };
 
