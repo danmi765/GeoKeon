@@ -25,34 +25,23 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 // app.engine('html', require('ejs').renderFile); // HTML 형식으로 변환시키는 모듈
 
 
-/* ■■■■■■■■■■■■페이지 설정 시작■■■■■■■■■■■■ */
-
-// index
+/* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
+// GET index
 app.get('/', function(req, res) {
     res.render('index');
 });
 
-// intro
+// GET intro
 app.get('/intro', function(req, res) {
     res.render('intro');
-});
-
-// comm_view
-app.get('/comm_view', function(req, res) {
-    res.render('comm_view');
-});
-
-// comm_write
-app.get('/comm_write', function(req, res) {
-    res.render('comm_write');
 });
 
 // design_collention
 app.get('/design_collection', function(req, res) {
     res.render('design_collection');
 });
+/* ■■■■■■■■■■■■페이지 라우팅 끝■■■■■■■■■■■■ */
 
-/* ■■■■■■■■■■■■페이지 설정 끝■■■■■■■■■■■■ */
 
 /* 이미지 업로드 */
 app.post('/upload*', uploadSetting.single('upload'), function(req,res) {
@@ -78,7 +67,7 @@ app.post('/upload*', uploadSetting.single('upload'), function(req,res) {
 
 
 /* ■■■■■■■■■■■■커뮤니티 게시판 라우팅■■■■■■■■■■■■ */
-app.use('/comm', require('./routes/commboard'));
+app.use('/', require('./routes/commboard'));
 /* ■■■■■■■■■■■■디자인 메뉴 라우팅■■■■■■■■■■■■ */
 app.use('/design', require('./routes/design'));
 
@@ -96,4 +85,4 @@ app.listen(port, () => {
     });
 });
 
-module.exports.db = defaultDB;
+exports.db = defaultDB;

@@ -38,7 +38,7 @@
                                 <% comms.forEach((comm, idx) => { %>   
                                     <tr>
                                         <th><%= comm.BOARD_INQUIRY_ID %></th>
-                                        <td class="comm_title"><a href="/comm_view"><%= comm.BOARD_INQUIRY_TITLE %></a></td>
+                                        <td class="comm_title"><a href="/comm_view/<%= comm.BOARD_INQUIRY_ID %>"><%= comm.BOARD_INQUIRY_TITLE %></a></td>
                                         <td><%= comm.BOARD_INQUIRY_WRITER %></td>
                                         <td><%= comm.BOARD_INQUIRY_DATE %></td>
                                     </tr>
