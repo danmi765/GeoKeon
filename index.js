@@ -50,7 +50,7 @@ app.get('/comm_write', function(req, res) {
 /* ■■■■■■■■■■■■페이지 설정 끝■■■■■■■■■■■■ */
 
 /* 이미지 업로드 */
-app.post('/upload&responseType=json', uploadSetting.single('upload'), function(req,res) {
+app.post('/upload*', uploadSetting.single('upload'), function(req,res) {
     var tmpPath = req.file.path;
     var fileName = req.file.filename;
     var filePath = req.file.path;

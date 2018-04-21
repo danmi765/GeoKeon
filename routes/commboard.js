@@ -9,6 +9,8 @@ const commBoardController = require('../models/commboard');
 
 /** 게시판 리스트 보기 **/
 router.get('/', commBoardController.list);
+/** 게시판 글 보기 **/
+router.get('/view', commBoardController.list);
 /** 게시판 글쓰기 **/
 router.post('/write', commBoardController.write);
 /** 게시판 글수정하기 **/
