@@ -12,32 +12,38 @@
 
             <div role="main" id="design_list" class="page_main">
                 <h2 class="page_title">Design Page</h2>
-                <ul>
-                    <li>
-                        <a href="#design1"
-                            data-rel="popup"
-                            data-position-to="window"
-                            data-transition="pop"
-                            class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">디자인1 보기</a>
-                    </li>
-                    <li>
-                        <!-- <a href="#design2" data-role="button" data-rel="dialog" data-transition="slideup">디자인2 보기</a> -->
-                        <a href="#design2"
-                            data-rel="popup"
-                            data-position-to="window"
-                            data-transition="pop"
-                            class="ui-btn ui-btn-b ui-corner-all mc-top-margin-1-5">디자인2 보기</a>
-                    </li>
-                    <li>
-                        <!-- <a href="#design3" data-role="button" data-rel="dialog" data-transition="slideup">디자인3 보기</a> -->
-                        <a href="#design3"
-                            data-rel="popup"
-                            data-position-to="window"
-                            data-transition="pop"
-                            class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">디자인3 보기</a>
-                    </li>
-                </ul>
-
+                <div class="page_content">
+                    <ul class="design_besiness_menu">
+                        <li><a href="">besiness1</a></li>
+                        <li><a href="">besiness2</a></li>
+                        <li><a href="">besiness3</a></li>
+                    </ul>
+                    <ul class="deisgn_img_list">
+                        <li>
+                            <a href="#design1"
+                                data-rel="popup"
+                                data-position-to="window"
+                                data-transition="pop"
+                                class="">디자인1 보기</a>
+                        </li>
+                        <li>
+                            <!-- <a href="#design2" data-role="button" data-rel="dialog" data-transition="slideup">디자인2 보기</a> -->
+                            <a href="#design2"
+                                data-rel="popup"
+                                data-position-to="window"
+                                data-transition="pop"
+                                class="">디자인2 보기</a>
+                        </li>
+                        <li>
+                            <!-- <a href="#design3" data-role="button" data-rel="dialog" data-transition="slideup">디자인3 보기</a> -->
+                            <a href="#design3"
+                                data-rel="popup"
+                                data-position-to="window"
+                                data-transition="pop"
+                                class="">디자인3 보기</a>
+                        </li>
+                    </ul>
+                </div>
 
                 <!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■Design List -->
                 <div data-role="popup" id="design1" data-dismissible="false">
@@ -48,6 +54,8 @@
                 </div>
             </div>
         </div>
+            <!--   footer 호출     -->
+            <% include ../partials/footer %>
 
     </body>
 </html>

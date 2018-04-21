@@ -1,6 +1,9 @@
 /* PC */
 @media all and (min-width: 1024px) {
 
+    /* display NONE */
+    .clocking{display:none;}
+
     /* 헤더 */
     .main_logo{position: absolute;top:0;left: 150px;}
     .main_logo>a:link, .main_logo>a:visited{text-indent:-9999em; background:url(../img/logo.png) left center no-repeat; display:block; width:150px; height:70px;}
@@ -9,12 +12,15 @@
     .main_header{ height: 70px;padding: 0 120px;}
     .main_header>ul{margin:0 0 0 150px; padding: 10px 0;}
     .main_header>ul:after{content:''; display:block; clear: both;}
-    .main_header>ul>li{float:left;padding:0 15px;}
-    .main_header>ul>li>a:link, .main_header>ul>li>a:visited{text-decoration:none;display:block;height:50px;width:100px;text-indent:-9999em;}
+    .main_header>ul>li{float:left;}
+    .main_header>ul>li>a:link, .main_header>ul>li>a:visited{text-decoration:none;display:block;height:50px;width:100px;text-indent:-9999em;padding:0 15px;}
 
-    .cate_intro{background:url(../img/intro.png) left center no-repeat;}
-    .cate_design{background:url(../img/design.png) left center no-repeat;}
-    .cate_comm{background:url(../img/comm.png) left center no-repeat;}
+    .cate_intro{background:url(../img/intro.png) center center no-repeat;}
+    .cate_design{background:url(../img/design.png) center center no-repeat;}
+    .cate_comm{background:url(../img/comm.png) center center no-repeat;}
+
+    .sub_menu > li{width:100px; height:30px; line-height:30px;}
+    .sub_menu > li > a:link, .sub_menu > li > a:visited{display:block;text-decoration:none;padding:0 15px;}
 
 
     /* 페이지 상단 */
@@ -56,6 +62,18 @@
 
     .board_btn{width:1100px; margin:10px auto 0; height:30px; text-align: right;}
     .board_btn .comm_write_btn{width:85px;float:right;}
+
+
+    /* 디자인게시판 */
+    .page_content{width:100%;}
+
+    .design_besiness_menu{width:420px;height:100px;margin:0 auto;}
+    .design_besiness_menu > li{float:left;}
+    .design_besiness_menu > li > a:link, .design_besiness_menu > li > a:visited{display:block; text-decoration:none;padding:30px;}
+
+    .deisgn_img_list{width:91%; margin:0 auto;}
+    .deisgn_img_list > li{float:left;width:50%;}
+    .deisgn_img_list > li > a:link, .deisgn_img_list > li > a:visited{display:block;margin:0 20px 50px; padding:30px;}
 
 
 
