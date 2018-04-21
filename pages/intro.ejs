@@ -5,17 +5,19 @@
     </head>
     <body>
 
-        <div date-role="page" id="intro_page" class="page_box">
+        <div date-role="page" id="intro_page" class="wrapper">
             <!-- 주메뉴 호출 -->
             <% include ../partials/header %>
-            <div role="main" class="page_main">
-                <h2 class="page_title">Intro Page</h2>
-                <div>
+            <div role="main" class="contets_wrapper">
+                <h2 class="contents_title">Intro Page</h2>
+                <div class="contents_area">
                     우리는 홈페이지는 만드는 홈페이지이다.
                     원하는 디자인을 골라서 문의해라.
-                </div>
-            </div>
+                </div> <!-- contents_area End -->
+            </div> <!-- contets_wrapper End -->
         </div>
+            <!--   footer 호출     -->
+            <% include ../partials/footer %>
 
     </body>
 </html>

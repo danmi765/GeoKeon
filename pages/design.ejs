@@ -5,38 +5,43 @@
     </head>
     <body>
 
-        <div data-role="page" id="design_page" class="page_box">
+        <div data-role="page" id="design_page" class="wrapper">
 
             <!-- 주메뉴 호출 -->
             <% include ../partials/header %>
 
-            <div role="main" id="design_list" class="page_main">
-                <h2 class="page_title">Design Page</h2>
-                <ul>
-                    <% designs.forEach((design, idx) => { %>   
-                        <li>
-                            <p>ID: <%= design.POTRPOLIO_ID %></p>
-                            <p>NAME: <%= design.PORTPOLIO_NAME %></p>
-                            <p>BUSINESS: <%= design.PORTPOLIO_BUSINESS %></p>
-                            <a href="#<%= design.POTRPOLIO_ID %>"
-                                data-rel="popup"
-                                data-position-to="window"
-                                data-transition="pop"
-                                class="ui-btn ui-btn-a ui-corner-all mc-top-margin-1-5">이미지 보기 - <%= design.POTRPOLIO_ID %></a>
-                        </li>
-                    <% }); %>
-                </ul>
-
-
-                <!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■Design List -->
-                <div data-role="popup" id="design1" data-dismissible="false">
-                    <div role="main" class="page_main">
-                        <h1>이미지 있는걸로</h1>
-                        <a href="#" data-rel="back" class="ui-btn ui-corner-all ui-shadow ui-btn-b mc-top-margin-1-5">목록보기</a>
-                    </div>
-                </div>
-            </div>
+            <div role="main" class="contets_wrapper">
+                <h2 class="contents_title">Design Page</h2>
+                <div class="contents_area">
+                    <div class="design_contents">
+                        <ul class="design_business_menu">
+                            <li><a href="" class="ui-btn ui-corner-all">업종1</a></li>
+                            <li><a href="" class="ui-btn ui-corner-all">업종2</a></li>
+                            <li><a href="" class="ui-btn ui-corner-all">업종3</a></li>
+                        </ul>
+                        <ul class="deisgn_thumbnail">
+                            <% designs.forEach((design, idx) => { %>   
+                                <li>
+                                    <a href="#design<%= design.POTRPOLIO_ID %>"
+                                        data-rel="popup"
+                                        data-position-to="window"
+                                        data-transition="pop"
+                                        class="">디자인 <%= design.POTRPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</a>
+                                    <ul class="deisgn_thumbnail_cover">
+                                        <li><a href="">모바일</a></li>
+                                        <li><a href="">테블릿</a></li>
+                                        <li><a href="">PC</a></li>
+                                    </ul>
+                                </li>
+                            <% }); %>
+                        </ul> <!-- deisgn_thumbnail End -->
+                        <!-- <div class="deisgn_thumbnail_more_btn"></div> -->
+                    </div> <!-- design_contents End -->
+                </div> <!-- contents_area End -->
+            </div> <!-- contets_wrapper End -->
         </div>
+            <!--   footer 호출     -->
+            <% include ../partials/footer %>
 
     </body>
 </html>

@@ -12,8 +12,10 @@
 
 
 /* RESET CSS*/
+@import url(https://cdn.rawgit.com/theeluwin/NotoSansKR-Hestia/master/stylesheets/NotoSansKR-Hestia.css);
 body{
-    font-family: 'Nanum Gothic', sans-serif;
+    font-family: 'Noto Sans Korean', sans-serif;
+    /*font-family: 'Nanum Gothic', sans-serif;*/
     font-size:14px;
 }
 body, h1, h2, h3, h4, h5, h6, p, div, img, span, address, pre, form, fieldset, textarea, input, select, table, th, td{

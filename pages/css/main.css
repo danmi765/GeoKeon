@@ -1,24 +1,26 @@
 /* PC */
 @media all and (min-width: 1024px) {
 
+    /* display NONE */
+    .clocking{display:none;}
+
     /* 헤더 */
-    .main_logo{position: absolute;top:0;left: 150px;}
-    .main_logo>a:link, .main_logo>a:visited{text-indent:-9999em; background:url(../img/logo.png) left center no-repeat; display:block; width:150px; height:70px;}
+    .header_logo{position: absolute;top:0;left: 150px;}
+    .header_logo>a:link, .header_logo>a:visited{text-indent:-9999em; background:url(../img/logo.png) left center no-repeat; display:block; width:150px; height:70px;}
 
-    .header_main_page{}
-    .main_header{ height: 70px;padding: 0 120px;}
-    .main_header>ul{margin:0 0 0 150px; padding: 10px 0;}
-    .main_header>ul:after{content:''; display:block; clear: both;}
-    .main_header>ul>li{float:left;padding:0 15px;}
-    .main_header>ul>li>a:link, .main_header>ul>li>a:visited{text-decoration:none;display:block;height:50px;width:100px;text-indent:-9999em;}
+    .header_area{}
+    .header_area_wrapper{ height: 70px;padding: 0 120px;}
+    .header_area_wrapper>ul{margin:0 0 0 150px; padding: 10px 0;}
+    .header_area_wrapper>ul:after{content:''; display:block; clear: both;}
+    .header_area_wrapper>ul>li{float:left;}
+    .header_area_wrapper>ul>li>a:link, .header_area_wrapper>ul>li>a:visited{text-decoration:none;display:block;height:50px;width:100px;padding:0 15px;line-height:50px;text-align:center;color:#000;font-size:16px;}
 
-    .cate_intro{background:url(../img/intro.png) left center no-repeat;}
-    .cate_design{background:url(../img/design.png) left center no-repeat;}
-    .cate_comm{background:url(../img/comm.png) left center no-repeat;}
+    .header_sub_menu > li{width:130px; height:30px; line-height:30px;}
+    .header_sub_menu > li > a:link, .header_sub_menu > li > a:visited{display:block;text-decoration:none;padding:0 15px;color:#000;text-align:center;}
 
 
     /* 페이지 상단 */
-    .page_title{background:#000; color:#fff; width:100%; text-align: center;padding:20px 0;height:200px;line-height:200px;font-size:3em;margin-bottom:50px;}
+    .contents_title{background:#000; color:#fff; width:100%; text-align: center;padding:20px 0;height:200px;line-height:200px;font-size:3em;margin-bottom:50px;}
 
 
     /* 문의게시판 */
@@ -34,28 +36,40 @@
     #comm_table > tbody > tr > td{text-align: center; padding:10px 0;}
     #comm_table > tbody > tr > td.comm_title {text-align:left; padding-left:10px;}
 
-    #comm_w_table, #comm_v_table{ width:1100px; margin:0 auto; border-top:1px solid #d1d1d1;}
-    #comm_w_table tr, #comm_v_table tr{border-bottom:1px solid #d1d1d1;}
-    #comm_w_table th, #comm_v_table th{padding:10px 15px; width:190px; border-right:1px solid #d1d1d1; background:#f1f1f1;text-align:left;}
-    #comm_w_table td, #comm_v_table td{width:850px;padding:5px 10px;}
-    #comm_w_table input{padding:5px 10px;}
-    #comm_w_table input.posts_pw{width:57px;}
-    #comm_w_table input.posts_title{width:500px;}
-    #comm_w_table .comm_w_content > td{padding:0;}
-    #comm_v_table .comm_v_content > td{background:#fff;}
-    .comm_w_btn{width:160px;margin:20px auto;}
-    .comm_w_btn button{width:70px; margin:0 10px 0 0; float:left;}
-    .comm_v_title td{background:#fff;}
-    .comm_v_back_btn{width:1100px;margin:0 auto;}
-    .comm_v_back_btn a{display: block;width:45px;float:right;}
+    #comm_write_table, #comm_view_table{ width:1100px; margin:0 auto; border-top:1px solid #d1d1d1;}
+    #comm_write_table tr, #comm_view_table tr{border-bottom:1px solid #d1d1d1;}
+    #comm_write_table th, #comm_view_table th{padding:10px 15px; width:190px; border-right:1px solid #d1d1d1; background:#f1f1f1;text-align:left;}
+    #comm_write_table td, #comm_view_table td{width:850px;padding:5px 10px;}
+    #comm_write_table input{padding:5px 10px;}
+    #comm_write_table input.posts_pw{width:57px;}
+    #comm_write_table input.posts_title{width:500px;}
+    #comm_write_table .comm_view_content > td{padding:0;}
+    #comm_view_table .comm_veiw_content > td{background:#fff;}
+    .comm_write_btn_area{width:160px;margin:20px auto;}
+    .comm_write_btn_area button{width:70px; margin:0 10px 0 0; float:left;}
+    .comm_view_title td{background:#fff;}
+    .comm_view_btn_area{width:1100px;margin:0 auto;}
+    .comm_view_btn_area a{display: block;width:45px;float:right;}
 
-    .board_search_bar{width:1100px; height:30px; margin:0 auto 5px;}
-    .board_search_bar select.search_select{float:right;width:70px;padding:3px 5px;border-radius: 4px;border: 1px solid #d1d1d1;}
-    .board_search_bar input.search_text{float:right; width:130px;padding: 4px 5px;margin: 0 3px;border: 1px solid #d1d1d1;border-radius: 4px;}
-    .board_search_bar button.search_btn{float:right; width: 55px;padding: 5px 10px;font-size: 12px;margin:0;}
+    .comm_search_bar{width:1100px; height:30px; margin:0 auto 5px;}
+    .comm_search_bar select.comm_search_select{float:right;width:70px;padding:3px 5px;border-radius: 4px;border: 1px solid #d1d1d1;}
+    .comm_search_bar input.comm_search_text{float:right; width:130px;padding: 4px 5px;margin: 0 3px;border: 1px solid #d1d1d1;border-radius: 4px;}
+    .comm_search_bar button.comm_search_btn{float:right; width: 55px;padding: 5px 10px;font-size: 12px;margin:0;}
 
-    .board_btn{width:1100px; margin:10px auto 0; height:30px; text-align: right;}
-    .board_btn .comm_write_btn{width:85px;float:right;}
+    .comm_btn_area{width:1100px; margin:10px auto 0; height:30px; text-align: right;}
+    .comm_btn_area .comm_write_btn_area{width:85px;float:right;}
+
+
+    /* 디자인게시판 */
+    .design_contents{width:100%;}
+
+    .design_business_menu{width:420px;height:100px;margin:0 auto;}
+    .design_business_menu > li{float:left;width:140px;text-align:center;}
+    .design_business_menu > li > a:link, .design_business_menu > li > a:visited{display:block; text-decoration:none;padding:20px 10px;margin:0 10px;}
+
+    .deisgn_thumbnail{width:91%; margin:0 auto;}
+    .deisgn_thumbnail > li{float:left;width:33%;background:#ff9;}
+    .deisgn_thumbnail > li > a:link, .deisgn_thumbnail > li > a:visited{display:block;margin:0 20px 50px; padding:30px;background:#99f;}
 
 
 

@@ -5,36 +5,38 @@
     </head>
     <body>
 
-       <div data-role="page" id="" class="page_box">
+       <div data-role="page" id="" class="wrapper">
             <!-- 주메뉴 호출 -->
             <% include ../partials/header %>
-
-            <h2 class="page_title">Comm Page</h2>
-
-            <div class="comm_view_box">
-                <table id="comm_v_table">
-                    <tbody>
-                        <tr class="comm_v_title">
-                            <th>제목</th>
-                            <td colspan="3">냉무</td>
-                        </tr>
-                        <tr>
-                            <th>작성자</th>
-                            <td>관리자</td>
-                            <th>작성일</th>
-                            <td>2018-04-16</td>
-                        </tr>
-                        <tr class="comm_v_content">
-                            <td colspan="4" class="v_textarea">ddd</td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <div class="comm_v_back_btn">
-                    <a href="#" data-rel="back" class="ui-btn ui-shadow ui-corner-all">목록</a>
-                </div>
-
-            </div>
+            <div role="main" class="contets_wrapper">
+                <h2 class="contents_title">Comm Page</h2>
+                <div class="contents_area">
+                    <div class="comm_contents">
+                        <table id="comm_view_table">
+                            <tbody>
+                                <tr class="comm_view_title">
+                                    <th>제목</th>
+                                    <td colspan="3">냉무</td>
+                                </tr>
+                                <tr>
+                                    <th>작성자</th>
+                                    <td>관리자</td>
+                                    <th>작성일</th>
+                                    <td>2018-04-16</td>
+                                </tr>
+                                <tr class="comm_view_content">
+                                    <td colspan="4" class="comm_view_textarea">ddd</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="comm_view_btn_area">
+                            <button onclick="history.bakc()" type="button" title="목록" class="ui-btn ui-shadow ui-corner-all comm_view_list_btn">목록</button>
+                            <button onclick="" type="button" title="수정" class="comm_view_modi_btn">수정</button>
+                            <button onclick="" type="button" title="수정" class="comm_view_del_btn">삭제</button>
+                        </div>
+                    </div> <!-- comm_contents End -->
+                </div> <!-- contents_area End -->
+           </div>
 
             <!--   footer 호출     -->
             <% include ../partials/footer %>
