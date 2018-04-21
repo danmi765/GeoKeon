@@ -47,6 +47,11 @@ app.get('/comm_write', function(req, res) {
     res.render('comm_write');
 });
 
+// design_collention
+app.get('/design_collection', function(req, res) {
+    res.render('design_collection');
+});
+
 /* ■■■■■■■■■■■■페이지 설정 끝■■■■■■■■■■■■ */
 
 /* 이미지 업로드 */
