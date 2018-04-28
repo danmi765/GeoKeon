@@ -5,6 +5,8 @@ const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
 const { getFormmatedDt } = require('../utils/utils');
 
+var ejs = require('ejs');
+
 const list = (req, res) => {
     console.log('/commboard/list defaultDB:', defaultDB);
     const reqBody = req.body;
@@ -18,7 +20,7 @@ const list = (req, res) => {
         let comms = results.map((commboard)=>{
             return { ...commboard, BOARD_INQUIRY_DATE: getFormmatedDt(commboard.BOARD_INQUIRY_DATE).date }
         })
-        return res.render('comm', { comms : comms });
+        return res.render('index', {  pages : 'comm.ejs', models:{comms : comms ,title : '커뮤니티 : 공지?', page_title : '공지?'} } );
     });
 };
 
@@ -36,8 +38,9 @@ exports.getComm = function(req, res){
         let comms = results.map((commboard)=>{
             return { ...commboard, BOARD_INQUIRY_DATE: getFormmatedDt(commboard.BOARD_INQUIRY_DATE).datetime }
         })
+
         // deep : 주소가 ../comm/1 일 때와 ../comm 일 때에 import해 오는 파일 경로가 달라지므로 deep으로 구분하여 import경로를 다르게 함
-        return res.render('comm_view', { comms : comms[0], deep : true });
+        return res.render('comm_view', {pages : 'comm_view.ejs', models : { comms : comms[0], deep : true, title : '커뮤니티 : 공지?', page_title : '공지? - 글보기' }} );
     });
 };
 
@@ -61,7 +64,7 @@ exports.modifyPage = function(req, res){
 };
 
 exports.writePage = function(req, res){
-    return res.render('comm_write', { comms: null, deep : false });
+    return res.render('index', { pages : 'comm_write.ejs',models :{ comms: null, deep : false , title : '커뮤니티 : 공지?', page_title : '공지? - 글쓰기' }});
 };
 exports.write = function(req, res){
     console.log('글쓰기.', req.body);

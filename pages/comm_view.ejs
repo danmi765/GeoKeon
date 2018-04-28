@@ -1,56 +1,30 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <%  if(deep){ %>
-            <%- include('../partials/head_deep'); %>
-        <%  }else{ %>
-            <%- include('../partials/head'); %>
-        <%  } %>
-    </head>
-    <body>
 
-       <div data-role="page" id="" class="wrapper">
-            <!-- 주메뉴 호출 -->
-            <% include ../partials/header %>
-            <div role="main" class="contets_wrapper">
-                <h2 class="contents_title">Comm Page</h2>
+            <h2 class="contents_title"><%= models.page_title %></h2>
                 <div class="contents_area">
                     <div class="comm_contents">
                         <table id="comm_view_table">
                             <tbody>
                                 <tr class="comm_view_title">
                                     <th>제목</th>
-                                    <td colspan="3"><%= comms.BOARD_INQUIRY_TITLE %></td>
+                                    <td colspan="3"><%= models.comms.BOARD_INQUIRY_TITLE %></td>
                                 </tr>
                                 <tr>
                                     <th>작성자</th>
-                                    <td><%= comms.BOARD_INQUIRY_WRITER %></td>
+                                    <td><%= models.comms.BOARD_INQUIRY_WRITER %></td>
                                     <th>작성일</th>
-                                    <td><%= comms.BOARD_INQUIRY_DATE %></td>
+                                    <td><%= models.comms.BOARD_INQUIRY_DATE %></td>
                                 </tr>
                                 <tr class="comm_view_content">
-                                    <td colspan="4" class="comm_view_textarea"><%= comms.BOARD_INQUIRY_CONTENT %></td>
+                                    <td colspan="4" class="comm_view_textarea"><%= models.comms.BOARD_INQUIRY_CONTENT %></td>
                                 </tr>
                             </tbody>
                         </table>
                         <div class="comm_view_btn_area">
                             <form method="DELETE" action="/comm_remove/:id">
                                 <button onclick="location.href='/comm'" type="button" title="목록" class="ui-btn ui-shadow ui-corner-all comm_view_list_btn">목록</button>
-                                <button onclick="location.href='/comm_modify/<%=comms.BOARD_INQUIRY_ID%>'" type="button" title="수정" class="comm_view_modi_btn">수정</button>
+                                <button onclick="location.href='/comm_modify/<%=models.comms.BOARD_INQUIRY_ID%>'" type="button" title="수정" class="comm_view_modi_btn">수정</button>
                                 <button type="submit" title="삭제" class="comm_view_del_btn">삭제</button>
                             </form>
                         </div>
                     </div> <!-- comm_contents End -->
                 </div> <!-- contents_area End -->
-           </div>
-
-            <!--   footer 호출     -->
-            <%  if(deep){ %>
-                <%- include('../partials/footer_deep'); %>
-            <%  }else{ %>
-                <%- include('../partials/footer'); %>
-            <%  } %>
-        </div>
-
-    </body>
-</html>

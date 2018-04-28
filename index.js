@@ -28,12 +28,12 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 /* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
 // GET index
 app.get('/', function(req, res) {
-    res.render('index');
+    res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
 });
 
 // GET intro
 app.get('/intro', function(req, res) {
-    res.render('intro');
+    res.render('intro',  {pages : 'intro.ejs',models : { title : '소개'}});
 });
 
 // design_collention

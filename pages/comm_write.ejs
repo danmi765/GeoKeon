@@ -1,19 +1,5 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <%  if(deep){ %>
-            <%- include('../partials/head_deep'); %>
-        <%  }else{ %>
-            <%- include('../partials/head'); %>
-        <%  } %>
-    </head>
-    <body>
 
-       <div data-role="page" id="" class="wrapper">
-            <!-- 주메뉴 호출 -->
-            <% include ../partials/header %>
-           <div role="main" class="contets_wrapper">
-               <h2 class="contents_title">Comm Page</h2>
+               <h2 class="contents_title"><%= models.page_title %></h2>
                <div class="contents_area">
                     <div class="comm_contents">
                         <form action="/comm_write" method="POST">
@@ -24,27 +10,26 @@
                                         <td colspan="3"><input type="password" class="posts_pw" name="posts_pw" maxlength="4" data-role="none" /></td>
                                     </tr>
 
-                                    <tr class="comm_write_title">
-                                        <th>제목</th>
-                                        <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" value="<%= (!comms)?'':comms.BOARD_INQUIRY_TITLE %>"/></td>
-                                    </tr>
+                                <tr class="comm_write_title">
+                                    <th>제목</th>
+                                    <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" value="<%= (!models.comms)?'':models.comms.BOARD_INQUIRY_TITLE %>"/></td>
+                                </tr>
 
-                                    <tr class="comm_write_content">
-                                        <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!comms)?'':comms.BOARD_INQUIRY_CONTENT %></textarea></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="comm_write_btn_area">
-                                <button onclick="" type="submit" title="작성" class="comm_write_wirte_btn" ><span>작성</span></button>
-                                <button onclick="location.href='/comm'" type="button" title="취소" class="comm_write_cancel_btn" ><span>취소</span></button>
-                            </div>
-                        </form>
+                                <tr class="comm_write_content">
+                                    <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!models.comms)?'':models.comms.BOARD_INQUIRY_CONTENT %></textarea></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="comm_write_btn_area">
+                            <button onclick="" type="button" title="작성" class="comm_write_wirte_btn" ><span>작성</span></button>
+                            <button onclick="location.href='/comm'" type="button" title="취소" class="comm_write_cancel_btn" ><span>취소</span></button>
+                        </div>
                     </div> <!-- comm_contents End -->
                </div> <!-- contents_area End -->
-           </div>
+
 
             <!--   footer 호출     -->
-            <%  if(deep){ %>
+            <%  if(models.deep){ %>
                 <%- include('../partials/footer_deep'); %>
             <%  }else{ %>
                 <%- include('../partials/footer'); %>
@@ -57,7 +42,3 @@
             });
 
         </script>
-
-        </div>
-    </body>
-</html>
