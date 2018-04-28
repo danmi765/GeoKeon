@@ -16,12 +16,20 @@
         <!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
 
         <!-- jQuery Mobile : Local -->
+        <%  if(pages == 'comm_view.ejs'){
+
+        }else{
+
+        %>
         <link rel="stylesheet" href="./lib/jquery.mobile-1.4.5.min.css" />
-        <script src="./lib/jquery-1.11.1.min.js"></script>
         <script src="./lib/jquery.mobile-1.4.5.min.js"></script>
+
+        <%}%>
+        <script src="./lib/jquery-1.11.1.min.js"></script>
+
         <!-- Custom Stylesheet -->
-        <link rel="stylesheet" href="./css/main.css" />
-        <link rel="stylesheet" href="./css/reset.css" />
+        <link rel="stylesheet" href="../css/main.css" />
+        <link rel="stylesheet" href="../css/reset.css" />
         <!-- <link rel="stylesheet" href="./css/common.css" /> -->
 
         <!-- Font Awesome -->
@@ -61,6 +69,8 @@
 
             </div>
 
+
+
             <footer class='footer_area'>
 
                 <div data-role='footer' class='footer_area_wrapper' data-position='fixed'>
@@ -73,10 +83,11 @@
 
             <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●js -->
 
-                <script src="./script/main.js"></script>
+            <script src="../script/main.js"></script>
 
                 <!-- 배너 스크립트 -->
-                <script src="./script/slideBanner.js"></script>
+            <script src="../script/slideBanner.js"></script>
+
         </div>
     </body>
 </html>
