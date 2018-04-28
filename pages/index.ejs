@@ -11,39 +11,26 @@
          <script type="text/javascript" src="js/respond.min.js"></script>
          <![endif]-->
 
-        <!-- jQuery Mobile -->
-        <!-- <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" /> -->
-        <!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
-
         <!-- jQuery Mobile : Local -->
-        <%  if(pages == 'comm_view.ejs'){
-
-        }else{
-
-        %>
-        <link rel="stylesheet" href="./lib/jquery.mobile-1.4.5.min.css" />
-        <script src="./lib/jquery.mobile-1.4.5.min.js"></script>
-
-        <%}%>
-        <script src="./lib/jquery-1.11.1.min.js"></script>
+        <script src="/lib/jquery-1.11.1.min.js"></script>
 
         <!-- Custom Stylesheet -->
-        <link rel="stylesheet" href="../css/main.css" />
-        <link rel="stylesheet" href="../css/reset.css" />
+        <link rel="stylesheet" href="/css/main.css" />
+        <link rel="stylesheet" href="/css/reset.css" />
         <!-- <link rel="stylesheet" href="./css/common.css" /> -->
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <!-- fadeIn/Out Banner -->
-        <link rel="stylesheet" href="./css/slideBanner.css" />
+        <link rel="stylesheet" href="/css/slideBanner.css" />
 
         <!-- CKEditor -->
-        <script src="./lib/ckeditor/ckeditor.js"></script>
+        <script src="/lib/ckeditor/ckeditor.js"></script>
 
     </head>
     <body>
-      <div data-role="page" id="comm_page" class="wrapper">
+      <div id="comm_page" class="wrapper">
             <header class='header_area'>
                 <div class='header_area_wrapper'>
                     <h1 class="header_logo"><a href="/">LOGO</a></h1>
@@ -63,7 +50,6 @@
             </header>
 
             <div role="main" class="contets_wrapper">
-                <%= pages %>
                 <!-- contents -->
                 <%- include(pages, {models}) %>
 
@@ -73,7 +59,7 @@
 
             <footer class='footer_area'>
 
-                <div data-role='footer' class='footer_area_wrapper' data-position='fixed'>
+                <div class='footer_area_wrapper'>
                     <h2 class="footer_logo">logo</h2>
                     <div class="footer_contents"></div>
                 </div>
@@ -83,10 +69,10 @@
 
             <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●js -->
 
-            <script src="../script/main.js"></script>
+            <script src="/script/main.js"></script>
 
                 <!-- 배너 스크립트 -->
-            <script src="../script/slideBanner.js"></script>
+            <script src="/script/slideBanner.js"></script>
 
         </div>
     </body>
