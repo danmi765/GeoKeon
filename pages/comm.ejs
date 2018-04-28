@@ -1,23 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-       <% include ../partials/head %>
-    </head>
-    <body>
 
-      <div data-role="page" id="comm_page" class="wrapper">
-
-            <!-- 주메뉴 호출 -->
-            <% include ../partials/header %>
-
-            <div role="main" class="contets_wrapper">
-                <h2 class="contents_title">Comm Page</h2>
+                <h2 class="contents_title"><%= models.page_title %></h2>
                 <div class="contents_area">
                     <div class="comm_contents">
                         <div class="comm_search_bar">
                             <input name="comm_search_text" class="comm_search_text" placeholder="검색내용 입력" data-role="none" >
                             <span class="comm_search_btn fa fa-search"></span>
-                            </form>
                             <select class="comm_search_select" data-role="none">
                                 <option>제목</option>
                                 <option>작성자</option>
@@ -35,9 +22,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% comms.forEach((comm, idx) => { %>   
+                                <% models.comms.forEach((comm, idx) => { %>
                                     <tr>
                                         <th><%= comm.BOARD_INQUIRY_ID %></th>
+                                     <!--   <td class="comm_title"><a href="/comm_view/<%= comm.BOARD_INQUIRY_ID %>"><%= comm.BOARD_INQUIRY_TITLE %></a></td>-->
                                         <td class="comm_title"><a href="/comm_view/<%= comm.BOARD_INQUIRY_ID %>"><%= comm.BOARD_INQUIRY_TITLE %></a></td>
                                         <td><%= comm.BOARD_INQUIRY_WRITER %></td>
                                         <td><%= comm.BOARD_INQUIRY_DATE %></td>
@@ -50,11 +38,3 @@
                         </div>
                     </div> <!-- comm_contents -->
                 </div> <!-- contents_area End -->
-            </div> <!-- contets_wrapper End -->
-            <!--   footer 호출     -->
-            <% include ../partials/footer %>
-        </div>
-
-
-    </body>
-</html>
