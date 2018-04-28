@@ -20,44 +20,20 @@
                             <li><a href="" class="ui-btn ui-corner-all">업종3</a></li>
                         </ul>
                         <ul class="deisgn_thumbnail">
-                            <li>
-                                <a href="#design1"
-                                    data-rel="popup"
-                                    data-position-to="window"
-                                    data-transition="pop"
-                                    class="">디자인1 보기</a>
-                                <ul class="deisgn_thumbnail_cover">
-                                    <li><a href="">모바일</a></li>
-                                    <li><a href="">테블릿</a></li>
-                                    <li><a href="">PC</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <!-- <a href="#design2" data-role="button" data-rel="dialog" data-transition="slideup">디자인2 보기</a> -->
-                                <a href="#design2"
-                                    data-rel="popup"
-                                    data-position-to="window"
-                                    data-transition="pop"
-                                    class="">디자인2 보기</a>
-                                <ul class="deisgn_thumbnail_cover">
-                                    <li><a href="">모바일</a></li>
-                                    <li><a href="">테블릿</a></li>
-                                    <li><a href="">PC</a></li>
-                                </ul>
-                            </li>
-                            <li>
-                                <!-- <a href="#design3" data-role="button" data-rel="dialog" data-transition="slideup">디자인3 보기</a> -->
-                                <a href="#design3"
-                                    data-rel="popup"
-                                    data-position-to="window"
-                                    data-transition="pop"
-                                    class="">디자인3 보기</a>
-                                <ul class="deisgn_thumbnail_cover">
-                                    <li><a href="">모바일</a></li>
-                                    <li><a href="">테블릿</a></li>
-                                    <li><a href="">PC</a></li>
-                                </ul>
-                            </li>
+                            <% designs.forEach((design, idx) => { %>   
+                                <li>
+                                    <a href="#design<%= design.POTRPOLIO_ID %>"
+                                        data-rel="popup"
+                                        data-position-to="window"
+                                        data-transition="pop"
+                                        class="">디자인 <%= design.POTRPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</a>
+                                    <ul class="deisgn_thumbnail_cover">
+                                        <li><a href="">모바일</a></li>
+                                        <li><a href="">테블릿</a></li>
+                                        <li><a href="">PC</a></li>
+                                    </ul>
+                                </li>
+                            <% }); %>
                         </ul> <!-- deisgn_thumbnail End -->
                         <!-- <div class="deisgn_thumbnail_more_btn"></div> -->
                     </div> <!-- design_contents End -->

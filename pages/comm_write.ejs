@@ -1,7 +1,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-       <% include ../partials/head %>
+        <%  if(deep){ %>
+            <%- include('../partials/head_deep'); %>
+        <%  }else{ %>
+            <%- include('../partials/head'); %>
+        <%  } %>
     </head>
     <body>
 
@@ -21,11 +25,11 @@
 
                                 <tr class="comm_write_title">
                                     <th>제목</th>
-                                    <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" /></td>
+                                    <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" value="<%= (!comms)?'':comms.BOARD_INQUIRY_TITLE %>"/></td>
                                 </tr>
 
                                 <tr class="comm_write_content">
-                                    <td colspan="4" class="posts_textarea"><textarea name="editor1"></textarea></td>
+                                    <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!comms)?'':comms.BOARD_INQUIRY_CONTENT %></textarea></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -38,10 +42,11 @@
            </div>
 
             <!--   footer 호출     -->
-            <% include ../partials/footer %>
-
-
-
+            <%  if(deep){ %>
+                <%- include('../partials/footer_deep'); %>
+            <%  }else{ %>
+                <%- include('../partials/footer'); %>
+            <%  } %>
         <script>
 
             /* 게시판 에디터 활성화 */

@@ -51,10 +51,10 @@
     .comm_view_btn_area{width:1100px;margin:0 auto;}
     .comm_view_btn_area a{display: block;width:45px;float:right;}
 
-    .comm_search_bar{width:1100px; height:30px; margin:0 auto 5px;}
+    .comm_search_bar{width:1100px; height:30px; margin:0 auto 5px; position: relative;}
     .comm_search_bar select.comm_search_select{float:right;width:70px;padding:3px 5px;border-radius: 4px;border: 1px solid #d1d1d1;}
-    .comm_search_bar input.comm_search_text{float:right; width:130px;padding: 4px 5px;margin: 0 3px;border: 1px solid #d1d1d1;border-radius: 4px;}
-    .comm_search_bar button.comm_search_btn{float:right; width: 55px;padding: 5px 10px;font-size: 12px;margin:0;}
+    .comm_search_bar input.comm_search_text{float:right; width:130px;padding: 5px 10px;margin: 0 10px;background-color: rgba(0,0,0,0);border-style: none;border-bottom: 1px solid black;}
+    .comm_search_bar span.comm_search_btn{position: absolute;bottom: 9px;right: 15px;font-size: 17px;}
 
     .comm_btn_area{width:1100px; margin:10px auto 0; height:30px; text-align: right;}
     .comm_btn_area .comm_write_btn_area{width:85px;float:right;}

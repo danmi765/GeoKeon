@@ -15,8 +15,9 @@
                 <div class="contents_area">
                     <div class="comm_contents">
                         <div class="comm_search_bar">
-                            <button onclick="" type="button" title="검색" class="comm_search_btn ui-btn ui-corner-all"  data-role="none"><span>검색</span></button>
-                            <input type="text" class="comm_search_text" data-role="none" />
+                            <input name="comm_search_text" class="comm_search_text" placeholder="검색내용 입력" data-role="none" >
+                            <span class="comm_search_btn fa fa-search"></span>
+                            </form>
                             <select class="comm_search_select" data-role="none">
                                 <option>제목</option>
                                 <option>작성자</option>
@@ -34,24 +35,14 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th>1</th>
-                                    <td class="comm_title"><a href="/comm_view">Title1</a></td>
-                                    <td>admin</td>
-                                    <td>201-03-25</td>
-                                </tr>
-                                <tr>
-                                    <th>2</th>
-                                    <td class="comm_title"><a href="/comm_write">Title2</a></td>
-                                    <td>admin</td>
-                                    <td>201-03-28</td>
-                                </tr>
-                                <tr>
-                                    <th>3</th>
-                                    <td class="comm_title"><a href="/comm_write">Title3</a></td>
-                                    <td>admin</td>
-                                    <td>201-03-13</td>
-                                </tr>
+                                <% comms.forEach((comm, idx) => { %>   
+                                    <tr>
+                                        <th><%= comm.BOARD_INQUIRY_ID %></th>
+                                        <td class="comm_title"><a href="/comm_view/<%= comm.BOARD_INQUIRY_ID %>"><%= comm.BOARD_INQUIRY_TITLE %></a></td>
+                                        <td><%= comm.BOARD_INQUIRY_WRITER %></td>
+                                        <td><%= comm.BOARD_INQUIRY_DATE %></td>
+                                    </tr>
+                                <% }); %>
                             </tbody>
                         </table> <!-- comm_table End -->
                         <div class="comm_btn_area">
