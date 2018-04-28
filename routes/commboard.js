@@ -14,7 +14,7 @@ router.get('/comm_view/:commId', commBoardController.getComm);
 /** 게시판 글쓰기 페이지 **/
 router.get('/comm_write', commBoardController.writePage);
 /** 게시판 글쓰기 **/
-// router.post('/write', commBoardController.write);
+router.post('/comm_write', commBoardController.write);
 /** 게시판 글수정하기 페이지 **/
 router.get('/comm_modify/:commId', commBoardController.modifyPage);
 /** 게시판 글수정하기 **/

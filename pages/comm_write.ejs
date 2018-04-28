@@ -16,27 +16,29 @@
                <h2 class="contents_title">Comm Page</h2>
                <div class="contents_area">
                     <div class="comm_contents">
-                        <table id="comm_write_table">
-                            <tbody>
-                                <tr class="comm_write_pw">
-                                    <th>비밀번호</th>
-                                    <td colspan="3"><input type="password" class="posts_pw" name="" maxlength="4" data-role="none" /></td>
-                                </tr>
+                        <form action="/comm_write" method="POST">
+                            <table id="comm_write_table">
+                                <tbody>
+                                    <tr class="comm_write_pw">
+                                        <th>비밀번호</th>
+                                        <td colspan="3"><input type="password" class="posts_pw" name="posts_pw" maxlength="4" data-role="none" /></td>
+                                    </tr>
 
-                                <tr class="comm_write_title">
-                                    <th>제목</th>
-                                    <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" value="<%= (!comms)?'':comms.BOARD_INQUIRY_TITLE %>"/></td>
-                                </tr>
+                                    <tr class="comm_write_title">
+                                        <th>제목</th>
+                                        <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" value="<%= (!comms)?'':comms.BOARD_INQUIRY_TITLE %>"/></td>
+                                    </tr>
 
-                                <tr class="comm_write_content">
-                                    <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!comms)?'':comms.BOARD_INQUIRY_CONTENT %></textarea></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="comm_write_btn_area">
-                            <button onclick="" type="button" title="작성" class="comm_write_wirte_btn" ><span>작성</span></button>
-                            <button onclick="location.href='/comm'" type="button" title="취소" class="comm_write_cancel_btn" ><span>취소</span></button>
-                        </div>
+                                    <tr class="comm_write_content">
+                                        <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!comms)?'':comms.BOARD_INQUIRY_CONTENT %></textarea></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="comm_write_btn_area">
+                                <button onclick="" type="submit" title="작성" class="comm_write_wirte_btn" ><span>작성</span></button>
+                                <button onclick="location.href='/comm'" type="button" title="취소" class="comm_write_cancel_btn" ><span>취소</span></button>
+                            </div>
+                        </form>
                     </div> <!-- comm_contents End -->
                </div> <!-- contents_area End -->
            </div>

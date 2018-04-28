@@ -16,7 +16,7 @@ const list = (req, res) => {
         }
         console.log('/commboard/list results', results);
         let comms = results.map((commboard)=>{
-            return { ...commboard, BOARD_INQUIRY_DATE: getFormmatedDt(commboard.BOARD_INQUIRY_DATE) }
+            return { ...commboard, BOARD_INQUIRY_DATE: getFormmatedDt(commboard.BOARD_INQUIRY_DATE).date }
         })
         return res.render('comm', { comms : comms });
     });
@@ -34,7 +34,7 @@ exports.getComm = function(req, res){
         }
         console.log('/commboard/getComm results', results);
         let comms = results.map((commboard)=>{
-            return { ...commboard, BOARD_INQUIRY_DATE: getFormmatedDt(commboard.BOARD_INQUIRY_DATE) }
+            return { ...commboard, BOARD_INQUIRY_DATE: getFormmatedDt(commboard.BOARD_INQUIRY_DATE).datetime }
         })
         // deep : 주소가 ../comm/1 일 때와 ../comm 일 때에 import해 오는 파일 경로가 달라지므로 deep으로 구분하여 import경로를 다르게 함
         return res.render('comm_view', { comms : comms[0], deep : true });
@@ -63,7 +63,9 @@ exports.modifyPage = function(req, res){
 exports.writePage = function(req, res){
     return res.render('comm_write', { comms: null, deep : false });
 };
-
+exports.write = function(req, res){
+    console.log('글쓰기.', req.body);
+};
 exports.remove = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
