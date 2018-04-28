@@ -33,7 +33,7 @@ app.get('/', function(req, res) {
 
 // GET intro
 app.get('/intro', function(req, res) {
-    res.render('intro',  {pages : 'intro.ejs',models : { title : '소개'}});
+    res.render('index',  {pages : 'intro.ejs',models : { title : '소개', page_title : '소개'}});
 });
 
 // design_collention
