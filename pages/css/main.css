@@ -18,6 +18,13 @@
     .header_sub_menu > li{width:130px; height:30px; line-height:30px;}
     .header_sub_menu > li > a:link, .header_sub_menu > li > a:visited{display:block;text-decoration:none;padding:0 15px;color:#000;text-align:center;}
 
+    /* 하단 */
+    .footer_area{border-top:2px solid #000;margin-top:50px;}
+    .footer_area_wrapper{padding:0 120px;min-height:130px;position:relative;}
+    .footer_logo{position:absolute;top:30px;left:130px;}
+    .footer_logo > a:link, .footer_logo > a:visited{display:block; width:150px;height:70px;background:url(../img/logo.png) left center no-repeat;}
+    .footer_contents{background:#ff9;width:75%;position:relative;top:20px;left:200px;}
+
 
     /* 페이지 상단 */
     .contents_title{background:#000; color:#fff; width:100%; text-align: center;padding:20px 0;height:200px;line-height:200px;font-size:3em;margin-bottom:50px;}
@@ -33,9 +40,9 @@
     #comm_write_table input{padding:5px 10px;}
     #comm_write_table input.posts_pw{width:57px;}
     #comm_write_table input.posts_title{width:500px;}
-    #comm_write_table .comm_view_content > td{padding:0;}
-    #comm_view_table .comm_veiw_content > td{background:#fff;}
-    .comm_write_btn_area{width:160px;margin:20px auto;}
+    #comm_write_table .comm_view_content > td{padding:0}
+    #comm_view_table .comm_veiw_content > td{background:#fff; }
+    .comm_write_btn_area{width:160px;margin:0 auto;padding:20px 0;}
     .comm_write_btn_area button{width:70px; margin:0 10px 0 0; float:left;}
     .comm_view_title td{background:#fff;}
     .comm_view_btn_area{width:1100px;margin:0 auto;}
@@ -61,6 +68,9 @@
     .deisgn_thumbnail > li{float:left;width:33%;background:#ff9;}
     .deisgn_thumbnail > li > a:link, .deisgn_thumbnail > li > a:visited{display:block;margin:0 20px 50px; padding:30px;background:#99f;}
 
+
+    /* 소개페이지 */
+    .intro_contents{width:80%;margin:0 auto; background:#ff9;}
 
 
 
