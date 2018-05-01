@@ -1,4 +1,14 @@
+<%
+let comm_name ;
 
+ if(models.comm_name == 'notice'){
+     comm_name = 'BOARD_NOTICE';
+ }else if(models.comm_name == 'inquiry'){
+     comm_name = 'BOARD_INQUIRY';
+ }
+
+
+%>
                 <h2 class="contents_title"><%= models.page_title %></h2>
                 <div class="contents_area">
                     <div class="comm_contents">
@@ -22,19 +32,18 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% models.comms.forEach((comm, idx) => { %>
+                                <%  models.comms.forEach((comm, idx) => { %>
                                     <tr>
-                                        <th><%= comm.BOARD_INQUIRY_ID %></th>
-                                     <!--   <td class="comm_title"><a href="/comm_view/<%= comm.BOARD_INQUIRY_ID %>"><%= comm.BOARD_INQUIRY_TITLE %></a></td>-->
-                                        <td class="comm_title"><a href="/comm_view/<%= comm.BOARD_INQUIRY_ID %>"><%= comm.BOARD_INQUIRY_TITLE %></a></td>
-                                        <td><%= comm.BOARD_INQUIRY_WRITER %></td>
-                                        <td><%= comm.BOARD_INQUIRY_DATE %></td>
+                                        <th><%= comm[comm_name+'_ID'] %></th>
+                                        <td class="comm_title"><a href="/comm_view/<%=models.comm_name%>&<%= comm[comm_name+'_ID'] %>"><%= comm[comm_name+'_TITLE'] %></a></td>
+                                        <td><%= comm[comm_name+'_WRITER'] %></td>
+                                        <td><%= comm[comm_name+'_DATE'] %></td>
                                     </tr>
                                 <% }); %>
                             </tbody>
                         </table> <!-- comm_table End -->
                         <div class="comm_btn_area">
-                            <button onclick="location.href='/comm_write'" type="button" title="글쓰기" class="comm_write_btn gk_simple1_btn" ><span>글쓰기</span></button>
+                            <button onclick="location.href='/comm_write/<%= models.comm_name%>'" type="button" title="글쓰기" class="comm_write_btn gk_simple1_btn" ><span>글쓰기</span></button>
                         </div>
                         <div class="gk_default_paging gk_basic2_paging">
                             <span><a href="">prev</a></span>
