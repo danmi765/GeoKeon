@@ -16,26 +16,34 @@
         <!-- <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script> -->
 
         <!-- jQuery Mobile : Local -->
-        <link rel="stylesheet" href="./lib/jquery.mobile-1.4.5.min.css" />
-        <script src="./lib/jquery-1.11.1.min.js"></script>
-        <!-- <script src="./lib/jquery.mobile-1.4.5.min.js"></script> -->
+        <!-- <%  if(pages == 'comm_view.ejs'){
+
+        }else{
+
+        %> -->
+        <script src="/lib/jquery-1.11.1.min.js"></script>
+        <!-- <script src="/lib/jquery.mobile-1.4.5.min.js"></script> -->
+        <link rel="stylesheet" href="/lib/jquery.mobile-1.4.5.min.css" />
+
+        <!-- <%}%> -->
+
         <!-- Custom Stylesheet -->
-        <link rel="stylesheet" href="./css/main.css" />
-        <link rel="stylesheet" href="./css/reset.css" />
+        <link rel="stylesheet" href="/css/main.css" />
+        <link rel="stylesheet" href="/css/reset.css" />
         <!-- <link rel="stylesheet" href="./css/common.css" /> -->
 
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <!-- fadeIn/Out Banner -->
-        <link rel="stylesheet" href="./css/slideBanner.css" />
+        <link rel="stylesheet" href="/css/slideBanner.css" />
 
         <!-- CKEditor -->
-        <script src="./lib/ckeditor/ckeditor.js"></script>
+        <script src="/lib/ckeditor/ckeditor.js"></script>
 
     </head>
     <body>
-      <div data-role="page" id="comm_page" class="wrapper">
+      <!-- <div data-role="role" id="comm_page" class="wrapper"> -->
             <header class='header_area'>
                 <div class='header_area_wrapper'>
                     <h1 class="header_logo"><a href="/">LOGO</a></h1>
@@ -45,7 +53,7 @@
                         <li>
                             <a href='/comm'>커뮤니티</a>
                             <ul class="header_sub_menu clocking">
-                                <li><a href="/comm">공지사항</a></li>
+                                <li><a href="/comm/inquiry">공지사항</a></li>
                                 <li><a href="/comm">문의사항</a></li>
                                 <li><a href="">Q&amp;A</a></li>
                             </ul>
@@ -61,6 +69,8 @@
 
             </div>
 
+
+
             <footer class='footer_area'>
 
                 <div data-role='footer' class='footer_area_wrapper' data-position='fixed'>
@@ -73,10 +83,11 @@
 
             <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●js -->
 
-                <script src="./script/main.js"></script>
+            <script src="/script/main.js"></script>
 
-                <!-- 배너 스크립트 -->
-                <script src="./script/slideBanner.js"></script>
-        </div>
+            <!-- 배너 스크립트 -->
+            <script src="/script/slideBanner.js"></script>
+
+        <!-- </div> -->
     </body>
 </html>

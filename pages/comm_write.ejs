@@ -3,12 +3,12 @@
                <div class="contents_area">
                     <div class="comm_contents">
                         <form action="/comm_write" method="POST">
-                            <table id="comm_write_table">
-                                <tbody>
-                                    <tr class="comm_write_pw">
-                                        <th>비밀번호</th>
-                                        <td colspan="3"><input type="password" class="posts_pw" name="posts_pw" maxlength="4" data-role="none" /></td>
-                                    </tr>
+                        <table id="comm_write_table">
+                            <tbody>
+                                <tr class="comm_write_pw">
+                                    <th>비밀번호</th>
+                                    <td colspan="3"><input type="password" class="posts_pw" name="posts_pw" maxlength="4" data-role="none" /></td>
+                                </tr>
 
                                 <tr class="comm_write_title">
                                     <th>제목</th>
@@ -21,19 +21,14 @@
                             </tbody>
                         </table>
                         <div class="comm_write_btn_area">
-                            <button onclick="" type="button" title="작성" class="comm_write_wirte_btn" ><span>작성</span></button>
+                            <button onclick="" type="submit" title="작성" class="comm_write_wirte_btn" ><span>작성</span></button>
                             <button onclick="location.href='/comm'" type="button" title="취소" class="comm_write_cancel_btn" ><span>취소</span></button>
                         </div>
+                        </form>
                     </div> <!-- comm_contents End -->
                </div> <!-- contents_area End -->
 
 
-            <!--   footer 호출     -->
-            <%  if(models.deep){ %>
-                <%- include('../partials/footer_deep'); %>
-            <%  }else{ %>
-                <%- include('../partials/footer'); %>
-            <%  } %>
         <script>
 
             /* 게시판 에디터 활성화 */

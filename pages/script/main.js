@@ -8,12 +8,6 @@ $(".header_main_menu > li > a, .header_sub_menu").hover(function(e){
     $(".header_sub_menu").addClass("clocking");
 });
 
-
-
-
-
 $(window).load(function(){
-
+    
 });
-
-

@@ -8,7 +8,7 @@ const router = express.Router();
 const commBoardController = require('../models/commboard');
 
 /** 게시판 리스트 보기 **/
-router.get('/comm', commBoardController.list);
+router.get('/comm/:commName', commBoardController.list);
 /** 게시판 글 보기 **/
 router.get('/comm_view/:commId', commBoardController.getComm);
 /** 게시판 글쓰기 페이지 **/
