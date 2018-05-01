@@ -2,28 +2,47 @@
                <h2 class="contents_title"><%= models.page_title %></h2>
                <div class="contents_area">
                     <div class="comm_contents">
-                        <form action="/comm_write" method="POST">
-                        <table id="comm_write_table">
-                            <tbody>
-                                <tr class="comm_write_pw">
-                                    <th>비밀번호</th>
-                                    <td colspan="3"><input type="password" class="posts_pw" name="posts_pw" maxlength="4" data-role="none" /></td>
-                                </tr>
+                        <%
+                            let comm_name ;
 
-                                <tr class="comm_write_title">
-                                    <th>제목</th>
-                                    <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" data-role="none" value="<%= (!models.comms)?'':models.comms.BOARD_INQUIRY_TITLE %>"/></td>
-                                </tr>
+                             if(models.comm_name == 'notice'){
+                                 comm_name = 'BOARD_NOTICE';
+                             }else if(models.comm_name == 'inquiry'){
+                                 comm_name = 'BOARD_INQUIRY';
+                             }
 
-                                <tr class="comm_write_content">
-                                    <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!models.comms)?'':models.comms.BOARD_INQUIRY_CONTENT %></textarea></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="comm_write_btn_area">
-                            <button onclick="" type="submit" title="작성" class="comm_write_wirte_btn" ><span>작성</span></button>
-                            <button onclick="location.href='/comm'" type="button" title="취소" class="comm_write_cancel_btn" ><span>취소</span></button>
-                        </div>
+                            var act ;
+                            if(!models.comms){
+                                act = '/comm_write/' + models.comm_name;
+                            }else{
+                                act = '/comm_modify/' + models.comm_name + '&' + models.comms[comm_name+'_ID'] ;
+                            }
+                        %>
+
+                        <form action="<%=act%>" method="post">
+                            <fieldset>
+                                <table id="comm_write_table">
+                                    <tbody>
+                                        <tr class="comm_write_pw">
+                                            <th>비밀번호</th>
+                                            <td colspan="3"><input type="password" class="posts_pw" name="posts_pw" maxlength="4" value="<%=(!models.comms)?'':models.comms[comm_name+'_PW'] %>"/></td>
+                                        </tr>
+
+                                        <tr class="comm_write_title">
+                                            <th>제목</th>
+                                            <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" value="<%=(!models.comms)?'':models.comms[comm_name+'_TITLE'] %>"/></td>
+                                        </tr>
+
+                                        <tr class="comm_write_content">
+                                            <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!models.comms)?'':models.comms[comm_name+'_CONTENT'] %></textarea></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                            <div class="comm_write_btn_area">
+                                <button type="submit" title="" class="comm_write_wirte_btn gk_simple1_btn" ><span><%=(!models.comms)?'작성':'수정'%></span></button>
+                                <button onclick="location.href='/comm/<%=models.comm_name%>'" type="button" title="취소" class="comm_write_cancel_btn gk_simple1_btn" ><span>취소</span></button>
+                            </div>
                         </form>
                     </div> <!-- comm_contents End -->
                </div> <!-- contents_area End -->

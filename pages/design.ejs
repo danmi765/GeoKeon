@@ -1,26 +1,14 @@
-<!DOCTYPE html>
-<html>
-    <head>
-       <% include ../partials/head %>
-    </head>
-    <body>
 
-        <div data-role="page" id="design_page" class="wrapper">
-
-            <!-- 주메뉴 호출 -->
-            <% include ../partials/header %>
-
-            <div role="main" class="contets_wrapper">
-                <h2 class="contents_title">Design Page</h2>
+                <h2 class="contents_title"><%= models.page_title%></h2>
                 <div class="contents_area">
                     <div class="design_contents">
                         <ul class="design_business_menu">
-                            <li><a href="" class="ui-btn ui-corner-all">업종1</a></li>
-                            <li><a href="" class="ui-btn ui-corner-all">업종2</a></li>
-                            <li><a href="" class="ui-btn ui-corner-all">업종3</a></li>
+                            <li><a href="" class="gk_corner_all gk_simple2_btn">업종1</a></li>
+                            <li><a href="" class="gk_corner_all gk_simple2_btn">업종2</a></li>
+                            <li><a href="" class="gk_corner_all gk_simple2_btn">업종3</a></li>
                         </ul>
                         <ul class="deisgn_thumbnail">
-                            <% designs.forEach((design, idx) => { %>   
+                            <% models.designs.forEach((design, idx) => { %>
                                 <li>
                                     <a href="#design<%= design.POTRPOLIO_ID %>"
                                         data-rel="popup"
@@ -38,10 +26,3 @@
                         <!-- <div class="deisgn_thumbnail_more_btn"></div> -->
                     </div> <!-- design_contents End -->
                 </div> <!-- contents_area End -->
-            </div> <!-- contets_wrapper End -->
-        </div>
-            <!--   footer 호출     -->
-            <% include ../partials/footer %>
-
-    </body>
-</html>
