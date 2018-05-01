@@ -57,7 +57,7 @@ exports.modifyPage = function(req, res){
             return { ...commboard, BOARD_INQUIRY_DATE: getFormmatedDt(commboard.BOARD_INQUIRY_DATE) }
         })
         // deep : 주소가 ../comm/1 일 때와 ../comm 일 때에 import해 오는 파일 경로가 달라지므로 deep으로 구분하여 import경로를 다르게 함
-        return res.render('comm_write', { comms : comms[0], deep : true });
+        return res.render('index', {pages : 'comm_write', models : { comms : comms[0], deep : true, title : '커뮤니티 : 공지?', page_title : '공지? - 글수정' }});
     });
 };
 
