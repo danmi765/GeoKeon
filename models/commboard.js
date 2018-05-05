@@ -165,6 +165,8 @@ exports.writePage = function(req, res){
 
 exports.write = function(req, res){
     console.log('글쓰기', req.body);
+    console.log('글쓰기 req.params', req.params);
+
     const reqBody = req.body;
     const commName = req.params.commName.toUpperCase();
     let insertValues, query;
@@ -194,21 +196,7 @@ exports.write = function(req, res){
         return list(req, res);
     });
 };
-exports.write = function(req, res){
-    console.log('글쓰기.', req.body);
-    const reqBody = req.body;
-    const insertValues = [
-        [reqBody.posts_title, reqBody.editor1, reqBody.posts_pw, '로그인한아이디', new Date()],
-    ]
-    dbconn.instance[defaultDB.db].query(queries.insert.add_comm_inquiry_board, [insertValues], function (error, results, fields) {
-        if (error){
-            console.log('[writePage]error', error);
-            return res.send({'error': error});
-        }
-        // return res.render('index', {  pages : 'comm.ejs', models:{comms : comms ,title : '커뮤니티 : 공지?', page_title : '공지?'} } );
-        return list(req, res);
-    });
-};
+
 exports.remove = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
