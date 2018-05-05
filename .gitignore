@@ -9,6 +9,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# user uploaded image
+pages/img/upload/
+
 # Runtime data
 pids
 *.pid

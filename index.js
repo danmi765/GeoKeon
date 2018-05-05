@@ -44,25 +44,55 @@ app.get('/design_collection', function(req, res) {
 
 
 /* 이미지 업로드 */
-app.post('/upload*', uploadSetting.single('upload'), function(req,res) {
-    var tmpPath = req.file.path;
-    var fileName = req.file.filename;
-    var filePath = req.file.path;
-    var originalName = req.file.originalname;
-    var newPath = "pages/img/upload/" + req.file.originalname;
+app.post('/upload*', uploadSetting.single('upload'), function(req, res) {
+    console.log('image upload[req.body]', req.body);
+    console.log('image upload[req.originalUrl]', req.originalUrl);  // 요청주소를 얻어낼 수 있다.
+    console.log('image upload[req.params]', req.params);
+    console.log('image upload[req.file]', req.file);
 
-    fs.rename(tmpPath, newPath, function (err) {
-        if (err) {
-            console.log(err);
+    const tmpPath = req.file.path;
+    const uploadPath = "pages/img/upload/";
+    let findFileName = req.file.originalname;
+    let idx = 1;
+    
+    while(true){
+        const isFileExist = fs.existsSync(uploadPath+findFileName);
+        console.log('-----fs.existsSync', isFileExist);
+        if(isFileExist){
+            /* 파일명이 중복될 때 */
+            /* 파일명 + 1 로 네이밍 한다. 그리고 네이밍한 파일명1도 중복되었는 지 확인하고 중복이 되었다면 파일명2로 하는 로직을 반복.. */
+            console.log('findFileName[before]:', findFileName);
+            let dotIdx = findFileName.lastIndexOf('.');
+            let fileIdx = findFileName.substring(0, dotIdx).match(/\d+/);
+            let fileDuplicateIdx = (fileIdx != null)?Number(fileIdx[0])+1 : 1;   //중복되는 파일의 인덱스값을 숫자로 추출.
+            let fileNameExceptNum = (fileIdx != null)?findFileName.indexOf(Number(fileIdx[0])) : dotIdx;
+
+            /* 파일이름을 재정의하고 다시 loop돌려서 변경된 파일이름과 중복되는 파일이 있는지 재확인 */
+            findFileName = findFileName.substring(0, fileNameExceptNum) + fileDuplicateIdx + findFileName.substring(dotIdx);
+        }else{
+            /* 파일명이 중복된 게 없을 때 */
+            return renameFS(tmpPath, findFileName)
         }
-        var url = `'pages/img/upload/${req.file.originalname}'`;
-
-        res.send({
-            "uploaded": 1,
-            "fileName": fileName,
-            "url": url
+    }
+    function renameFS(tmpPath, fileName){
+        /* CKEditor가 발급한 random한 파일명을 변경하는 작업 */
+        fs.rename(tmpPath, uploadPath + fileName, function (err) {
+            if (err) {
+                console.log('-----renameFS error', err);
+                return res.send({
+                    "uploaded": 0,
+                    "error": {
+                        "message": "파일 전송 중 오류가 발생하였습니다."
+                    }
+                }); 
+            }
+            return res.send({
+                "uploaded": 1,
+                "fileName": fileName,
+                "url": `../img/upload/${fileName}`
+            });
         });
-    });
+    }
 });
 
 
