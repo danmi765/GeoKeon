@@ -1,0 +1,36 @@
+
+                <h2 class="contents_title"><%= models.page_title%></h2>
+                <div class="contents_area">
+                    <div class="login_contents">
+                        <div><%= models.msg%></div>
+                        <form method="post" action="/join">
+                            <fieldset>
+                                <table>
+                                    <tr>
+                                        <th>ID</th>
+                                        <td><input type="text" name="user_id" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>PW</th>
+                                        <td><input type="password" name="user_pw" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>NAME</th>
+                                        <td><input type="text" name="user_name" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>EMAIL</th>
+                                        <td><input type="text" name="user_email" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>PHONE</th>
+                                        <td><input type="text" name="user_phone" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><button type="submit" title="join" class="gk_simple1_btn"><span>JOIN</span></button></td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div> <!-- contents_area End -->

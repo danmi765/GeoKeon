@@ -11,6 +11,20 @@ const uploadSetting = multer({dest:"pages/img/upload/"});
 
 const dbconn = require('./dbconn/conn');
 const defaultDB = 'mysql';  // 기본 Database 종류 정의. 해당 변수는 다른 곳에 널리 쓰기 위해 최하단의 exports 문법에서 다시 사용됨.
+const session = require('express-session');
+
+app.use(session({
+    secret : 'keyboard cat',
+    resave : false,
+    saveUninitialized: true
+}));
+
+// 세션을 전역으로 사용할 수 있도록 함
+app.use(function(req, res, next) {
+  res.locals = req.session;
+  next();
+});
+
 
 // 주소 입력을 통해 서버 내부 특정 폴더경로에 접근 가능하게 설정
 app.use(express.static('pages'));
@@ -28,18 +42,22 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 /* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
 // GET index
 app.get('/', function(req, res) {
-    res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
+
+    res.render('index', {pages : 'main.ejs',  models : { user : req.session.authId, title : '메인'}});
 });
 
 // GET intro
 app.get('/intro', function(req, res) {
-    res.render('index',  {pages : 'intro.ejs',models : { title : '소개', page_title : '소개'}});
+
+    res.render('index',  {pages : 'intro.ejs' ,models : { title : '소개', page_title : '소개'}});
 });
 
 // design_collention
 app.get('/design_collection', function(req, res) {
     res.render('design_collection');
 });
+
+
 /* ■■■■■■■■■■■■페이지 라우팅 끝■■■■■■■■■■■■ */
 
 
@@ -70,6 +88,8 @@ app.post('/upload*', uploadSetting.single('upload'), function(req,res) {
 app.use('/', require('./routes/commboard'));
 /* ■■■■■■■■■■■■디자인 메뉴 라우팅■■■■■■■■■■■■ */
 app.use('/design', require('./routes/design'));
+/* ■■■■■■■■■■■■로그인/가입 라우팅■■■■■■■■■■■■ */
+app.use('/', require('./routes/account'));
 
 // Express 서버 시작.
 app.listen(port, () => {
