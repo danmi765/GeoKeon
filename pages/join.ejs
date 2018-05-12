@@ -10,7 +10,7 @@
                                         <th>ID</th>
                                         <td>
                                             <input type="text" name="user_id" maxlength="10" />
-                                            <button type="button" title="중복확인" onclick="" class="gk_simple1_btn">중복확인</button>
+                                            <button type="button" title="중복확인" onclick="joinIdDupCheck()" class="gk_simple1_btn">중복확인</button>
                                             <span class="" name="user_id"></span>
                                         </td>
                                     </tr>
@@ -46,7 +46,7 @@
                                                 <option value="gmail.com">gmail.com</option>
                                                 <option name="dir_entr" value="dir_entr">직접입력</option>
                                             </select>
-                                            <input type="text" name="user_mail_dir" value="이메일을 입력하세요" onFocus="this.value='';return true;" onchange="userMailDirChange()" />
+                                            <input type="text" name="user_mail_dir" maxlength="20" value="이메일을 입력하세요" onFocus="this.value='';return true;" onchange="userMailDirChange()" />
                                             <span class="" name="user_email">
                                         </td>
                                     </tr>
@@ -54,11 +54,11 @@
                                         <th>PHONE</th>
                                         <td>
                                             <input type="text" name="user_phone1" maxlength="3" />
-                                            <span>&#45;</span>
+                                            &#45;
                                             <input type="text" name="user_phone2" maxlength="4" />
-                                            <span>&#45;</span>
+                                            &#45;
                                             <input type="text" name="user_phone3" maxlength="4" />
-                                            <span class="" name="user_phone">
+                                            <span class="" name="user_phone"></span>
                                         </td>
                                     </tr>
                                     <tr>

@@ -30,6 +30,9 @@ router.get('/logout', function(req, res) {
 
 });
 
+/** 아이디 중복체크 **/
+ router.post('/idCheck', accountController.checkid);
+
 /** 쿼리 테스트 **/
 router.post('/query', accountController.query);
 /** 이벤트로그 일괄제거 **/

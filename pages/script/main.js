@@ -46,6 +46,11 @@ function userMailDirChange(){
 
 }
 
+// 유효성 체크 후 공란에 입력되면 안내글을 지운다.
+$(".login_contents input[type=text], .login_contents input[type=password]").change(function(){
+    $(this).siblings("span").html("");
+});
+
 
 /* 회원가입 유효성체크 */
 function goJoin(){
@@ -84,51 +89,54 @@ function goJoin(){
     }else if(user.user_phone1 == "" || user.user_phone2 == "" || user.user_phone3 == ""){
         $("span[name=user_phone]").html("휴대전화번호를 입력하세요.");
 
-    }
-
-    if($("select[name=user_mail] > option:selected").index() == 4){
-        user.user_email = $("input[name=user_mail_id]").val() + "@" + $("input[name=user_mail_dir]").val();
-
+    // 유효성 모두 통과한 후
     }else{
-        user.user_email = $("input[name=user_mail_id]").val() + "@" + $("select[name=user_mail]").val();
-        console.log("jn");
-    }
-    user.user_phone =  $("input[name=user_phone1]").val() + $("input[name=user_phone2]").val() + $("input[name=user_phone3]").val();
 
-    console.log("user --> ", user);
+        if($("select[name=user_mail] > option:selected").index() == 4){
+            user.user_email = $("input[name=user_mail_id]").val() + "@" + $("input[name=user_mail_dir]").val();
+
+        }else{
+            user.user_email = $("input[name=user_mail_id]").val() + "@" + $("select[name=user_mail]").val();
+            console.log("jn");
+        }
+        user.user_phone =  $("input[name=user_phone1]").val() + $("input[name=user_phone2]").val() + $("input[name=user_phone3]").val();
+
+        console.log("user --> ", user);
+
+        return connectToServer("/join", user, "post", function(err, res){
+        
+            // 성공하면 res.data = 1, 실패하면 res.data = 0
+            if(err){
+                console.log("서버오류 ---> ", err);
+                return false;
+            }
+    
+            // 가입실패
+            if(res.error){
+                /* 
+                    [ res.error.errno ]
+                    1406 ---> Data Too Long
+                    1054 ---> Bac Sql
+                    1062 ---> PK 중복
+                */
+                console.log("DB오류 ---> " + res.error.errno);
+                return false ;
+            }
+    
+            // 가입 성공
+            if(res.data == 1){
+                location.href="/login";
+            }
+    
+        }); // callback function End
+
+    } // else End
 
     // document.joinForm.submit();
 
-    return connectToServer("/join", user, "post", function(err, res){
-        
-        // 성공하면 res.data = 1, 실패하면 res.data = 0
-        if(err){
-            console.log("서버오류 ---> ", err);
-            return false;
-        }
-
-        // 가입실패
-        if(res.error){
-            /* 
-                [ res.error.errno ]
-                1406 ---> Data Too Long
-                1054 ---> Bac Sql
-                1062 ---> PK 중복
-            */
-            console.log("DB오류 ---> " + res.error.errno);
-            return false ;
-        }
-
-        // 가입 성공
-        if(res.data == 1){
-            location.href="/login";
-        }
-
-    }); // callback function End
-
 }
 
-/* Ajax 통신을 위한 펑션 */
+/* 회원가입 Ajax 통신을 위한 펑션 */
 function connectToServer(url, data, method, callback){
     console.log('[connectToServer]url:', url);
     console.log('[connectToServer]data:', data);
@@ -162,10 +170,83 @@ function connectToServer(url, data, method, callback){
 } // ajax E
 
 
+/* 가입아이디 중복체크 */
+function joinIdDupCheck(){
+
+    var user = {
+        user_id : $("input[name=user_id]").val()
+    }
+
+    if(user.user_id != ''){
+
+        return connectToServerCheckId("/idCheck", user, "post", function(err, res){
+            
+            // 중복이면 res.data = 1, 중복아니면 res.data = 0
+            if(err){
+                console.log("서버오류 ---> ", err);
+                return false;
+            }
+
+            // 확인실패
+            if(res.error){
+                /* 
+                    [ res.error.errno ]
+                    1406 ---> Data Too Long
+                    1054 ---> Bac Sql
+                    1062 ---> PK 중복
+                */
+                console.log("DB오류 ---> " + res.error.errno);
+                return false ;
+            }
+
+            console.log("res.data -----> ", res.data);
+            // 중복된아이디
+            if(res.data == 1){
+                alert("아이디가 중복되었습니다");
+            
+            // 중복되지 않은 아이디
+            }else{
+                alert("사용가능한 아이디입니다.");
+                
+            }
+
+        }); // callback function End
+    } //  if End
+} // joinIdDupCheck End
+
+/* 아이디 중복체크 Ajax 통신을 위한 펑션 */
+function connectToServerCheckId(url, data, method, callback){
+    console.log('[connectToServer]url:', url);
+    console.log('[connectToServer]data:', data);
+    $.ajax({
+        url: url,
+        data: JSON.stringify((data)?data:''),
+        type: method,
+        contentType: 'application/json',
+        success: function(data, status){
+            callback(null, data);
+        },
+        timeout: 10000,
+
+        error: function(data, status, errthrown){
+            console.log('[error]data', data);
+            console.log('[error]status', status);
+            console.log('[error]err thrown', errthrown);
+            if(data.status == 400){
+                if(data.responseText != undefined){
+                    callback(data.responseText.replace(/(\n|\r\n)/g, '<br>'), null);
+                }else{
+                    callback(data.responseJSON.replace(/(\n|\r\n)/g, '<br>'), null)
+                }
+            }else if(status == 'timeout'){
+                callback('서버응답시간을 초과하였습니다.', null)
+            }else if(status == 'error'){
+                callback('서버로부터 에러가 발생되었습니다.', null)
+            }
+        }
+    });
+} // ajax E
 
 
-$(window).load(function(){
-
-});
 
 

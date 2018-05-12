@@ -81,6 +81,25 @@ exports.join = function(req, res){
 };
 
 
+// 아이디 중복체크
+exports.checkid = function(req, res){
+
+    console.log('checkid req.body:', req.body);
+
+        dbconn.instance[defaultDB.db].query(queries.select.get_user_id, [req.body.user_id], function (error, results, fields) {
+            if (error){
+                console.log("에러났어요------------>", error);
+                return res.send({'error': error});
+            }
+
+            console.log("results.GK_USERS_ID ---> ", results.length);
+
+            return res.send({data : results.length });
+
+        });// 쿼리 끝
+};
+
+
 /* for test */
 exports.query = (req, res) => {
     console.log('/account/query req.body:', req.body);
