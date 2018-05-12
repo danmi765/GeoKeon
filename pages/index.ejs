@@ -49,11 +49,18 @@
                     <ul class="header_local_menu">
 
                         <%
-                        
+                        if(locals){
+                            console.log('---------------');
+                            console.log('locals.authId:', (locals.authId)?locals.authId:null);
+                            console.log('locals.currentSession:', (locals.authId)?locals[authId]:null);
+                            console.log('locals.sessionStorage:', locals.lastLoginInfo);
+                            console.log('---------------');
+                        }
+
                         // 세션 이용 --->  locals.변수명
                         
                             // 회원아이디가 존재하지 않으면 or 옛날 세션일 경우 login을 띄우고
-                            if(!locals.authId || (new Date(locals.loginDt) < new Date(locals.lastLoginDt))){
+                            if(!locals.authId || (new Date(locals[authId].loginDt) < new Date(locals.lastLoginInfo.loginDt))){
                         %>
                             <li><a href="/login">login</a></li>
 

@@ -18,17 +18,20 @@ const { getSessionStorage } = require('./utils/sessionStorage');
 app.use(session({
     secret : 'keyboard cat',
     resave : false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 // 쿠키 유효기간 1시간
+      }
 }));
 
 // 세션을 전역으로 사용할 수 있도록 함
 app.use(function(req, res, next) {
     res.locals = req.session;   /* 로그인 할때 authId와 loggedDt속성이 추가로 들어간다 */
     
+    // console.log('[index.js]req.session', req.session);
     res.locals = {
         ...res.locals,
-        lastLoginDt : getSessionStorage(),  /* 세션 스토리지 저장소(js)에 있는 최종 로그인시간을 불러온다 */
-        
+        lastLoginInfo : getSessionStorage((req.session.authId)?req.session.authId:null),  /* 세션 스토리지 저장소(js)에 있는 회원의 최신 로그인시간을 불러온다 */        
     }
     next();
 });
@@ -51,7 +54,7 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 // GET index
 app.get('/', function(req, res) {
 
-    res.render('index', {pages : 'main.ejs',  models : { user : req.session.authId, title : '메인'}});
+    res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
 });
 
 // GET intro

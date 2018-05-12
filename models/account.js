@@ -36,13 +36,18 @@ exports.login = function(req, res){
 
             // 로그인 성공
             }else{
-
+                /* 로그인 당시 시간 캡쳐 */
+                const loginDt = {    
+                    loginDt : new Date()
+                }
                 // 세션 존재하면 기존세션 제거 후 발급 : 중복로그인 방지
-
                 req.session.authId = user_id; // 사용자 아이디 세션에 저장
-                req.session.loginDt = setSessionStorage(new Date());   /* 최종 로그인 시점의 세션상태를 저장하는 곳 */
-                
 
+                /* 로그인되는 순간에 저장되는 값이 변하지 않는 세션 */
+                req.session[user_id] = loginDt;
+                /* 새로 로그인할 때마다 값이 새로 들어가는 세션 영역에 저장하기 */
+                setSessionStorage(user_id, loginDt)
+                
                 req.session.save(function(){ // 세션 저장 후 렌더
                     res.redirect('/');
                     // res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
@@ -62,17 +67,22 @@ exports.join = function(req, res){
 
         dbconn.instance[defaultDB.db].query(queries.insert.add_user, [req.body.user_id, hash, req.body.user_name, req.body.user_email, req.body.user_phone, new Date(), 'T'], function (error, results, fields) {
             if (error){
+                console.log("에러났어요------------>", error);
                 return res.send({'error': error});
             }
 
-            dbconn.instance[defaultDB.db].query(queries.select.get_user_id, [req.body.user_id], function (error, results, fields) {
-                console.log("--------results---> ", results);
-            });
-        });// 쿼리 끝
+            // 회원가입 성공
+            if(results.affectedRows == 1){
+                return res.send({data : true});
 
+            // 회원가입 실패
+            }else{
+                return res.send({data : false});
+            }
+        });// 쿼리 끝
+ 
      }); // 해싱 끝
 
-    return res.render('index', {  pages : 'join.ejs', models:{title : '회원가입', page_title : '회원가입'}} );
 };
 
 
