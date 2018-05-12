@@ -22,6 +22,14 @@ router.get('/login', function(req, res) {
 
 router.post('/login', accountController.login);
 
+/**  로그아웃  **/
+router.get('/logout', function(req, res) {
+    req.session.destroy(function(){
+        req.session;
+        });
+
+});
+
 /** 쿼리 테스트 **/
 router.post('/query', accountController.query);
 /** 이벤트로그 일괄제거 **/

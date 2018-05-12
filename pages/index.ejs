@@ -58,10 +58,11 @@
                             <li><a href="/login">login</a></li>
 
 
-                        <%  // 회원아이디가 존재하면 회원아이디를 띄운다.
+                        <%  // 회원아이디가 존재하면 회원아이디와 logout버튼을 띄운다.
                             } else{ %>
 
                             <li><a href=""><%= locals.authId%></a>
+                            <li><a href="logout">logout</a>
 
                         <% } %>
                         <li><a href="/">home</a></li>
