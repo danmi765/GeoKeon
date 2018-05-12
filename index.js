@@ -16,13 +16,16 @@ const session = require('express-session');
 app.use(session({
     secret : 'keyboard cat',
     resave : false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: {
+        maxAge: 1000 * 60 * 60 // 쿠키 유효기간 1시간
+      }
 }));
 
 // 세션을 전역으로 사용할 수 있도록 함
 app.use(function(req, res, next) {
-  res.locals = req.session;
-  next();
+    res.locals = req.session;
+    next();
 });
 
 
@@ -43,7 +46,7 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 // GET index
 app.get('/', function(req, res) {
 
-    res.render('index', {pages : 'main.ejs',  models : { user : req.session.authId, title : '메인'}});
+    res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
 });
 
 // GET intro

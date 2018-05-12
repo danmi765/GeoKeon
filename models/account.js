@@ -36,12 +36,16 @@ exports.login = function(req, res){
 
             // 로그인 성공
             }else{
-
+ 
                 // 세션 존재하면 기존세션 제거 후 발급 : 중복로그인 방지
 
                 req.session.authId = user_id; // 사용자 아이디 세션에 저장
-			    req.session.save(function(){ // 세션 저장 후 렌더
-                    res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
+                
+                console.log("req.session-------------->", req.session);
+
+                req.session.save(function(){ // 세션 저장 후 렌더
+                    res.redirect('/');
+                    // res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
                  });
             }
         }
@@ -54,21 +58,26 @@ exports.join = function(req, res){
     console.log('login req.body:', req.body);
 
     bcrypt.hash(req.body.user_pw, salt,  function(err, hash) {
-        console.log('--------------------------->' + user_pw);
-
+        console.log('--------------------------->' +req.body.user_pw);
+ 
         dbconn.instance[defaultDB.db].query(queries.insert.add_user, [req.body.user_id, hash, req.body.user_name, req.body.user_email, req.body.user_phone, new Date(), 'T'], function (error, results, fields) {
             if (error){
+                console.log("에러났어요------------>", error);
                 return res.send({'error': error});
             }
 
-            dbconn.instance[defaultDB.db].query(queries.select.get_user_id, [req.body.user_id], function (error, results, fields) {
-                console.log("--------results---> ", results);
-            });
-        });// 쿼리 끝
+            // 회원가입 성공
+            if(results.affectedRows == 1){
+                return res.send({data : true});
 
+            // 회원가입 실패
+            }else{
+                return res.send({data : false});
+            }
+        });// 쿼리 끝
+ 
      }); // 해싱 끝
 
-    return res.render('index', {  pages : 'join.ejs', models:{title : '회원가입', page_title : '회원가입'}} );
 };
 
 

@@ -80,5 +80,8 @@
     /* 로그인 페이지 */
     .login_contents{width:80%; margin:0 auto;}
 
+    /* 가입 페이지 */
+    .login_contents input[name=user_mail_dir]{display:none;}
+
 
 }
