@@ -1,13 +1,14 @@
 module.exports = {
     'select' : {
         'list_comm_board' : 'SELECT * FROM ?? ORDER BY ?? DESC',
-
         'list_portpolio' : 'SELECT * FROM PORTPOLIO',
-        'get_comm_board' : 'SELECT * FROM ?? WHERE ?? = ?'
+        'get_comm_board' : 'SELECT * FROM ?? WHERE ?? = ?',
+        'get_user_id' : 'SELECT * FROM GK_USERS WHERE GK_USERS_ID = ? '
     },
     'insert' : {
         'add_comm_inquiry_board' : 'INSERT INTO BOARD_INQUIRY (BOARD_INQUIRY_TITLE, BOARD_INQUIRY_CONTENT, BOARD_INQUIRY_PW, BOARD_INQUIRY_WRITER, BOARD_INQUIRY_DATE) VALUES ?',
-        'add_comm_notice_board' : 'INSERT INTO BOARD_NOTICE (BOARD_NOTICE_TITLE, BOARD_NOTICE_CONTENT, BOARD_NOTICE_WRITER, BOARD_NOTICE_DATE) VALUES ?'
+        'add_comm_notice_board' : 'INSERT INTO BOARD_NOTICE (BOARD_NOTICE_TITLE, BOARD_NOTICE_CONTENT, BOARD_NOTICE_WRITER, BOARD_NOTICE_DATE) VALUES ?',
+        'add_user' : 'INSERT INTO GK_USERS (GK_USERS_ID, GK_USERS_PW, GK_USERS_NAME, GK_USERS_EMAIL, GK_USERS_PHONE, GK_USERS_DATE, GK_USERS_STATUS) VALUES (?, ?, ?, ?, ?, ?, ?)'
     },
     'delete' : {
         'delete_comm_board' : 'DELETE FROM ?? WHERE ?? = ?'

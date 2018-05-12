@@ -10,13 +10,17 @@
 
     .header_area{}
     .header_area_wrapper{ height: 70px;padding: 0 120px;}
-    .header_area_wrapper>ul{margin:0 0 0 150px; padding: 10px 0;}
+    .header_area_wrapper>ul.header_main_menu{margin:0 0 0 150px; padding: 10px 0;}
     .header_area_wrapper>ul:after{content:''; display:block; clear: both;}
     .header_area_wrapper>ul>li{float:left;}
-    .header_area_wrapper>ul>li>a:link, .header_area_wrapper>ul>li>a:visited{text-decoration:none;display:block;height:50px;width:100px;padding:0 15px;line-height:50px;text-align:center;color:#000;font-size:16px;}
+    .header_area_wrapper>ul.header_main_menu>li>a:link, .header_area_wrapper>ul>li>a:visited{text-decoration:none;display:block;height:50px;width:100px;padding:0 15px;line-height:50px;text-align:center;color:#000;font-size:16px;}
 
     .header_sub_menu > li{width:130px; height:30px; line-height:30px;}
     .header_sub_menu > li > a:link, .header_sub_menu > li > a:visited{display:block;text-decoration:none;padding:0 15px;color:#000;text-align:center;}
+
+    .header_local_menu{position:absolute; right:150px; top:20px;}
+    .header_area_wrapper>ul.header_local_menu>li>a:link, .header_area_wrapper>ul.header_local_menu>li>a:visited{text-decoration:none;display:block;padding:5px 10px;color:#000;}
+    .header_area_wrapper>ul.header_local_menu>li>a:hover, .header_area_wrapper>ul.header_local_menu>li>a:focus{text-decoration:underline;}
 
     /* 하단 */
     .footer_area{border-top:2px solid #000;margin-top:50px;}
@@ -72,6 +76,9 @@
     /* 소개페이지 */
     .intro_contents{width:80%;margin:0 auto; background:#ff9;}
 
+
+    /* 로그인 페이지 */
+    .login_contents{width:80%; margin:0 auto;}
 
 
 }

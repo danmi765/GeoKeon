@@ -46,6 +46,27 @@
                             </ul>
                         </li>
                     </ul>
+                    <ul class="header_local_menu">
+
+                        <%
+                        
+                        // 세션 이용 --->  locals.변수명
+                        
+                            // 회원아이디가 존재하지 않으면 or 옛날 세션일 경우 login을 띄우고
+                            if(!locals.authId || (new Date(locals.loginDt) < new Date(locals.lastLoginDt))){
+                        %>
+                            <li><a href="/login">login</a></li>
+
+
+                        <%  // 회원아이디가 존재하면 회원아이디와 logout버튼을 띄운다.
+                            } else{ %>
+
+                            <li><a href=""><%= locals.authId%></a>
+                            <li><a href="logout">logout</a>
+
+                        <% } %>
+                        <li><a href="/">home</a></li>
+                    </ul>
                 </div>
             </header>
 
