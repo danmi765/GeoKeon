@@ -1,42 +1,39 @@
 
 <%
 let comm_name ;
-
- if(models.comm_name == 'notice'){
-     comm_name = 'BOARD_NOTICE';
- }else if(models.comm_name == 'inquiry'){
-     comm_name = 'BOARD_INQUIRY';
- }
-
-
+if(models.comm_name == 'notice'){
+    comm_name = 'BOARD_NOTICE';
+}else if(models.comm_name == 'inquiry'){
+    comm_name = 'BOARD_INQUIRY';
+}
 %>
 
-            <h2 class="contents_title"><%= models.page_title %></h2>
-                <div class="contents_area">
-                    <div class="comm_contents">
-                        <table id="comm_view_table">
-                            <tbody>
-                                <tr class="comm_view_title">
-                                    <th>제목</th>
-                                    <td colspan="3"><%= models.comms[comm_name+'_TITLE'] %></td>
-                                </tr>
-                                <tr>
-                                    <th>작성자</th>
-                                    <td><%= models.comms[comm_name+'_WRITER'] %></td>
-                                    <th>작성일</th>
-                                    <td><%= models.comms[comm_name+'_DATE'] %></td>
-                                </tr>
-                                <tr class="comm_view_content">
-                                    <td colspan="4" class="comm_view_textarea"><%- models.comms[comm_name+'_CONTENT'] %></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="comm_view_btn_area">
-                            <form method="post" action="/comm_remove/<%=models.comm_name%>&<%= models.comms[comm_name+'_ID']%>">
-                                <button onclick="location.href='/comm/<%=models.comm_name%>'" type="button" title="목록" class="comm_view_list_btn gk_simple1_btn">목록</button>
-                                <button onclick="location.href='/comm_modify/<%=models.comm_name%>&<%=models.comms[comm_name+'_ID']%>'" type="button" title="수정" class="comm_view_modi_btn gk_simple1_btn">수정</button>
-                                <button type="submit" title="삭제" class="comm_view_del_btn gk_simple1_btn">삭제</button>
-                            </form>
-                        </div>
-                    </div> <!-- comm_contents End -->
-                </div> <!-- contents_area End -->
+    <h2 class="contents_title"><%= models.page_title %></h2>
+        <div class="contents_area">
+            <div class="comm_contents">
+                <table id="comm_view_table">
+                    <tbody>
+                        <tr class="comm_view_title">
+                            <th>제목</th>
+                            <td colspan="3"><%= models.comms[comm_name+'_TITLE'] %></td>
+                        </tr>
+                        <tr>
+                            <th>작성자</th>
+                            <td><%= models.comms[comm_name+'_WRITER'] %></td>
+                            <th>작성일</th>
+                            <td><%= models.comms[comm_name+'_DATE'] %></td>
+                        </tr>
+                        <tr class="comm_view_content">
+                            <td colspan="4" class="comm_view_textarea"><%- models.comms[comm_name+'_CONTENT'] %></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="comm_view_btn_area">
+                    <form method="post" action="/comm_remove/<%=models.comm_name%>&<%= models.comms[comm_name+'_ID']%>">
+                        <button onclick="location.href='/comm/<%=models.comm_name%>'" type="button" title="목록" class="comm_view_list_btn gk_simple1_btn">목록</button>
+                        <button onclick="location.href='/comm_modify/<%=models.comm_name%>&<%=models.comms[comm_name+'_ID']%>'" type="button" title="수정" class="comm_view_modi_btn gk_simple1_btn">수정</button>
+                        <button type="submit" title="삭제" class="comm_view_del_btn gk_simple1_btn">삭제</button>
+                    </form>
+                </div>
+            </div> <!-- comm_contents End -->
+        </div> <!-- contents_area End -->

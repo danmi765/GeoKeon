@@ -247,6 +247,12 @@ function connectToServerCheckId(url, data, method, callback){
     });
 } // ajax E
 
+<<<<<<< HEAD
 
 
 
+=======
+$(window).load(function(){
+    
+});
+>>>>>>> 5a59cc014e733d3268581958789e8ab133c3de1a

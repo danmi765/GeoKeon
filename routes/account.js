@@ -23,6 +23,7 @@ router.post('/login', accountController.login);
 /**  로그아웃  **/
 router.get('/logout', function(req, res) {
 
+    delete req.session[req.session.authId];
     delete req.session.authId;
 	req.session.save(function(){
 		res.redirect('/');

@@ -5,7 +5,7 @@ const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
 const bcrypt = require('bcrypt');
 const salt = bcrypt.genSaltSync(10);
-
+const { setSessionStorage } = require('../utils/sessionStorage');
 
 
 // 로그인
@@ -36,13 +36,18 @@ exports.login = function(req, res){
 
             // 로그인 성공
             }else{
- 
+                /* 로그인 당시 시간 캡쳐 */
+                const loginDt = {    
+                    loginDt : new Date()
+                }
                 // 세션 존재하면 기존세션 제거 후 발급 : 중복로그인 방지
-
                 req.session.authId = user_id; // 사용자 아이디 세션에 저장
-                
-                console.log("req.session-------------->", req.session);
 
+                /* 로그인되는 순간에 저장되는 값이 변하지 않는 세션 */
+                req.session[user_id] = loginDt;
+                /* 새로 로그인할 때마다 값이 새로 들어가는 세션 영역에 저장하기 */
+                setSessionStorage(user_id, loginDt)
+                
                 req.session.save(function(){ // 세션 저장 후 렌더
                     res.redirect('/');
                     // res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
@@ -55,11 +60,11 @@ exports.login = function(req, res){
 // 가입
 exports.join = function(req, res){
 
-    console.log('login req.body:', req.body);
+    console.log('join req.body:', req.body);
 
     bcrypt.hash(req.body.user_pw, salt,  function(err, hash) {
-        console.log('--------------------------->' +req.body.user_pw);
- 
+        console.log('--------hash------------------->', hash);
+
         dbconn.instance[defaultDB.db].query(queries.insert.add_user, [req.body.user_id, hash, req.body.user_name, req.body.user_email, req.body.user_phone, new Date(), 'T'], function (error, results, fields) {
             if (error){
                 console.log("에러났어요------------>", error);

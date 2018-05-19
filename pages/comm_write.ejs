@@ -2,9 +2,7 @@
                <h2 class="contents_title"><%= models.page_title %></h2>
                <div class="contents_area">
                     <div class="comm_contents">
-
                         <%
-
                             let comm_name ;
 
                              if(models.comm_name == 'notice'){
@@ -54,7 +52,15 @@
 
             /* 게시판 에디터 활성화 */
             CKEDITOR.replace( 'editor1', {
-                filebrowserUploadUrl: '/upload'
+                
+                extraPlugins: 'embed,autoembed,uploadimage,image2',
+                
+                /* embed url 삽입 시 실행되는 로직 */
+                embed_provider: '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
+                
+                /* 업로드 url */
+                filebrowserUploadUrl: '/upload',
+
             });
 
         </script>
