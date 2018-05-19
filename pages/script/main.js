@@ -1,4 +1,5 @@
 var id_chk = 0; // 아이디 중복체크 유효성 검사용 변수
+var joins; // 암호화를 위함 key
 
 // 공백체크 함수
 function checkSpace(str) { 
@@ -30,6 +31,61 @@ $(".header_main_menu > li > a, .header_sub_menu").hover(function(e){
     $(".header_sub_menu").addClass("clocking");
 });
 
+// 로그인
+function goLogin(saltKey){
+
+    console.log(saltKey);
+
+    var user = {
+        user_id : $("input[name=user_id]").val(),
+        user_pw : $("input[name=user_pw]").val()
+    }
+
+    console.log("---- :" ,user);
+
+    // 암호화
+    var en_user = CryptoJS.AES.encrypt(JSON.stringify(user), saltKey).toString();
+
+    return connectToServer("/login", {user_data : en_user}, "post", function(err, res){
+            
+        if(err){
+            console.log("서버오류 ---> ", err);
+            return false;
+        }
+
+        //실패
+        if(res.error){
+            /* 
+                [ res.error.errno ]
+                1406 ---> Data Too Long
+                1054 ---> Bad Sql
+                1062 ---> PK 중복
+            */
+            console.log("DB오류 ---> " + res.error.errno);
+            return false ;
+        }
+
+        // 아이디 불일치
+        if(res.data == 1){
+            $(".msg_box").html("아이디가 존재하지 않습니다.");
+        }
+
+        // 비밀번호 불일치
+        if(res.data == -1){
+            $(".msg_box").html("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 로그인 성공
+        if(res.data == 0){
+            location.href="/";
+        }
+
+    }); // callback function End
+ 
+ 
+
+}
+
 
 // 가입 : 이메일 직접입력 선택 시
 function chageMailSelect(){
@@ -58,7 +114,6 @@ $('input[name=user_mail_dir]').blur(function() {
     }
 });
 
-
 function userMailDirChange(){
 
     var mail =  $("input[name=user_mail_dir]").val();
@@ -75,7 +130,7 @@ $(".login_contents input[type=text], .login_contents input[type=password]").chan
 
 
 /* 회원가입 유효성체크 */
-function goJoin(){
+function goJoin(saltKey){
 
     var user = {
         user_id : $("input[name=user_id]").val(),
@@ -87,7 +142,7 @@ function goJoin(){
 
         user_phone1 : $("input[name=user_phone1]").val(), 
         user_phone2 : $("input[name=user_phone2]").val(),
-        user_phone3 : $("input[name=user_phone3]").val(),
+        user_phone3 : $("input[name=user_phone3]").val()
     }
 
     if(user.user_id == ""){
@@ -134,6 +189,8 @@ function goJoin(){
     // 유효성 모두 통과한 후
     }else{
 
+        console.log("saltKey ----> ", saltKey);
+
         if($("select[name=user_mail] > option:selected").index() == 4){
             user.user_email = $("input[name=user_mail_id]").val() + "@" + $("input[name=user_mail_dir]").val();
 
@@ -146,7 +203,7 @@ function goJoin(){
         console.log("user --> ", user);
 
         // 암호화
-        var en_user = CryptoJS.AES.encrypt(JSON.stringify(user), 'geoseong' ).toString();
+        var en_user = CryptoJS.AES.encrypt(JSON.stringify(user), saltKey).toString();
 
         console.log('en_user:', en_user);
 
@@ -172,7 +229,7 @@ function goJoin(){
     
             // 가입 성공
             if(res.data == 1){
-                location.href="/login";
+                location.href="/loginPage";
             }
     
         }); // callback function End
@@ -182,41 +239,6 @@ function goJoin(){
     // document.joinForm.submit();
 
 }
-
-/* 회원가입 Ajax 통신을 위한 펑션 */
-function connectToServer(url, data, method, callback){
-    console.log('[connectToServer]url:', url);
-    console.log('[connectToServer]data:', data);
-
-
-    $.ajax({
-        url: url,
-        data: JSON.stringify((data)?data:''),
-        type: method,
-        contentType: 'application/json',
-        success: function(data, status){
-            callback(null, data);
-        },
-        timeout: 10000,
-
-        error: function(data, status, errthrown){
-            console.log('[error]data', data);
-            console.log('[error]status', status);
-            console.log('[error]err thrown', errthrown);
-            if(data.status == 400){
-                if(data.responseText != undefined){
-                    callback(data.responseText.replace(/(\n|\r\n)/g, '<br>'), null);
-                }else{
-                    callback(data.responseJSON.replace(/(\n|\r\n)/g, '<br>'), null)
-                }
-            }else if(status == 'timeout'){
-                callback('서버응답시간을 초과하였습니다.', null)
-            }else if(status == 'error'){
-                callback('서버로부터 에러가 발생되었습니다.', null)
-            }
-        }
-    });
-} // ajax E
 
 
 /* 가입아이디 중복체크 */
@@ -228,7 +250,7 @@ function joinIdDupCheck(){
 
     if(user.user_id != ''){
 
-        return connectToServerCheckId("/idCheck", user, "post", function(err, res){
+        return connectToServer("/idCheck", user, "post", function(err, res){
             
             // 중복이면 res.data = 1, 중복아니면 res.data = 0
             if(err){
@@ -264,10 +286,13 @@ function joinIdDupCheck(){
     } //  if End
 } // joinIdDupCheck End
 
-/* 아이디 중복체크 Ajax 통신을 위한 펑션 */
-function connectToServerCheckId(url, data, method, callback){
+
+/*Ajax 통신을 위한 펑션 */
+function connectToServer(url, data, method, callback){
     console.log('[connectToServer]url:', url);
     console.log('[connectToServer]data:', data);
+
+
     $.ajax({
         url: url,
         data: JSON.stringify((data)?data:''),
@@ -296,7 +321,5 @@ function connectToServerCheckId(url, data, method, callback){
         }
     });
 } // ajax E
-
-
 
 
