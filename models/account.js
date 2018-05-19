@@ -6,6 +6,7 @@ const defaultDB = require('../index');
 const bcrypt = require('bcrypt');
 const salt = bcrypt.genSaltSync(10);
 const { setSessionStorage } = require('../utils/sessionStorage');
+const CryptoJS = require("crypto-js");
 
 
 // 로그인
@@ -62,10 +63,18 @@ exports.join = function(req, res){
 
     console.log('join req.body:', req.body);
 
-    bcrypt.hash(req.body.user_pw, salt,  function(err, hash) {
+    // 복호화
+    var bytes = CryptoJS.AES.decrypt( req.body.user_data , 'geoseong');
+    var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
+    var user_db_data = JSON.parse(decryptedPW);
+
+    console.log('---->> decryptedPW:', decryptedPW);
+    console.log("---->user_db_data.user_pw : ", user_db_data.user_pw);
+ 
+    bcrypt.hash(user_db_data.user_pw, salt,  function(err, hash) {
         console.log('--------hash------------------->', hash);
 
-        dbconn.instance[defaultDB.db].query(queries.insert.add_user, [req.body.user_id, hash, req.body.user_name, req.body.user_email, req.body.user_phone, new Date(), 'T'], function (error, results, fields) {
+        dbconn.instance[defaultDB.db].query(queries.insert.add_user, [user_db_data.user_id, hash, user_db_data.user_name, user_db_data.user_email, user_db_data.user_phone, new Date(), 'T'], function (error, results, fields) {
             if (error){
                 console.log("에러났어요------------>", error);
                 return res.send({'error': error});
@@ -82,6 +91,7 @@ exports.join = function(req, res){
         });// 쿼리 끝
  
      }); // 해싱 끝
+ 
 
 };
 

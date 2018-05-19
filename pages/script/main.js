@@ -1,3 +1,25 @@
+var id_chk = 0; // 아이디 중복체크 유효성 검사용 변수
+
+// 공백체크 함수
+function checkSpace(str) { 
+    if(str.search(/\s/) != -1) {
+         return true; 
+    } else {
+         return false;
+     } 
+}
+
+// 특수 문자가 있나 없나 체크
+function checkSpecial(str) {
+    var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
+    if(special_pattern.test(str) == true) { 
+        return true; 
+    } else {
+        return false; 
+    } 
+}
+
+
 
 // 서브메뉴
 $(".header_main_menu > li > a, .header_sub_menu").hover(function(e){
@@ -71,8 +93,25 @@ function goJoin(){
     if(user.user_id == ""){
         $("span[name=user_id]").html("아이디를 입력하세요");
 
+    }else if(user.user_id.length < 5 || user.user_id.length > 10){
+        $("span[name=user_id]").html("아이디는 5자 이상 10자 이하 입니다.");
+
+    }else if(checkSpace(user.user_id) == true ){
+        // 띄어쓰기 포함되어있음
+        $("span[name=user_id]").html("아이디는 공백을 입력할 수 없습니다.");
+
+    }else if(checkSpecial(user.user_id) == true){
+        // 특수문자 포함되어있음
+        $("span[name=user_id]").html("아이디는 특수문자를 사용할 수 없습니다.");
+        
     }else if(user.user_pw == ""){
         $("span[name=user_pw]").html("비밀번호를를 입력하세요");
+
+    }else if(user.user_pw.length < 4 || user.user_pw.length > 10){
+        $("span[name=user_pw]").html("비밀번호는 4자 이상 10자 이하 입니다.");
+
+    }else if(checkSpace(user.user_pw) == true){
+        $("span[name=user_pw]").html("비밀번호는 공백을 입력할 수 없습니다.");
 
     }else if(user.user_pw != user.user_pw_check){
         $("span[name=user_pw_check]").html("비밀번호가 일치하지 않습니다.");
@@ -89,6 +128,9 @@ function goJoin(){
     }else if(user.user_phone1 == "" || user.user_phone2 == "" || user.user_phone3 == ""){
         $("span[name=user_phone]").html("휴대전화번호를 입력하세요.");
 
+    }else if(id_chk != 1){
+        alert("아이디 중복체크를 해주세요.");
+
     // 유효성 모두 통과한 후
     }else{
 
@@ -103,7 +145,12 @@ function goJoin(){
 
         console.log("user --> ", user);
 
-        return connectToServer("/join", user, "post", function(err, res){
+        // 암호화
+        var en_user = CryptoJS.AES.encrypt(JSON.stringify(user), 'geoseong' ).toString();
+
+        console.log('en_user:', en_user);
+
+        return connectToServer("/join", {user_data : en_user} , "post", function(err, res){
         
             // 성공하면 res.data = 1, 실패하면 res.data = 0
             if(err){
@@ -116,7 +163,7 @@ function goJoin(){
                 /* 
                     [ res.error.errno ]
                     1406 ---> Data Too Long
-                    1054 ---> Bac Sql
+                    1054 ---> Bad Sql
                     1062 ---> PK 중복
                 */
                 console.log("DB오류 ---> " + res.error.errno);
@@ -140,6 +187,8 @@ function goJoin(){
 function connectToServer(url, data, method, callback){
     console.log('[connectToServer]url:', url);
     console.log('[connectToServer]data:', data);
+
+
     $.ajax({
         url: url,
         data: JSON.stringify((data)?data:''),
@@ -207,6 +256,7 @@ function joinIdDupCheck(){
             // 중복되지 않은 아이디
             }else{
                 alert("사용가능한 아이디입니다.");
+                id_chk = 1;
                 
             }
 
@@ -247,12 +297,6 @@ function connectToServerCheckId(url, data, method, callback){
     });
 } // ajax E
 
-<<<<<<< HEAD
 
 
 
-=======
-$(window).load(function(){
-    
-});
->>>>>>> 5a59cc014e733d3268581958789e8ab133c3de1a
