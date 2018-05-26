@@ -156,6 +156,7 @@ exports.findId = function(req, res){
         // 해당 이메일에 아이디가 존재할 경우.
         if(results.length >= 1){
             console.log("results ---> ", results);
+            res.render('index', {pages : 'findid.ejs', models : {title : '아이디찾기', page_title : '아이디찾기', find_id : '아이디가 존재합니다', find_id_res : results}});
             
         }
 
