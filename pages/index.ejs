@@ -28,13 +28,11 @@
         <!-- CKEditor -->
         <script src="/lib/ckeditor/ckeditor.js"></script>
 
-        <!-- CryptoJS v3.1.2 -->
-        <script src="lib/CryptoJSv3.1.2/rollups/aes.js"></script>
-        <script src="lib/CryptoJSv3.1.2/components/aes.js"></script>
-        <script src="lib/CryptoJSv3.1.2/rollups/sha256.js"></script>
-        <script src="lib/CryptoJSv3.1.2/components/sha256.js"></script>
-
-
+        <!—- CryptoJS v3.1.2 -—>
+        <script src="/lib/CryptoJSv3.1.2/rollups/aes.js"></script>
+        <script src="/lib/CryptoJSv3.1.2/components/aes.js"></script>
+        <script src="/lib/CryptoJSv3.1.2/rollups/sha256.js"></script>
+        <script src="/lib/CryptoJSv3.1.2/components/sha256.js"></script>
     </head>
     <body>
       <div id="comm_page" class="wrapper">
@@ -59,9 +57,9 @@
                         if(locals){
                             console.log('---------------');
                             console.log('locals.authId:', (locals.authId)?locals.authId:null);
-                            console.log('locals.joins:', (locals.joins)?locals.joins:null);
                             console.log('locals.currentSession:', (locals.authId)?locals[authId]:null);
                             console.log('locals.sessionStorage:', locals.lastLoginInfo);
+                            console.log('locals.rowsPerPage:', locals.rowsPerPage);
                             console.log('---------------');
                         }
 
@@ -70,7 +68,7 @@
                             // 회원아이디가 존재하지 않으면 or 옛날 세션일 경우 login을 띄우고
                             if(!locals.authId || (new Date(locals[authId].loginDt) < new Date(locals.lastLoginInfo.loginDt))){
                         %>
-                            <li><a href="/loginPage">login</a></li>
+                            <li><a href="/login">login</a></li>
 
 
                         <%  // 회원아이디가 존재하면 회원아이디와 logout버튼을 띄운다.

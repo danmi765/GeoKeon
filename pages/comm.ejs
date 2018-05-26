@@ -7,19 +7,20 @@ let comm_name ;
      comm_name = 'BOARD_INQUIRY';
  }
 
-
 %>
                 <h2 class="contents_title"><%= models.page_title %></h2>
                 <div class="contents_area">
                     <div class="comm_contents">
                         <div class="comm_search_bar">
-                            <input name="comm_search_text" class="comm_search_text" placeholder="검색내용 입력"  >
-                            <span class="comm_search_btn fa fa-search"></span>
-                            <select class="comm_search_select">
-                                <option>제목</option>
-                                <option>작성자</option>
-                                <option>내용</option>
-                            </select>
+                            <form action="/comm/<%=models.comm_name%>" name="comm_search_form">
+                                <input name="comm_search_text" class="comm_search_text" placeholder="검색내용 입력"  >
+                                <span class="comm_search_btn fa fa-search" onclick="javascript:comm_search_form.submit()"></span>
+                                <select class="comm_search_select" name="comm_search_select">
+                                    <option value="t">제목</option>
+                                    <option value="w">작성자</option>
+                                    <option value="c">내용</option>
+                                </select>
+                            </form>
                         </div>
 
                         <table class="gk_default_table gk_th_border_table">
@@ -34,7 +35,10 @@ let comm_name ;
                             <tbody>
                                 <%  models.comms.forEach((comm, idx) => { %>
                                     <tr>
-                                        <th><%= comm[comm_name+'_ID'] %></th>
+                                        <th>
+                                            <%= comm.display_num %>
+                                            <span class="id clocking"><%= comm[comm_name+'_ID'] %></span>
+                                        </th>
                                         <td class="comm_title"><a href="/comm_view/<%=models.comm_name%>&<%= comm[comm_name+'_ID'] %>"><%= comm[comm_name+'_TITLE'] %></a></td>
                                         <td><%= comm[comm_name+'_WRITER'] %></td>
                                         <td><%= comm[comm_name+'_DATE'] %></td>
@@ -48,7 +52,18 @@ let comm_name ;
                         <div class="gk_default_paging gk_basic2_paging">
                             <span><a href="">prev</a></span>
                                 <ul>
-                                    <li><a href="" class="selected">1</a></li>
+                                    <% 
+                                    if(models.comms.length > 0){
+                                        for(var i=0; i < Math.ceil(Number(models.comms[0].COUNT) / Number(locals.rowsPerPage)) ; i++) { %>
+                                            <li><a href="?page=<%= (i+1) %>&comm_search_select=<%=locals.type%>&comm_search_text=<%=locals.query%>" class="selected"><%= (i+1) %></a></li>
+                                    <%  
+                                        } // end for
+                                    }else{ 
+                                    %>
+                                        <li><a href="" class="selected">1</a></li>
+                                    <% 
+                                    } // end if
+                                    %>
                                 </ul>
                                 <span><a href="">next</a></span>
                         </div>

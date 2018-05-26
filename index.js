@@ -21,21 +21,19 @@ app.use(session({
     saveUninitialized: true,
     cookie: {
         maxAge: 1000 * 60 * 60 // 쿠키 유효기간 1시간
-      }
+    }
 }));
 
 // 세션을 전역으로 사용할 수 있도록 함
 app.use(function(req, res, next) {
-    //  console.log('[index.js]req.session', req);
-    
     res.locals = req.session;   /* 로그인 할때 authId와 loggedDt속성이 추가로 들어간다 */
     
+    // console.log('[index.js]req.session', req.session);
     res.locals = {
         ...res.locals,
-        lastLoginInfo : getSessionStorage((req.session.authId)?req.session.authId:null),  /* 세션 스토리지 저장소(js)에 있는 회원의 최신 로그인시간을 불러온다 */        
+        lastLoginInfo : getSessionStorage((req.session.authId)?req.session.authId:null),  /* 세션 스토리지 저장소(js)에 있는 회원의 최신 로그인시간을 불러온다 */
+        // rowsPerPage: 15,    /* 게시판 한페이지당 노출될 행 갯수 */
     }
-
-
     next();
 });
 

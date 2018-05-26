@@ -21,5 +21,7 @@ router.get('/comm_modify/:commName&:commId', commBoardController.modifyPage);
 router.post('/comm_modify/:commName&:commId', commBoardController.modify);
 /** 게시판 글삭제하기 **/
 router.post('/comm_remove/:commName&:commId', commBoardController.remove);
+/** 게시판 글 검색하기 **/
+router.post('/comm_remove/:commName&:commId', commBoardController.remove);
 
 module.exports = router;
