@@ -1,0 +1,21 @@
+
+
+                <h2 class="contents_title"><%= models.page_title%></h2>
+                <div class="contents_area">
+                    <div class="login_contents">
+                        <div class="msg_box"><%=models.msg%></div>
+                        <form method="post" action="findId">
+                            <fieldset>
+                                <table>
+                                    <tr>
+                                        <td>Email</td>                                
+                                        <td><input type="text" name="user_email" maxlength="35" /></td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2"><button type="submit" title="찾기" class="gk_simple1_btn"><span>find</span></button></td>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div> <!-- contents_area End -->
