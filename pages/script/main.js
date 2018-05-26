@@ -287,6 +287,48 @@ function joinIdDupCheck(){
 } // joinIdDupCheck End
 
 
+
+// 정보수정하기 페이지이동
+function goModiMyInfoPage(saltKey){
+
+    var user_pw = $("input[name=user_pw]").val() ;
+
+    // 암호화
+    var en_user = CryptoJS.AES.encrypt(user_pw, saltKey).toString();
+
+    return connectToServer("/mypage", {user_pw : en_user}, "post", function(err, res){
+            
+        if(err){
+            console.log("서버오류 ---> ", err);
+            return false;
+        }
+
+        //실패
+        if(res.error){
+            /* 
+                [ res.error.errno ]
+                1406 ---> Data Too Long
+                1054 ---> Bad Sql
+                1062 ---> PK 중복
+            */
+            console.log("DB오류 ---> " + res.error.errno);
+            return false ;
+        }
+
+        // 비밀번호 일치 
+        if(res.data == true){
+            location.href="/myModi";
+
+        // 비밀번호 불일치
+        }else{
+            alert(res.msg);
+        }
+
+    }); // callback function End
+
+} // goModiMyInfo End
+
+
 /*Ajax 통신을 위한 펑션 */
 function connectToServer(url, data, method, callback){
     console.log('[connectToServer]url:', url);

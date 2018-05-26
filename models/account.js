@@ -6,6 +6,7 @@ const defaultDB = require('../index');
 const bcrypt = require('bcrypt');
 // const salt = bcrypt.genSaltSync(10);
 const { setSessionStorage } = require('../utils/sessionStorage');
+const { getFormmatedDt } = require('../utils/utils');
 const CryptoJS = require("crypto-js");
 const randomstring = require("randomstring"); // 비밀번호 생성을 위한 랜덤문자열 
 const nodemailer = require('nodemailer'); // 비밀번호 이메일 발송
@@ -242,6 +243,79 @@ exports.findPw = function(req, res){
         }
     }); // dbconn End
 };
+
+
+// 마이페이지
+exports.mypage = function(req, res){
+
+    /** lev = 1 ---> 내작성글
+        lev = 2 ---> 정보수정 **/
+    console.log(req.query.lev);
+
+    if( req.query.lev == 1 ){
+
+        // 해당회원의 아이디를 불러와 작성한 게시글과 댓글 리스트를 select하여 ejs로 보낸다.
+        // 관리자일 경우엔 관리자페이지를 따로 설정하기 떄문에 일반회원기준으로만 작성함.
+        // select --> get_comm_board (BOARD_INQUIRY) 에서 가져옴.
+
+        var user_id = req.session.authId;
+
+        console.log("user_id -----> ", user_id);
+        
+        dbconn.instance[defaultDB.db].query(queries.select.get_comm_board, [tables['INQUIRY'], 'BOARD_INQUIRY_WRITER' ,user_id], function (error, results, fields) {
+
+            console.log("res =====> ", results);
+
+            let my_post = results.map((mypage_comm)=>{
+                return { ...mypage_comm, 'BOARD_INQUIRY_DATE': getFormmatedDt(mypage_comm['BOARD_INQUIRY_DATE']).date }
+            });
+
+            
+            res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post}});
+
+        });
+
+
+
+
+    }else if( req.query.lev == 2 ){
+
+        // 해당회원의 정보를 select하여 ejs로 보낸다.
+
+        res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '2'}});
+
+    }
+    
+};
+
+
+// 마이페이지 정보수정 화면이동
+exports.myInfoPage = function(req, res){
+ 
+    dbconn.instance[defaultDB.db].query(queries.select.get_user_pw_for_user_id, [req.session.authId], function (error, results, fields) {
+
+        // 복호화
+        var bytes = CryptoJS.AES.decrypt( req.body.user_pw , req.session.joins);
+        var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
+
+        // 비밀번호 불일치
+        if( !bcrypt.compareSync(decryptedPW, results[0].GK_USERS_PW) ){
+            return res.send({data : false, msg : '비밀번호가 일치하지 않습니다.'});
+
+        // 비밀번호 일치
+        }else{
+            return res.send({data : true});
+        }
+    }); // db End
+};
+
+// 내정보 수정 페이지로 이동
+exports.myModiPage = function(req, res){
+
+    res.render('index', {pages : 'mypage_infomodi.ejs', models : {title : '내정보수정', page_title : '내정보수정'}});
+
+};
+
 
 
 /* for test */
