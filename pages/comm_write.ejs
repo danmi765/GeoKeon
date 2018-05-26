@@ -25,7 +25,10 @@
                                     <tbody>
                                         <tr class="comm_write_pw">
                                             <th>비밀번호</th>
-                                            <td colspan="3"><input type="password" class="posts_pw" name="posts_pw" maxlength="4" value="<%=(!models.comms)?'':models.comms[comm_name+'_PW'] %>"/></td>
+                                            <td colspan="3">
+                                                <input type="hidden" name="user_id" value="<%= locals.authId%>">
+                                                <input type="password" class="posts_pw" name="posts_pw" maxlength="4" value="<%=(!models.comms)?'':models.comms[comm_name+'_PW'] %>"/>
+                                            </td>
                                         </tr>
 
                                         <tr class="comm_write_title">

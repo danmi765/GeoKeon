@@ -226,14 +226,14 @@ exports.write = function(req, res){
     if(commName == 'NOTICE'){
 
         insertValues = [
-            [reqBody.posts_title, reqBody.editor1, '로그인한아이디', new Date()]
+            [reqBody.posts_title, reqBody.editor1, reqBody.user_id, new Date()]
         ];
         query = queries.insert.add_comm_notice_board;
 
     }else if(commName == 'INQUIRY'){
 
         insertValues = [
-            [reqBody.posts_title, reqBody.editor1, reqBody.posts_pw, '로그인한아이디', new Date()]
+            [reqBody.posts_title, reqBody.editor1, reqBody.posts_pw, reqBody.user_id, new Date()]
         ];
         query = queries.insert.add_comm_inquiry_board;
 

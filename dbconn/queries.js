@@ -4,7 +4,8 @@ module.exports = {
         'search_comm_board' : 'SELECT BOARD.*, CNT.COUNT FROM ?? BOARD, (SELECT COUNT(??) as COUNT FROM ?? WHERE ?? LIKE ?) CNT WHERE ?? LIKE ? ORDER BY ? DESC LIMIT ?, ?',
         'list_portpolio' : 'SELECT * FROM PORTPOLIO',
         'get_comm_board' : 'SELECT * FROM ?? WHERE ?? = ?',
-        'get_user_id' : 'SELECT * FROM GK_USERS WHERE GK_USERS_ID = ? '
+        'get_user_id' : 'SELECT * FROM GK_USERS WHERE GK_USERS_ID = ? ',
+        'get_user_id_for_email' : "SELECT CONCAT( SUBSTR( GK_USERS_ID, 1, LENGTH(GK_USERS_ID)-3 ), '***' ) AS GK_USERS_ID FROM GK_USERS WHERE GK_USERS_EMAIL = ?"
     },
     'insert' : {
         'add_comm_inquiry_board' : 'INSERT INTO BOARD_INQUIRY (BOARD_INQUIRY_TITLE, BOARD_INQUIRY_CONTENT, BOARD_INQUIRY_PW, BOARD_INQUIRY_WRITER, BOARD_INQUIRY_DATE) VALUES ?',
