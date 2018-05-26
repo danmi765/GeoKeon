@@ -166,7 +166,7 @@ exports.findId = function(req, res){
 
 // 비밀번호 찾기
 exports.findPwPage = function(req, res){
-
+    res.render('index', {pages : 'findpw.ejs', models : {title : '비밀번호찾기', page_title : '비밀번호찾기'}});
 };
 
 exports.findPw = function(req, res){
