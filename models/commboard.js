@@ -92,7 +92,7 @@ const list = (req, res) => {
                 }
             })
             console.log('[board list]actual sql', execQuery.sql);
-            return res.render('index', {  pages : 'comm.ejs', models:{comms : comms ,title : '커뮤니티 : 공지?', page_title : '공지?', comm_name : req.params.commName} } );
+            return res.render('index', { pages : 'comm.ejs', models:{comms : comms ,title : '커뮤니티 : 공지?', page_title : '공지?', comm_name : req.params.commName} } );
         }); //end query
 }; //end list()
 
