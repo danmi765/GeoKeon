@@ -7,6 +7,8 @@ const bcrypt = require('bcrypt');
 // const salt = bcrypt.genSaltSync(10);
 const { setSessionStorage } = require('../utils/sessionStorage');
 const CryptoJS = require("crypto-js");
+const randomstring = require("randomstring"); // 비밀번호 생성을 위한 랜덤문자열 
+const nodemailer = require('nodemailer'); // 비밀번호 이메일 발송
 
 
 // 로그인
@@ -171,6 +173,74 @@ exports.findPwPage = function(req, res){
 
 exports.findPw = function(req, res){
 
+    console.log("req.body ------> ", req.body.user_id);
+
+    // query --> select.get_user_id
+    dbconn.instance[defaultDB.db].query(queries.select.get_user_id, [req.body.user_id], function (error, results, fields) {
+
+        if (error){
+            console.log("에러났어요------------>", error);
+            return res.send({'error': error});
+        }
+
+        // 해당 아이디가 존재하지 않음.
+        if( results.length == 0){
+            res.render('index', {pages : 'findpw.ejs', models : {title : '비밀번호찾기', page_title : '비밀번호찾기', msg : '아이디가 존재하지 않습니다.'}});
+        }
+
+        // 해당 아이디가 존재함.
+        if(results.length >= 1){
+
+            // 새로운 비밀번호 생성
+            var new_password = 
+                randomstring.generate({
+                    length: 10,
+                    charset: 'geokeon8991'
+                });
+
+            // 사용자  email로 전송
+            var transporter = nodemailer.createTransport({              
+                service: 'Gmail',
+                auth: {
+                    user: 'bizentrotspark@gmail.com',
+                    pass: 'Passw0rd!3'
+                }
+            });
+
+            var mailOptions = {  
+                from: '관리자 <bizentrotspark@gmail.com>',
+                to: results[0].GK_USERS_EMAIL,
+                subject: '새로운 비밀번호를 발송하였습니다.',
+                text: '새로운 비밀번호는 [ ' + new_password + ' ]입니다. 로그인 후 비밀번호를 변경해 주세요.'
+            };
+
+            transporter.sendMail(mailOptions, function(err, info){
+                if(err){
+                    console.log(err);
+                }
+                else{
+                    console.log("Email sent! --> ", info.response);
+                }
+                transporter.close();
+            });
+                
+            // 새로운 비밀번호 암호화
+            bcrypt.hash(new_password, req.session.joins,  function(err, hash) {
+
+                // 암호화된 새 비밀번호 update
+                dbconn.instance[defaultDB.db].query(queries.update.update_user_pw, [hash, req.body.user_id], function (error, results, fields) {
+                    if (error){
+                        console.log("에러났어요------------>", error);
+                        return res.send({'error': error});
+                    }                    
+                }); // 업데이트 끝
+
+            });// 해싱 끝
+            
+            res.render('index', {pages : 'login.ejs', models : {title : '로그인', page_title : '로그인', find_pw : '1'}});
+
+        }
+    }); // dbconn End
 };
 
 

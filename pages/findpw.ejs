@@ -5,14 +5,14 @@
                     <div class="login_contents">
                         <div class="msg_box"><%=models.msg%></div>
 
-                        <!-- 아이디 찾기 화면 -->
-                    <% if(!models.find_id){ %>
-                        <form method="post" action="findId">
+                        <!-- 비밀번호 찾기 화면 -->
+                    <% if(!models.find_pw){ %>
+                        <form method="post" action="findPw">
                             <fieldset>
                                 <table>
                                     <tr>
-                                        <td>Email</td>                                
-                                        <td><input type="text" name="user_email" maxlength="35" /></td>
+                                        <td>ID</td>                                
+                                        <td><input type="text" name="user_id" maxlength="35" /></td>
                                     </tr>
                                     <tr>
                                         <td colspan="2"><button type="submit" title="찾기" class="gk_simple1_btn"><span>find</span></button></td>
