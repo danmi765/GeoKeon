@@ -10,6 +10,7 @@ const { getFormmatedDt } = require('../utils/utils');
 const CryptoJS = require("crypto-js");
 const randomstring = require("randomstring"); // 비밀번호 생성을 위한 랜덤문자열 
 const nodemailer = require('nodemailer'); // 비밀번호 이메일 발송
+const split = require('node-split').split;
 
 
 // 로그인
@@ -312,7 +313,83 @@ exports.myInfoPage = function(req, res){
 // 내정보 수정 페이지로 이동
 exports.myModiPage = function(req, res){
 
-    res.render('index', {pages : 'mypage_infomodi.ejs', models : {title : '내정보수정', page_title : '내정보수정'}});
+    // 내정보가져오기
+    // 가져온정보 암호화 후 보내기
+    // 쿼리 get_user_id
+
+    var user_id = req.session.authId;
+
+    dbconn.instance[defaultDB.db].query(queries.select.get_user_id, [user_id], function (error, results, fields) {
+        
+        if (error) {
+            console.error('[connection.query]error: ' + error);
+            return res.send({'error': error});
+        }
+
+        console.log("res----> ", results);
+
+        var user_data = {
+            user_id : results[0].GK_USERS_ID ,
+            user_name : results[0].GK_USERS_NAME,
+            user_email_id :  results[0].GK_USERS_EMAIL.split('@')[0],
+            user_email_mail :  results[0].GK_USERS_EMAIL.split('@')[1],
+            user_phone1 :  results[0].GK_USERS_PHONE.substr(0,3),
+            user_phone2 :  results[0].GK_USERS_PHONE.substr(3,4),
+            user_phone3 :  results[0].GK_USERS_PHONE.substr(7,10),
+            user_join_date : results[0].GK_USERS_DATE,
+            user_status : results[0].GK_USERS_STATUS
+        }
+
+        console.log("user_data ------>",  user_data);
+
+        res.render('index', {pages : 'mypage_infomodi.ejs', models : {title : '내정보수정', page_title : '내정보수정', user_data : user_data}});
+
+    });
+
+   
+
+};
+
+// 비밀번호 변경 페이지 이동
+exports.changePwPage = function(req, res){
+
+    res.render('index', {pages : 'mypage_pwmodi.ejs', models : {title : '비밀번호변경', page_title : '비밀번호변경'}});
+
+};
+
+exports.changePw = function(req, res){
+
+    console.log("user_id--->", req.session.authId);
+    console.log("user_new_pw--->", req.body.user_data);
+
+    var bytes = CryptoJS.AES.decrypt( req.body.user_data , req.session.joins);
+    var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
+
+    console.log("decryptedPW---->",decryptedPW);
+
+    bcrypt.hash(decryptedPW, req.session.joins,  function(err, hash) {
+
+    console.log("hash----->", hash);
+
+        dbconn.instance[defaultDB.db].query(queries.update.update_user_pw, [ hash, req.session.authId], function (error, results, fields) {
+            if (error) {
+                console.error('[connection.query]error: ' + error);
+                return res.send({'error': error});
+            }
+            
+            // 사용한 salt key(joins)값 삭제
+            req.session.joins = "";
+
+            console.log("results.affectedRows =--------=> ", results.affectedRows );
+
+            if( results.affectedRows == 1 ){
+                return res.send({data : true}); 
+            }else {
+                return res.send({data : false}); 
+            }
+
+        }); // DB 끝
+    }); // 해싱 끝
 
 };
 

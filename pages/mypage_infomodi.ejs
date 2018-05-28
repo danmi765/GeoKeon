@@ -2,6 +2,65 @@
                 <h2 class="contents_title"><%= models.page_title%></h2>
                 <div class="contents_area">
                     <div class="my_info_modi_contents">
-                        
+                        <form name="my_info_modi_form" action="" method="post">
+                            <fieldset>
+                                <table>
+                                    <tr>
+                                        <th>ID</th>
+                                        <td><%=models.user_data.user_id%></td>
+                                    </tr>
+                                    <tr>
+                                        <th>PW</th>
+                                        <td><button type="button" onclick="location.href='/changePwPage'" class="gk_simple1_btn" title="비밀번호 변경하기"><span>비밀번호변경</span></button>
+                                    </tr>
+                                    <tr>
+                                        <th>Name</th>
+                                        <td><input name="user_name" type="text" value="<%=models.user_data.user_name%>" /></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Phone</th>
+                                        <td>
+                                           <input name="user_phone1" type="text" value="<%=models.user_data.user_phone1%>" />-
+                                           <input name="user_phone2" type="text" value="<%=models.user_data.user_phone2%>" />-
+                                           <input name="user_phone3" type="text" value="<%=models.user_data.user_phone3%>" /> 
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>E-mail</th>
+                                        <td>
+                                            <input name="user_email" type="text" value="<%=models.user_data.user_email_id%>" />&#64;
+                                            <!-- 메일을 우찌해야하나?? -->
+                                            <select name="user_mail" onchange="chageMailSelect()">
+                                                <option selected="selected" value="naver.com">naver.com</option>
+                                                <option value="hanmail.net">hanmail.net</option>
+                                                <option value="nate.com">nate.com</option>
+                                                <option value="gmail.com">gmail.com</option>
+                                                <option name="dir_entr" value="dir_entr">직접입력</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Join Date</th>
+                                        <td><%=models.user_data.user_join_date%></td>
+                                    </tr>
+                                    <tr>
+                                        <th>staus</th>
+                                        <td>
+                                            <%
+                                                var status = "";
+                                                if(models.user_data.user_status == 'T'){
+                                                    status = '가입';
+                                                }else{
+                                                    <!-- 후에 '휴먼' 계정도 만들기 -->
+                                                    status = "탈퇴";
+                                                }
+                                            %>
+                                            <%=status%>
+                                            <button type="button" onclick="" title="회원탈퇴" class="gk_simple1_btn"><span>탈퇴하기</span></button>
+                                        </td1>
+                                    </tr>
+                                </table>
+                            </fieldset>
+                        </form>
                     </div> <!-- my_info_modi_contents End -->
                 </div> <!-- contents_area End -->

@@ -124,7 +124,7 @@ function userMailDirChange(){
 }
 
 // 유효성 체크 후 공란에 입력되면 안내글을 지운다.
-$(".login_contents input[type=text], .login_contents input[type=password]").change(function(){
+$(".login_contents input[type=text], .login_contents input[type=password], .my_pw_modi_contents input[type=password]").change(function(){
     $(this).siblings("span").html("");
 });
 
@@ -321,12 +321,75 @@ function goModiMyInfoPage(saltKey){
 
         // 비밀번호 불일치
         }else{
-            alert(res.msg);
+            $(".passsword_error_messege").html("비밀번호가 일치하지 않습니다.");
         }
 
     }); // callback function End
 
 } // goModiMyInfo End
+
+
+//비밀번호 변경
+function goChangePassword(saltKey){
+
+    var user = {
+        new_user_pw : $("input[name=new_user_pw]").val(),
+        new_user_pw_ckh : $("input[name=new_user_pw_ckh]").val()
+    }
+
+    // 새로운 비밀번호 유효성검사
+    if(user.new_user_pw == ""){
+        $("span[name=new_user_pw]").html("비밀번호를 입력하세요");
+
+    }else if(user.new_user_pw_ckh == ""){
+        $("span[name=new_user_pw_ckh]").html("비밀번호를 한번 더 입력하세요");
+
+    }else if(user.new_user_pw.length < 4 || user.new_user_pw.length > 10){
+        $("span[name=new_user_pw]").html("비밀번호는 4자 이상 10자 이하 입니다.");
+
+    }else if(checkSpace(user.new_user_pw) == true){
+        $("span[name=new_user_pw]").html("비밀번호는 공백을 입력할 수 없습니다.");
+
+    }else if(user.new_user_pw != user.new_user_pw_ckh){
+        $("span[name=new_user_pw_ckh]").html("비밀번호가 일치하지 않습니다.");
+
+    // 유효성 통과
+    }else{ 
+        
+        // 암호화
+        var en_user_new_pw = CryptoJS.AES.encrypt(JSON.stringify(user.new_user_pw), saltKey).toString();
+
+        console.log('en_user_new_pw:', en_user_new_pw);
+
+        return connectToServer("/changePw",  {user_data : en_user_new_pw} , "post", function(err, res){
+        
+            if(err){
+                console.log("서버오류 ---> ", err);
+                return false;
+            }
+    
+            // 실패
+            if(res.error){
+                /* 
+                    [ res.error.errno ]
+                    1406 ---> Data Too Long
+                    1054 ---> Bad Sql
+                    1062 ---> PK 중복
+                */
+                console.log("DB오류 ---> " + res.error.errno);
+                return false ;
+            }
+    
+            // 성공
+            if(res.data == true){
+                location.href="/logout";
+            }
+    
+        }); // callback function End
+    }
+
+    return false;
+}
 
 
 /*Ajax 통신을 위한 펑션 */
