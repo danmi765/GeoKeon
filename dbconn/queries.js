@@ -5,7 +5,8 @@ module.exports = {
         'list_portpolio' : 'SELECT * FROM PORTPOLIO',
         'get_comm_board' : 'SELECT * FROM ?? WHERE ?? = ?',
         'get_user_id' : 'SELECT * FROM GK_USERS WHERE GK_USERS_ID = ? ',
-        'get_user_id_for_email' : "SELECT CONCAT( SUBSTR( GK_USERS_ID, 1, LENGTH(GK_USERS_ID)-3 ), '***' ) AS GK_USERS_ID FROM GK_USERS WHERE GK_USERS_EMAIL = ?"
+        'get_user_id_for_email' : "SELECT CONCAT( SUBSTR( GK_USERS_ID, 1, LENGTH(GK_USERS_ID)-3 ), '***' ) AS GK_USERS_ID FROM GK_USERS WHERE GK_USERS_EMAIL = ?",
+        'get_user_pw_for_user_id' : 'SELECT GK_USERS_PW FROM GK_USERS WHERE GK_USERS_ID = ?'
     },
     'insert' : {
         'add_comm_inquiry_board' : 'INSERT INTO BOARD_INQUIRY (BOARD_INQUIRY_TITLE, BOARD_INQUIRY_CONTENT, BOARD_INQUIRY_PW, BOARD_INQUIRY_WRITER, BOARD_INQUIRY_DATE) VALUES ?',
@@ -20,7 +21,8 @@ module.exports = {
         'update_comm_notice_board' : 'UPDATE BOARD_NOTICE SET BOARD_NOTICE_TITLE = ?, BOARD_NOTICE_CONTENT=? WHERE BOARD_NOTICE_ID=?',
 
         'update_comm_inquiry_board_cnt_p': 'UPDATE BOARD_INQUIRY SET BOARD_INQUIRY_CNT = ? WHERE BOARD_INQUIRY_ID = ?',
-        'update_comm_notice_board_cnt_p': 'UPDATE BOARD_NOTICE SET BOARD_NOTICE_CNT = ? WHERE BOARD_NOTICE_ID = ?'
+        'update_comm_notice_board_cnt_p': 'UPDATE BOARD_NOTICE SET BOARD_NOTICE_CNT = ? WHERE BOARD_NOTICE_ID = ?',
         // UPDATE board_inquiry a, board_inquiry b SET a.BOARD_INQUIRY_CNT = b.BOARD_INQUIRY_CNT+1 WHERE a.BOARD_INQUIRY_ID = b.BOARD_INQUIRY_ID and a.BOARD_INQUIRY_ID = ? ===> select문 없이 update하기
+        'update_user_pw' : 'UPDATE GK_USERS SET GK_USERS_PW = ? WHERE GK_USERS_ID = ? '
     }
 }

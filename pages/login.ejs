@@ -6,7 +6,14 @@
             joins = "<%= locals.joins %>" ;
         })
     </script>
-<% } %>
+<% }
+
+    if(models.find_pw == '1'){  %>
+        <script>
+            alert('비밀번호를 이메일로 발송하였습니다.');
+        </script>
+
+<% }%>
 
 
                 <h2 class="contents_title"><%= models.page_title%></h2>

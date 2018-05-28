@@ -35,6 +35,11 @@ router.get('/logout', function(req, res) {
  router.get('/findPwPage',accountController.findPwPage);
  router.post('/findPw',accountController.findPw);
 
+ /** 마이페이지 **/
+ router.get('/mypage', accountController.mypage );
+ router.post('/mypage',accountController.myInfoPage);
+ router.get('/myModi',accountController.myModiPage );
+
 /** 쿼리 테스트 **/
 router.post('/query', accountController.query);
 /** 이벤트로그 일괄제거 **/
