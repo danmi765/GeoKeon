@@ -362,14 +362,16 @@ exports.changePw = function(req, res){
     console.log("user_id--->", req.session.authId);
     console.log("user_new_pw--->", req.body.user_data);
 
+    // 복호화
     var bytes = CryptoJS.AES.decrypt( req.body.user_data , req.session.joins);
     var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
+    var user_db_data = JSON.parse(decryptedPW);
 
-    console.log("decryptedPW---->",decryptedPW);
+    console.log("user_db_data---->",user_db_data);
 
-    bcrypt.hash(decryptedPW, req.session.joins,  function(err, hash) {
+    bcrypt.hash(user_db_data, req.session.joins,  function(err, hash) {
 
-    console.log("hash----->", hash);
+        console.log("hash----->", hash);
 
         dbconn.instance[defaultDB.db].query(queries.update.update_user_pw, [ hash, req.session.authId], function (error, results, fields) {
             if (error) {
@@ -381,6 +383,8 @@ exports.changePw = function(req, res){
             req.session.joins = "";
 
             console.log("results.affectedRows =--------=> ", results.affectedRows );
+
+            // 결과 값 날리는거 다시 정리하자
 
             if( results.affectedRows == 1 ){
                 return res.send({data : true}); 
