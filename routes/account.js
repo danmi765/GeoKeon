@@ -39,6 +39,8 @@ router.get('/logout', function(req, res) {
  router.get('/mypage', accountController.mypage );
  router.post('/mypage',accountController.myInfoPage);
  router.get('/myModi',accountController.myModiPage );
+ router.get('/changePwPage', accountController.changePwPage );
+ router.post('/changePw', accountController.changePw );
 
 /** 쿼리 테스트 **/
 router.post('/query', accountController.query);
