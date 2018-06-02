@@ -15,6 +15,11 @@ const split = require('node-split').split;
 
 // 로그인
 exports.loginPage = function(req, res){
+
+    if( req.session.authId ){
+        delete req.session[req.session.authId];
+        delete req.session.authId;
+    }  
     
     let salt = bcrypt.genSaltSync(10); // salt key 생성
     console.log("====> salt : ", salt);
@@ -50,6 +55,10 @@ exports.login = function(req, res){
             if(!bcrypt.compareSync(user_db_data.user_pw, results[0].GK_USERS_PW)){
                 return res.send({data : -1 });
               
+            // 탈퇴한 회원
+            }else if(results[0].GK_USERS_STATUS == 'F'){
+                return res.send({data : 2 });
+                
             // 로그인 성공
             }else{
                 // 로그인 당시 시간 캡쳐 
@@ -63,10 +72,21 @@ exports.login = function(req, res){
                 req.session[user_db_data.user_id] = loginDt;
                 // 새로 로그인할 때마다 값이 새로 들어가는 세션 영역에 저장하기
                 setSessionStorage(user_db_data.user_id, loginDt)
+
+                // 마지막 접속일 저장
+                dbconn.instance[defaultDB.db].query(queries.update.update_user_login_dt, [getFormmatedDt(loginDt.loginDt).date, user_db_data.user_id], function (error, results, fields) {
+                  
+                    if (error){
+                        return res.send({'error': error});
+                    }
+
+                    req.session.save(function(){ // 세션 저장 후 렌더
+                        return res.send({data : 0 });
+                    });
+
+                }); // LOGIN_DT_USER_QUERY END
+
                 
-                req.session.save(function(){ // 세션 저장 후 렌더
-                    return res.send({data : 0 });
-                 });
             }
         }
     });
@@ -205,7 +225,7 @@ exports.findPw = function(req, res){
                 service: 'Gmail',
                 auth: {
                     user: 'bizentrotspark@gmail.com',
-                    pass: 'Passw0rd!3'
+                    pass: 'geokeon2018'
                 }
             });
 
@@ -336,7 +356,7 @@ exports.myModiPage = function(req, res){
             user_phone1 :  results[0].GK_USERS_PHONE.substr(0,3),
             user_phone2 :  results[0].GK_USERS_PHONE.substr(3,4),
             user_phone3 :  results[0].GK_USERS_PHONE.substr(7,10),
-            user_join_date : results[0].GK_USERS_DATE,
+            user_join_date : results[0].GK_USERS_JOIN_DATE,
             user_status : results[0].GK_USERS_STATUS
         }
 
@@ -345,10 +365,25 @@ exports.myModiPage = function(req, res){
         res.render('index', {pages : 'mypage_infomodi.ejs', models : {title : '내정보수정', page_title : '내정보수정', user_data : user_data}});
 
     });
-
-   
-
 };
+
+exports.myModi = function(req, res){
+
+    var user_id = req.session.authId;
+
+    console.log("req.body ===> ", req.body);
+
+    dbconn.instance[defaultDB.db].query(queries.update.update_user_info, [req.body.user_data.user_name, req.body.user_data.user_phone, req.body.user_data.user_email, user_id], function (error, results, fields) {
+
+        if (error) {
+            console.error('[connection.query]error: ' + error);
+            return res.send({'error': error});
+        }
+        return res.send({data : true}); 
+    });
+};
+
+
 
 // 비밀번호 변경 페이지 이동
 exports.changePwPage = function(req, res){
@@ -397,6 +432,26 @@ exports.changePw = function(req, res){
 
 };
 
+
+// 회원탈퇴
+exports.withdrawal = function(req, res){
+
+    var user_id = req.session.authId;
+
+    console.log("req.body--->", req.body);
+    console.log("user_id--->", user_id);
+
+    dbconn.instance[defaultDB.db].query(queries.update.update_user_withdtawal, [ 'F', req.body.user_data, user_id], function (error, results, fields) {
+        if (error) {
+            console.error('[connection.query]error: ' + error);
+            return res.send({'error': error});
+        }
+
+        return res.send({data : true}); 
+
+    });
+
+};
 
 
 /* for test */

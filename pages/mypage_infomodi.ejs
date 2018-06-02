@@ -1,4 +1,12 @@
 
+<script>
+
+    $(window).on("load", function(){
+        var mail = "<%=models.user_data.user_email_mail%>";
+        chageMailSelect();
+    });
+
+</script>
                 <h2 class="contents_title"><%= models.page_title%></h2>
                 <div class="contents_area">
                     <div class="my_info_modi_contents">
@@ -29,7 +37,6 @@
                                         <th>E-mail</th>
                                         <td>
                                             <input name="user_email" type="text" value="<%=models.user_data.user_email_id%>" />&#64;
-                                            <!-- 메일을 우찌해야하나?? -->
                                             <select name="user_mail" onchange="chageMailSelect()">
                                                 <option selected="selected" value="naver.com">naver.com</option>
                                                 <option value="hanmail.net">hanmail.net</option>
@@ -37,6 +44,30 @@
                                                 <option value="gmail.com">gmail.com</option>
                                                 <option name="dir_entr" value="dir_entr">직접입력</option>
                                             </select>
+                                            <input type="text" name="user_mail_dir" maxlength="20" value="<%=models.user_data.user_email_mail%>" onFocus="this.value='';return true;" onchange="userMailDirChange()" />
+                                            <span class="" name="user_email">
+                                            
+                                            <script>
+                                                var mail = "<%=models.user_data.user_email_mail%>";
+                                                var num ;
+
+
+                                                switch(mail)
+                                                        {
+                                                        case 'naver.com':num = 0; break;
+                                                        case 'hanmail.net': num=1; break;
+                                                        case 'nate.com': num=2; break;
+                                                        case 'gmail.com': num=3; break;
+                                                        default: num=4; break;
+                                                        }
+                                                $("select[name='user_mail'] option:eq("+num+")").attr("selected", true);
+                                                $("input[name=user_mail_dir]").attr("value", mail) ;
+                                                $("input[name=user_mail_dir]").val(mail) ;
+
+
+                                                
+                                                  
+                                            </script>
                                         </td>
                                     </tr>
                                     <tr>
@@ -50,14 +81,29 @@
                                                 var status = "";
                                                 if(models.user_data.user_status == 'T'){
                                                     status = '가입';
-                                                }else{
-                                                    <!-- 후에 '휴먼' 계정도 만들기 -->
+                                                }else if(models.user_data.user_status == 'F'){
                                                     status = "탈퇴";
+                                                }else if(models.user_data.user_status == 'R'){
+                                                    status = "휴면";
                                                 }
                                             %>
                                             <%=status%>
-                                            <button type="button" onclick="" title="회원탈퇴" class="gk_simple1_btn"><span>탈퇴하기</span></button>
-                                        </td1>
+                                            <button type="button" onclick="javascript:$('.reasons_box').show();" title="회원탈퇴버튼" class="gk_simple1_btn"><span>탈퇴하기</span></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2" class="reasons_box">
+                                            <p>탈퇴사유를 선택해주세요.</p>
+                                            <input type="radio" name="withdrawal_reasons" id="withdrawal_reasons1" checked="checked" value="홈페이지 제작 안함" /><label for="withdrawal_reasons1">홈페이지 제작 안함</label>
+                                            <input type="radio" name="withdrawal_reasons" id="withdrawal_reasons2" value="그냥" /><label for="withdrawal_reasons2">그냥</label>
+                                            <input type="radio" name="withdrawal_reasons" id="withdrawal_reasons3" value="내가 더 잘만들것같음" /><label for="withdrawal_reasons3">내가 더 잘만들것같음</label>
+                                            <button type="button" onclick="return goWithdrawal()" title="회원탈퇴하기" class="gk_simple1_btn"><span>확인</span></button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="2">
+                                            <button type="button" onclick="return goModiMyInfoModi()" class="gk_simple1_btn" title="내정보수정하기"><span>정보수정</span></button>
+                                        </td>
                                     </tr>
                                 </table>
                             </fieldset>
