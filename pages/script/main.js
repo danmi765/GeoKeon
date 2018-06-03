@@ -1,6 +1,9 @@
 var id_chk = 0; // 아이디 중복체크 유효성 검사용 변수
 var joins; // 암호화를 위함 key
 
+// 회원탈퇴박스 가리기
+$(".reasons_box").hide();
+
 // 공백체크 함수
 function checkSpace(str) { 
     if(str.search(/\s/) != -1) {
@@ -73,6 +76,11 @@ function goLogin(saltKey){
         // 비밀번호 불일치
         if(res.data == -1){
             $(".msg_box").html("비밀번호가 일치하지 않습니다.");
+        }
+
+        // 탈퇴한회원
+        if(res.data == 2){
+            $(".msg_box").html("이미 탈퇴한 회원입니다.");
         }
 
         // 로그인 성공
@@ -382,13 +390,99 @@ function goChangePassword(saltKey){
     
             // 성공
             if(res.data == true){
-                location.href="/logout";
+                alert("비밀번호 변경이 완료되었습니다. 로그인 해주세요.");
+                location.href="/loginPage";
             }
     
         }); // callback function End
     }
 
-    return false;
+    //return false;
+}
+
+// 회원탈퇴
+function goWithdrawal(){
+
+    var rs = $("input[name='withdrawal_reasons']:checked").val();
+
+    if(rs == ''){      
+
+        alert("사유가 선택되지 않았습니다.");
+
+        return false;
+
+    }else{
+        return connectToServer("/withdrawal",  {user_data : rs} , "post", function(err, res){
+            
+            if(err){
+                console.log("서버오류 ---> ", err);
+                return false;
+            }
+
+            // 실패
+            if(res.error){
+                /* 
+                    [ res.error.errno ]
+                    1406 ---> Data Too Long
+                    1054 ---> Bad Sql
+                    1062 ---> PK 중복
+                */
+                console.log("DB오류 ---> " + res.error.errno);
+                return false ;
+            }
+
+            // 성공
+            if(res.data == true){
+                alert("이용해 주셔서 감사합니다.");
+                location.href="/logout";
+            }
+
+        }); // callback function End
+    }
+}
+
+// 내 정보 수정
+function goModiMyInfoModi(){
+
+    var user_data = {
+        user_name : $("input[name='user_name']").val()
+    };
+
+    if($("select[name=user_mail] > option:selected").index() == 4){
+        user_data.user_email = $("input[name=user_email]").val() + "@" + $("input[name=user_mail_dir]").val();
+
+    }else{
+        user_data.user_email = $("input[name=user_email]").val() + "@" + $("select[name=user_mail]").val();
+        console.log("jn");
+    }
+    user_data.user_phone =  $("input[name=user_phone1]").val() + $("input[name=user_phone2]").val() + $("input[name=user_phone3]").val();
+
+    console.log("user_data ---> ", user_data);
+
+    return connectToServer("/myModi",  {user_data : user_data} , "post", function(err, res){
+            
+        if(err){
+            console.log("서버오류 ---> ", err);
+            return false;
+        }
+
+        // 실패
+        if(res.error){
+            /* 
+                [ res.error.errno ]
+                1406 ---> Data Too Long
+                1054 ---> Bad Sql
+                1062 ---> PK 중복
+            */
+            console.log("DB오류 ---> " + res.error.errno);
+            return false ;
+        }
+        // 성공
+        if(res.data == true){
+            alert("정보가 수정되었습니다.");
+            location.href="/";
+        }
+    }); // callback function End
 }
 
 /* 댓글 작성하기
@@ -572,7 +666,8 @@ function modifyComment(authId, comm_name, comm_id, commentId, commentContent){
     }
     
     return connectToServer("/comm_comment_modify", content, "post", function(err, res){
-            
+
+
         if(err){
             console.log("서버오류 ---> ", err);
             return false;
@@ -594,7 +689,6 @@ function modifyComment(authId, comm_name, comm_id, commentId, commentContent){
         renderComment(authId, comm_name, comm_id, res); /* 서버로부터 받아온 댓글리스트 뷰에 렌더링하기 */
     });
 }
-
 
 /*Ajax 통신을 위한 펑션 */
 function connectToServer(url, data, method, callback){
