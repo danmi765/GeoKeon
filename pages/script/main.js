@@ -34,7 +34,7 @@ $(".header_main_menu > li > a, .header_sub_menu").hover(function(e){
 // 로그인
 function goLogin(saltKey){
 
-    console.log(saltKey);
+    console.log('goLogin saltKey', saltKey);
 
     var user = {
         user_id : $("input[name=user_id]").val(),
@@ -331,7 +331,7 @@ function goModiMyInfoPage(saltKey){
 
 //비밀번호 변경
 function goChangePassword(saltKey){
-
+    console.log('goChangePassword saltKey:', saltKey);
     var user = {
         new_user_pw : $("input[name=new_user_pw]").val(),
         new_user_pw_ckh : $("input[name=new_user_pw_ckh]").val()
@@ -391,12 +391,215 @@ function goChangePassword(saltKey){
     return false;
 }
 
+/* 댓글 작성하기
+    @writer : 글쓴이
+    @comm_name : 게시판 테이블종류
+    @comm_id : 게시물 ID
+*/
+function submitComment(writer, comm_name, comm_id){
+    var commentContent = $('.comm_comment_write_area').find('textarea').val();
+    if(commentContent.length == 0){
+        alert('댓글 내용이 입력되지 않았습니다.');
+        return;
+    }
+    var content = {
+        commName: comm_name,
+        commId: comm_id,
+        writer : writer,
+        content : $('.comm_comment_write_area').find('textarea').val(),
+        date : new Date()
+    }
+
+    console.log("submitComment content:" ,content);
+
+    return connectToServer("/comm_comment_submit", content, "post", function(err, res){
+            
+        if(err){
+            console.log("서버오류 ---> ", err);
+            return false;
+        }
+
+        //실패
+        if(res.error){
+            /* 
+                [ res.error.errno ]
+                1406 ---> Data Too Long
+                1054 ---> Bad Sql
+                1062 ---> PK 중복
+            */
+            console.log("DB오류 ---> " + res.error.errno);
+            return false ;
+        }
+        renderComment(writer, comm_name, comm_id, res); /* 서버로부터 받아온 댓글리스트 뷰에 렌더링하기 */
+
+    }); // callback function End
+}
+/* 댓글 목록보기
+    @authId : 현재 로그인한 계정
+    @comm_name : 게시판 테이블종류
+    @comm_id : 게시물 ID
+*/
+function listComment(authId, comm_name, comm_id){
+    var content = {
+        commName: comm_name,
+        commId: comm_id,
+    }
+    
+    return connectToServer("/comm_comment_view", content, "post", function(err, res){
+            
+        if(err){
+            console.log("서버오류 ---> ", err);
+            return false;
+        }
+
+        //실패
+        if(res.error){
+            /* 
+                [ res.error.errno ]
+                1406 ---> Data Too Long
+                1054 ---> Bad Sql
+                1062 ---> PK 중복
+            */
+            console.log("DB오류 ---> " + res.error.errno);
+            return false ;
+        }
+
+        console.log('listComment success', res);
+        renderComment(authId, comm_name, comm_id, res); /* 서버로부터 받아온 댓글리스트 뷰에 렌더링하기 */
+
+    }); // callback function End
+}
+/* 서버로부터 받아온 댓글리스트 뷰에 렌더링하기 
+    @authId : 현재 로그인한 계정
+    @comm_name : 게시판 테이블종류
+    @comm_id : 게시물 ID
+    @commentlist : 서버로부터 받은 댓글 리스트 (배열형태)
+*/
+function renderComment(authId, comm_name, comm_id, commentlist){
+    /* 댓글 리스트 배열형태로 나오는데, 이것을 loop문을 통해서 html로 조립 */
+    /* 아직 다른 테이블에 대한 동적 컬럼명 할당은 구현 안 한 상태. */
+    var commentdoms = commentlist.map(function(d,i){
+        if(authId != d.COMMENT_INQUIRY_WRITER){
+            return '<div class="comm_comment_row" id="'+d.COMMENT_INQUIRY_ID+'">'+
+                '<div class="comm_comment_writer">'+d.COMMENT_INQUIRY_WRITER+'</div>'+
+                '<div class="comm_comment_date">'+d.COMMENT_INQUIRY_DATE+'</div>'+
+                '<div class="comm_comment_content">'+d.COMMENT_INQUIRY_CONTENT+'</div>'
+            '</div>';
+        }else{
+            return '<div class="comm_comment_row" id="'+d.COMMENT_INQUIRY_ID+'">'+
+                '<div class="comm_comment_writer">'+d.COMMENT_INQUIRY_WRITER+'</div>'+
+                '<div class="comm_comment_date">'+d.COMMENT_INQUIRY_DATE+'</div>'+
+                '<div class="comm_comment_content">'+d.COMMENT_INQUIRY_CONTENT+'</div>'+
+                '<div class="comm_comment_delete fa fa-trash fa-lg" onClick="removeComment(\''+authId+'\',\''+comm_name+'\',\''+comm_id+'\',\''+d.COMMENT_INQUIRY_ID+'\')"></div>'+
+                '<div class="comm_comment_modify fa fa-edit fa-lg" onClick=""></div>'+
+            '</div>';
+        }
+    });
+    /* 댓글 html영역에 기존 것 없애고 최신상태 댓글리스트 DOM 추가하기 */
+    $('.comm_comment_area').find('td').children('.comm_comment_row').remove();
+    $('.comm_comment_area').find('td').append(commentdoms.join(''))
+        .find('.comm_comment_modify').on('click', function(e){
+            /* 수정하기 버튼 눌렀을 때 자식으로 input과 button이 생긴다 */
+            var content = $(e.target).siblings('.comm_comment_content').text();
+            $(e.target).siblings('.comm_comment_content').text('').append('<textarea rows="4">'+content+'</textarea><button class="submit">제출</button><button class="cancel">취소</button>')
+                .each(function(i,d){    /* 현 상태에서의 .each : append이후 시점에 대한 이벤트를 주고 싶을때 사용 */
+                    /* 제출 버튼 눌렀을때의 클릭이벤트 */
+                    $(d).find('button.submit').on('click', function(e){
+                        var commentId = $(e.target).parents('.comm_comment_row').attr('id');
+                        var commentContent = $(e.target).siblings('textarea').val();
+                        console.log('submit commentContent', commentContent);
+                        /* 댓글 수정하기 메소드로 이동 */
+                        modifyComment(authId, comm_name, comm_id, commentId, commentContent)
+                    });
+                    /* 취소 버튼 눌렀을때의 클릭이벤트 */
+                    $(d).find('button.cancel').on('click', function(e){
+                        /* 상태 원상복귀 */
+                        $(e.target).parents('.comm_comment_content').text(content).children().remove();
+                    });
+                });
+        });
+}
+
+/* 댓글 삭제하기 
+    @authId : 현재 로그인한 계정
+    @comm_name : 게시판 테이블종류
+    @comm_id : 게시물 ID
+    @commentId : 제거하고자 하는 댓글번호
+*/
+function removeComment(authId, comm_name, comm_id, commentId){
+    var content = {
+        commName: comm_name,
+        commentId: commentId,
+        commId: comm_id
+    }
+    
+    return connectToServer("/comm_comment_del", content, "post", function(err, res){
+            
+        if(err){
+            console.log("서버오류 ---> ", err);
+            return false;
+        }
+
+        //실패
+        if(res.error){
+            /* 
+                [ res.error.errno ]
+                1406 ---> Data Too Long
+                1054 ---> Bad Sql
+                1062 ---> PK 중복
+            */
+            console.log("DB오류 ---> " + res.error.errno);
+            return false ;
+        }
+
+        console.log('removeComment success', res);
+        renderComment(authId, comm_name, comm_id, res); /* 서버로부터 받아온 댓글리스트 뷰에 렌더링하기 */
+    });
+}
+/* 댓글 수정하기 
+    @authId : 현재 로그인한 계정
+    @comm_name : 게시판 테이블종류
+    @comm_id : 게시물 ID
+    @commentId : 제거하고자 하는 댓글번호
+    @commentContent : 수정하고자하는 댓글내용
+*/
+function modifyComment(authId, comm_name, comm_id, commentId, commentContent){
+    var content = {
+        commName: comm_name,
+        commId: comm_id,
+        commentId: commentId,
+        commentContent: commentContent
+    }
+    
+    return connectToServer("/comm_comment_modify", content, "post", function(err, res){
+            
+        if(err){
+            console.log("서버오류 ---> ", err);
+            return false;
+        }
+
+        //실패
+        if(res.error){
+            /* 
+                [ res.error.errno ]
+                1406 ---> Data Too Long
+                1054 ---> Bad Sql
+                1062 ---> PK 중복
+            */
+            console.log("DB오류 ---> " + res.error.errno);
+            return false ;
+        }
+
+        console.log('removeComment success', res);
+        renderComment(authId, comm_name, comm_id, res); /* 서버로부터 받아온 댓글리스트 뷰에 렌더링하기 */
+    });
+}
+
 
 /*Ajax 통신을 위한 펑션 */
 function connectToServer(url, data, method, callback){
     console.log('[connectToServer]url:', url);
     console.log('[connectToServer]data:', data);
-
 
     $.ajax({
         url: url,
@@ -426,5 +629,3 @@ function connectToServer(url, data, method, callback){
         }
     });
 } // ajax E
-
-

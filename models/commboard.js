@@ -6,6 +6,7 @@ const defaultDB = require('../index');
 const { getFormmatedDt } = require('../utils/utils');
 const { getSessionStorage } = require('../utils/sessionStorage');
 
+/** 게시판 리스트 보기 & 검색하기 **/
 const list = (req, res) => {
     /* queryString
         @page : 페이지 번호 (http://주소?page=1 할때의 page=1부분이 query이며, {page:1} 형태로 파싱됨)
@@ -96,6 +97,7 @@ const list = (req, res) => {
         }); //end query
 }; //end list()
 
+/** 게시판 글 보기 **/
 exports.getComm = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
@@ -146,6 +148,7 @@ exports.getComm = function(req, res){
 
 };
 
+/** 게시판 글수정하기 페이지 **/
 exports.modifyPage = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
@@ -180,6 +183,7 @@ exports.modifyPage = function(req, res){
     });
 };
 
+/** 게시판 글수정하기 **/
 exports.modify = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
@@ -211,10 +215,12 @@ exports.modify = function(req, res){
 
 };
 
+/** 게시판 글쓰기 페이지 **/
 exports.writePage = function(req, res){
     return res.render('index', { pages : 'comm_write.ejs',models :{ comms: null, title : '커뮤니티 : 공지?', page_title : '공지? - 글쓰기', comm_name : req.params.commName }});
 };
 
+/** 게시판 글쓰기 **/
 exports.write = function(req, res){
     console.log('글쓰기', req.body);
     console.log('글쓰기 req.params', req.params);
@@ -249,6 +255,7 @@ exports.write = function(req, res){
     });
 };
 
+/** 게시판 글삭제하기 **/
 exports.remove = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
@@ -268,5 +275,139 @@ exports.remove = function(req, res){
     });
 };
 
+/** 게시판 댓글 목록보기 **/
+const listComment = (req, res) => {
+    const reqBody = req.body;
+    const commName = reqBody.commName.toUpperCase(); // 게시판 테이블명 대문자로 변환
+    const commId = reqBody.commId;
+    let tableName, whereCols;
+
+    console.log('/commboard/listComment reqBody: ', reqBody);
+
+    /* 게시판 분류에 따른 테이블 컬럼명 정의 */
+    if(commName == 'INQUIRY'){
+        tableName = 'COMMENT_INQUIRY';
+        whereCols = {
+            i: 'BOARD_INQUIRY_ID',
+            d: 'COMMENT_INQUIRY_DATE'
+        }
+    }
+
+    const dbquery = dbconn.instance[defaultDB.db].query(queries.select.get_comment_list, 
+        [tableName, whereCols.i, commId, whereCols.d], 
+        function (error, results, fields) {
+            if (error){
+                console.log('[listComment]error', error);
+                return res.send({'error': error});
+            }
+            console.log('/commboard/listComment dbquery', dbquery.sql);
+            console.log('/commboard/listComment results', results);
+
+            let comms = results.map((commboard, idx)=>{
+                return { 
+                    ...commboard, 
+                    [tableName+'_DATE']: getFormmatedDt(commboard[tableName+'_DATE']).date
+                }
+            })
+            return res.send(comms);
+        });
+}
+/** 게시판 댓글 등록하기 **/
+exports.submitComment = function(req, res){
+    const reqBody = req.body;
+    const commName = reqBody.commName.toUpperCase(); // 게시판 테이블명 대문자로 변환
+    let tableName, insertCols;
+
+    console.log('/commboard/submitComment reqBody: ', reqBody);
+
+    /* 게시판 분류에 따른 테이블 컬럼명 정의 */
+    if(commName == 'INQUIRY'){
+        tableName = 'COMMENT_INQUIRY';
+        insertCols = {
+            i: 'BOARD_INQUIRY_ID',
+            c: 'COMMENT_INQUIRY_CONTENT',
+            w: 'COMMENT_INQUIRY_WRITER',
+            d: 'COMMENT_INQUIRY_DATE'
+        }
+    }
+
+    const dbquery = dbconn.instance[defaultDB.db].query(queries.insert.add_comment,
+        [tableName, 
+            insertCols.i, insertCols.c, insertCols.w, insertCols.d,
+            reqBody.commId, reqBody.content, reqBody.writer, getFormmatedDt(reqBody.date).date
+        ], 
+        function (error, results, fields) {
+            if (error){
+                console.log('[submitComment]error', error);
+                return res.send({'error': error});
+            }
+            console.log('/commboard/submitComment dbquery', dbquery.sql);
+            console.log('/commboard/submitComment results', results);
+            // return res.send({result: 'submitComment'})
+            return listComment(req, res);
+        });
+}
+/** 게시판 댓글 삭제하기 **/
+exports.delComment = function(req, res){
+    const reqBody = req.body;
+    const commName = reqBody.commName.toUpperCase(); // 게시판 테이블명 대문자로 변환
+    const commentId = reqBody.commentId;
+    let tableName, deleteCols;
+
+    console.log('/commboard/delComment reqBody: ', reqBody);
+
+    /* 게시판 분류에 따른 테이블 컬럼명 정의 */
+    // if(commName == 'INQUIRY'){
+        tableName = 'COMMENT_INQUIRY';
+        deleteCols = {
+            i : 'COMMENT_INQUIRY_ID'
+        }
+    // }
+
+    const dbquery = dbconn.instance[defaultDB.db].query(queries.delete.delete_comm_board,
+        [tableName, 
+            deleteCols.i, commentId
+        ], 
+        function (error, results, fields) {
+            if (error){
+                console.log('[delComment]error', error);
+                return res.send({'error': error});
+            }
+            console.log('/commboard/delComment', dbquery.sql);
+            console.log('/commboard/delComment results', results);
+            // return res.send({result: 'submitComment'})
+            return listComment(req, res);
+        });
+}
+/** 게시판 댓글 수정하기 **/
+exports.modifyComment = function(req, res){
+    const reqBody = req.body;
+    const commName = reqBody.commName.toUpperCase(); // 게시판 테이블명 대문자로 변환
+    const commentId = reqBody.commentId;
+    const commentContent = reqBody.commentContent;
+    let tableName, modifyQuery;
+
+    console.log('/commboard/modifyComment reqBody: ', reqBody);
+
+    /* 게시판 분류에 따른 테이블 컬럼명 정의 */
+    if(commName == 'INQUIRY'){
+        tableName = 'COMMENT_INQUIRY';
+        modifyQuery = queries.update.update_comment_inquiry;
+    }
+
+    const dbquery = dbconn.instance[defaultDB.db].query(modifyQuery,
+        [commentContent, commentId], 
+        function (error, results, fields) {
+            if (error){
+                console.log('[modifyComment]error', error);
+                return res.send({'error': error});
+            }
+            console.log('/commboard/modifyComment sql', dbquery.sql);
+            console.log('/commboard/modifyComment results', results);
+            return listComment(req, res);
+        });
+}
+
 /* EXPORT AREA */
 exports.list = list;
+exports.listComment = listComment;
