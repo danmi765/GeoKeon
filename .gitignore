@@ -71,3 +71,4 @@ typings/
 .prop/
 
 # End of https://www.gitignore.io/api/node
+.prop/props.js
