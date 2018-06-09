@@ -3,41 +3,35 @@
                <div class="contents_area">
                     <div class="comm_contents">
                         <%
-                            let comm_name ;
-
-                             if(models.comm_name == 'notice'){
-                                 comm_name = 'BOARD_NOTICE';
-                             }else if(models.comm_name == 'inquiry'){
-                                 comm_name = 'BOARD_INQUIRY';
-                             }
-
-                            var act ;
-                            if(!models.comms){
-                                act = '/comm_write/' + models.comm_name;
-                            }else{
-                                act = '/comm_modify/' + models.comm_name + '&' + models.comms[comm_name+'_ID'] ;
-                            }
+                        
+                        if(!models.comms){
+                            act = '/comm_write/' + models.comm_name;
+                        }else{
+                            act = '/comm_modify/' + models.comm_name +'&' + models.comms['BOARD_ID'];
+                        }
+                        
                         %>
-
                         <form action="<%=act%>" method="post">
                             <fieldset>
                                 <table id="comm_write_table">
                                     <tbody>
                                         <tr class="comm_write_pw">
+                                            <!-- 가져온 비밀번호 수정하면 서버로 보내 입력된 비밀번호와 일치여부 확인  -->
                                             <th>비밀번호</th>
                                             <td colspan="3">
                                                 <input type="hidden" name="user_id" value="<%= locals.authId%>">
-                                                <input type="password" class="posts_pw" name="posts_pw" maxlength="4" value="<%=(!models.comms)?'':models.comms[comm_name+'_PW'] %>"/>
+                                                <input type="password" class="posts_pw_check" name="posts_pw" maxlength="4" value=""/>
+                                                <!-- <input type="hidden" class="posts_pw" name="posts_pw" maxlength="4" value="<%=(!models.comms)?'':models.comms['PASSWORD'] %>"/> -->
                                             </td>
                                         </tr>
 
                                         <tr class="comm_write_title">
                                             <th>제목</th>
-                                            <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" value="<%=(!models.comms)?'':models.comms[comm_name+'_TITLE'] %>"/></td>
+                                            <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" value="<%=(!models.comms)?'':models.comms['TITLE'] %>"/></td>
                                         </tr>
 
                                         <tr class="comm_write_content">
-                                            <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!models.comms)?'':models.comms[comm_name+'_CONTENT'] %></textarea></td>
+                                            <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!models.comms)?'':models.comms['CONTENT'] %></textarea></td>
                                         </tr>
                                     </tbody>
                                 </table>

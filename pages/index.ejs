@@ -56,9 +56,9 @@
                         <li>
                             <a href='/comm/notice'>커뮤니티</a>
                             <ul class="header_sub_menu clocking">
-                                <li><a href="/comm/notice">공지사항</a></li>
-                                <li><a href="/comm/inquiry">문의사항</a></li>
-                                <li><a href="">Q&amp;A</a></li>
+                                <%  locals.board_domain_list.forEach((domain, idx) => { %>
+                                    <li><a href="/comm/<%=domain.BOARD_DOMAIN_ID%>"><%=domain.BOARD_NAME%></a></li>
+                                <% }); %>
                             </ul>
                         </li>
                     </ul>

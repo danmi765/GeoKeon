@@ -35,13 +35,10 @@ let comm_name ;
                             <tbody>
                                 <%  models.comms.forEach((comm, idx) => { %>
                                     <tr>
-                                        <th>
-                                            <%= comm.display_num %>
-                                            <span class="id clocking"><%= comm[comm_name+'_ID'] %></span>
-                                        </th>
-                                        <td class="comm_title"><a href="/comm_view/<%=models.comm_name%>&<%= comm[comm_name+'_ID'] %>"><%= comm[comm_name+'_TITLE'] %></a></td>
-                                        <td><%= comm[comm_name+'_WRITER'] %></td>
-                                        <td><%= comm[comm_name+'_DATE'] %></td>
+                                        <th><%= comm.display_num %></th>
+                                        <td class="comm_title"><a href="/comm_view/<%=models.comm_name%>&<%= comm['BOARD_ID'] %>"><%= comm['TITLE'] %></a></td>
+                                        <td><%= comm['USER_ID'] %></td>
+                                        <td><%= comm['DATE'] %></td>
                                     </tr>
                                 <% }); %>
                             </tbody>

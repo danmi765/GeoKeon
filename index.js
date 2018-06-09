@@ -13,7 +13,8 @@ const dbconn = require('./dbconn/conn');
 const defaultDB = 'mysql';  // 기본 Database 종류 정의. 해당 변수는 다른 곳에 널리 쓰기 위해 최하단의 exports 문법에서 다시 사용됨.
 const session = require('express-session');
 
-const { getSessionStorage } = require('./utils/sessionStorage');
+const { getSessionStorage, setSessionStorage } = require('./utils/sessionStorage');
+const queries = require('./dbconn/queries');
 
 app.use(session({
     secret : 'keyboard cat',
@@ -55,7 +56,24 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 // GET index
 app.get('/', function(req, res) {
 
-    res.render('index', {pages : 'main.ejs', models : { title : '메인'}});
+    dbconn.instance[defaultDB].query(queries.select.get_board_domain_list, [], function (error, results, fields) {
+        if (error){
+            console.log('[getComm]error', error);
+            return res.send({'error': error});
+        }
+
+        req.session.board_domain_list = results; // 게시판 목록 세션에 저장
+    
+        req.session.save(function(){ // 세션 저장 후 렌더
+           res.redirect('/main');
+           
+        });
+    });
+
+});
+
+app.get('/main', function(req, res) {
+    res.render('index', {pages : 'main.ejs', models : { title : '메인' }});
 });
 
 // GET intro

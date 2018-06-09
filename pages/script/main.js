@@ -625,18 +625,18 @@ function renderComment(authId, comm_name, comm_id, commentlist){
     /* 댓글 리스트 배열형태로 나오는데, 이것을 loop문을 통해서 html로 조립 */
     /* 아직 다른 테이블에 대한 동적 컬럼명 할당은 구현 안 한 상태. */
     var commentdoms = commentlist.map(function(d,i){
-        if(authId != d.COMMENT_INQUIRY_WRITER){
-            return '<div class="comm_comment_row" id="'+d.COMMENT_INQUIRY_ID+'">'+
-                '<div class="comm_comment_writer">'+d.COMMENT_INQUIRY_WRITER+'</div>'+
-                '<div class="comm_comment_date">'+d.COMMENT_INQUIRY_DATE+'</div>'+
-                '<div class="comm_comment_content">'+d.COMMENT_INQUIRY_CONTENT+'</div>'
+        if(authId != d.USER_ID){
+            return '<div class="comm_comment_row" id="'+d.COMMENT_ID+'">'+
+                '<div class="comm_comment_writer">'+d.USER_ID+'</div>'+
+                '<div class="comm_comment_date">'+d.DATE+'</div>'+
+                '<div class="comm_comment_content">'+d.CONTENT+'</div>'
             '</div>';
         }else{
-            return '<div class="comm_comment_row" id="'+d.COMMENT_INQUIRY_ID+'">'+
-                '<div class="comm_comment_writer">'+d.COMMENT_INQUIRY_WRITER+'</div>'+
-                '<div class="comm_comment_date">'+d.COMMENT_INQUIRY_DATE+'</div>'+
-                '<div class="comm_comment_content">'+d.COMMENT_INQUIRY_CONTENT+'</div>'+
-                '<div class="comm_comment_delete fa fa-trash fa-lg" onClick="removeComment(\''+authId+'\',\''+comm_name+'\',\''+comm_id+'\',\''+d.COMMENT_INQUIRY_ID+'\')"></div>'+
+            return '<div class="comm_comment_row" id="'+d.COMMENT_ID+'">'+
+                '<div class="comm_comment_writer">'+d.USER_ID+'</div>'+
+                '<div class="comm_comment_date">'+d.DATE+'</div>'+
+                '<div class="comm_comment_content">'+d.CONTENT+'</div>'+
+                '<div class="comm_comment_delete fa fa-trash fa-lg" onClick="removeComment(\''+authId+'\',\''+comm_name+'\',\''+comm_id+'\',\''+d.COMMENT_ID+'\')"></div>'+
                 '<div class="comm_comment_modify fa fa-edit fa-lg" onClick=""></div>'+
             '</div>';
         }
