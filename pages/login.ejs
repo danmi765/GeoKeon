@@ -1,11 +1,17 @@
 
 
-<% if (locals.joins) { %>
+<% 
+    if (models.salt) {
+    %>
     <script>
-        $(window).on("load", function(){
-            joins = "<%= locals.joins %>" ;
-        })
+        $(window).on("load", function(){            
+            joins = "<%= models.salt %>" ;
+            console.log("joins---> " , joins);
+        });
+
     </script>
+
+
 <% }
 
     if(models.find_pw == '1'){  %>

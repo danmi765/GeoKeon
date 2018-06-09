@@ -16,6 +16,7 @@ const split = require('node-split').split;
 // 로그인
 exports.loginPage = function(req, res){
 
+    // 기존 user_id 세션 있을 경우 삭제
     if( req.session.authId ){
         delete req.session[req.session.authId];
         delete req.session.authId;
@@ -26,7 +27,8 @@ exports.loginPage = function(req, res){
     req.session.joins = salt; // 세션에 저장
     
     req.session.save(function(){ // 세션 저장 후 렌더
-       res.redirect('/login');
+       //  res.redirect('/login');
+        res.render('index', {pages : 'login.ejs', models : {title : '로그인', page_title : '로그인', salt: salt}});
        
     });
 }
@@ -35,6 +37,7 @@ exports.loginPage = function(req, res){
 exports.login = function(req, res){
 
     console.log('login req.body:', req.body);
+    console.log('session.joins ===> ', req.session.joins);
 
     // 복호화
     var bytes = CryptoJS.AES.decrypt( req.body.user_data , req.session.joins);
@@ -52,11 +55,11 @@ exports.login = function(req, res){
            
         }else{
             // 비밀번호 불일치
-            if(!bcrypt.compareSync(user_db_data.user_pw, results[0].GK_USERS_PW)){
+            if(!bcrypt.compareSync(user_db_data.user_pw, results[0].USER_PW)){
                 return res.send({data : -1 });
               
             // 탈퇴한 회원
-            }else if(results[0].GK_USERS_STATUS == 'F'){
+            }else if(results[0].STATUS == 'F'){
                 return res.send({data : 2 });
                 
             // 로그인 성공
@@ -74,7 +77,7 @@ exports.login = function(req, res){
                 setSessionStorage(user_db_data.user_id, loginDt)
 
                 // 마지막 접속일 저장
-                dbconn.instance[defaultDB.db].query(queries.update.update_user_login_dt, [getFormmatedDt(loginDt.loginDt).date, user_db_data.user_id], function (error, results, fields) {
+                dbconn.instance[defaultDB.db].query(queries.update.update_user_login_dt, [getFormmatedDt(loginDt.loginDt).datetime, user_db_data.user_id], function (error, results, fields) {
                   
                     if (error){
                         return res.send({'error': error});
@@ -113,7 +116,7 @@ exports.join = function(req, res){
     bcrypt.hash(user_db_data.user_pw, req.session.joins,  function(err, hash) {
         console.log('--------hash------------------->', hash);
 
-        dbconn.instance[defaultDB.db].query(queries.insert.add_user, [user_db_data.user_id, hash, user_db_data.user_name, user_db_data.user_email, user_db_data.user_phone, new Date(), 'T'], function (error, results, fields) {
+        dbconn.instance[defaultDB.db].query(queries.insert.add_user, [user_db_data.user_id, hash, user_db_data.user_name, user_db_data.user_phone, user_db_data.user_email, new Date(), 'T'], function (error, results, fields) {
             if (error){
                 console.log("에러났어요------------>", error);
                 return res.send({'error': error});
@@ -231,7 +234,7 @@ exports.findPw = function(req, res){
 
             var mailOptions = {  
                 from: '관리자 <bizentrotspark@gmail.com>',
-                to: results[0].GK_USERS_EMAIL,
+                to: results[0].USER_EMAIL,
                 subject: '새로운 비밀번호를 발송하였습니다.',
                 text: '새로운 비밀번호는 [ ' + new_password + ' ]입니다. 로그인 후 비밀번호를 변경해 주세요.'
             };
@@ -258,8 +261,8 @@ exports.findPw = function(req, res){
                 }); // 업데이트 끝
 
             });// 해싱 끝
-            
-            res.render('index', {pages : 'login.ejs', models : {title : '로그인', page_title : '로그인', find_pw : '1'}});
+
+            res.render('index', {pages : 'main.ejs', models : {title : '로그인', page_title : '로그인', find_pw : '1'}});
 
         }
     }); // dbconn End

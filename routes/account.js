@@ -14,6 +14,7 @@ router.post('/join', accountController.join);
 router.get('/login', function(req, res){
     res.render('index', {pages : 'login.ejs', models : {title : '로그인', page_title : '로그인'}});
 });
+
 router.get('/loginPage', accountController.loginPage);
 router.post('/login', accountController.login);
 

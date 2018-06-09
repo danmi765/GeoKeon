@@ -35,6 +35,17 @@
         <script src="/lib/CryptoJSv3.1.2/components/sha256.js"></script>
     </head>
     <body>
+
+
+        <% 
+
+            if(models.find_pw == '1'){  %>
+                <script>
+                    alert('비밀번호를 이메일로 발송하였습니다.');
+                </script>
+        
+        <% }%>
+        
       <div id="comm_page" class="wrapper">
             <header class='header_area'>
                 <div class='header_area_wrapper'>
