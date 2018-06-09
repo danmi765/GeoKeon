@@ -4,6 +4,21 @@ var joins; // 암호화를 위함 key
 // 회원탈퇴박스 가리기
 $(".reasons_box").hide();
 
+// 숫자만 입력받기 ( 가입 : 휴대전화번호 )
+function checkNumber(check_form){
+    var ele =  $('input[name=' + check_form + ']') ;
+
+    var numPattern = /([^0-9])/;
+    var numPattern = numPattern.test(ele.val()); // false : 숫자
+    if(numPattern){
+        alert("숫자만 입력해 주세요!");
+
+        ele.val('');
+        ele.select();
+        return false;
+    }
+}
+
 // 공백체크 함수
 function checkSpace(str) { 
     if(str.search(/\s/) != -1) {
@@ -13,7 +28,7 @@ function checkSpace(str) {
      } 
 }
 
-// 특수 문자가 있나 없나 체크
+// 특수 문자 유무 체크
 function checkSpecial(str) {
     var special_pattern = /[`~!@#$%^&*|\\\'\";:\/?]/gi;
     if(special_pattern.test(str) == true) { 
@@ -21,6 +36,29 @@ function checkSpecial(str) {
     } else {
         return false; 
     } 
+}
+
+// 한글포함 여부 채크
+function checkKorean(str){
+    var korean_pattern = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/;
+    if( !korean_pattern.test(str) ){
+        return false;
+    }else{
+        return true;
+    }
+}
+
+// 6~20자 영문과 숫자조합 아이디 체크
+function checkCombination(str){
+    var idReg = /^[a-z]+[a-z0-9]{5,19}$/g;
+        // 영문과 숫자조합 아님
+        if( !idReg.test( str ) ) {
+            return false;
+        
+        // 영문과 숫자조합 맞음
+        }else{
+            return true;
+        }
 }
 
 
@@ -76,6 +114,8 @@ function goLogin(saltKey){
         // 비밀번호 불일치
         if(res.data == -1){
             $(".msg_box").html("비밀번호가 일치하지 않습니다.");
+            $("input[name=user_pw]").val("");
+            $("input[name=user_pw]").select();
         }
 
         // 탈퇴한회원
@@ -156,17 +196,9 @@ function goJoin(saltKey){
     if(user.user_id == ""){
         $("span[name=user_id]").html("아이디를 입력하세요");
 
-    }else if(user.user_id.length < 5 || user.user_id.length > 10){
-        $("span[name=user_id]").html("아이디는 5자 이상 10자 이하 입니다.");
+    }else if( checkCombination(user.user_id) == false ){
+        $("span[name=user_id]").html("아이디는 영문자로 시작하는 6~20자 영문자 또는 숫자이어야 합니다.");
 
-    }else if(checkSpace(user.user_id) == true ){
-        // 띄어쓰기 포함되어있음
-        $("span[name=user_id]").html("아이디는 공백을 입력할 수 없습니다.");
-
-    }else if(checkSpecial(user.user_id) == true){
-        // 특수문자 포함되어있음
-        $("span[name=user_id]").html("아이디는 특수문자를 사용할 수 없습니다.");
-        
     }else if(user.user_pw == ""){
         $("span[name=user_pw]").html("비밀번호를를 입력하세요");
 
@@ -184,6 +216,9 @@ function goJoin(saltKey){
 
     }else if(user.user_mail_id == ""){
         $("span[name=user_email]").html("이메일을 입력하세요.");
+
+    }else if( checkKorean(user.user_mail_id) == true || checkSpecial(user.user_mail_id) == true ){
+        $("span[name=user_email]").html("잘못된 형식입니다.");
 
     }else if(user.user_mail_id != "" && $("select[name=user_mail] > option:selected").index() == 4 && $("input[name=user_mail_dir]").val() == "이메일을 입력하세요"){
         $("span[name=user_email]").html("이메일을 입력하세요.");
@@ -258,39 +293,56 @@ function joinIdDupCheck(){
 
     if(user.user_id != ''){
 
-        return connectToServer("/idCheck", user, "post", function(err, res){
+        if(user.user_id.length < 6 || user.user_id.length > 20){
+            alert("아이디는 영문자로 시작하는 6~20자 영문자 또는 숫자이어야 합니다.");
+    
+        }else if( checkCombination(user.user_id) == false ){
+            alert("아이디는 영문자로 시작하는 6~20자 영문자 또는 숫자이어야 합니다.");
+    
+        }else if(checkSpace(user.user_id) == true ){
+            // 띄어쓰기 포함되어있음
+            alert("아이디는 공백을 입력할 수 없습니다.");
+    
+        }else if(checkSpecial(user.user_id) == true){
+            // 특수문자 포함되어있음
+            alert("아이디는 특수문자를 사용할 수 없습니다.");
             
-            // 중복이면 res.data = 1, 중복아니면 res.data = 0
-            if(err){
-                console.log("서버오류 ---> ", err);
-                return false;
-            }
+        }else{
 
-            // 확인실패
-            if(res.error){
-                /* 
-                    [ res.error.errno ]
-                    1406 ---> Data Too Long
-                    1054 ---> Bac Sql
-                    1062 ---> PK 중복
-                */
-                console.log("DB오류 ---> " + res.error.errno);
-                return false ;
-            }
-
-            console.log("res.data -----> ", res.data);
-            // 중복된아이디
-            if(res.data == 1){
-                alert("아이디가 중복되었습니다");
-            
-            // 중복되지 않은 아이디
-            }else{
-                alert("사용가능한 아이디입니다.");
-                id_chk = 1;
+            return connectToServer("/idCheck", user, "post", function(err, res){
                 
-            }
+                // 중복이면 res.data = 1, 중복아니면 res.data = 0
+                if(err){
+                    console.log("서버오류 ---> ", err);
+                    return false;
+                }
 
-        }); // callback function End
+                // 확인실패
+                if(res.error){
+                    /* 
+                        [ res.error.errno ]
+                        1406 ---> Data Too Long
+                        1054 ---> Bac Sql
+                        1062 ---> PK 중복
+                    */
+                    console.log("DB오류 ---> " + res.error.errno);
+                    return false ;
+                }
+
+                console.log("res.data -----> ", res.data);
+                // 중복된아이디
+                if(res.data == 1){
+                    alert("아이디가 중복되었습니다");
+                
+                // 중복되지 않은 아이디
+                }else{
+                    alert("사용가능한 아이디입니다.");
+                    id_chk = 1;
+                    
+                }
+
+            }); // callback function End
+        }
     } //  if End
 } // joinIdDupCheck End
 

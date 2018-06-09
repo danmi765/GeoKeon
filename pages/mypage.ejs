@@ -31,7 +31,7 @@
                                             <%  models.my_post.forEach((post, idx) => { %>
                                                 <tr>
                                                     <td><%= post['BOARD_INQUIRY_ID'] %></td>
-                                                    <td class="comm_title"><a href="/comm_view/inquiry&<%= post['BOARD_INQUIRY_ID'] %>"><%= post['BOARD_INQUIRY_TITLE'] %></a></td>
+                                                    <td class="comm_title"><a href="/comm_view/inquiry&<%= post['BOARD_INQUIRY_ID'] %>" target="_blank"><%= post['BOARD_INQUIRY_TITLE'] %></a></td>
                                                     <td><%= post['BOARD_INQUIRY_WRITER'] %></td>
                                                     <td><%= post['BOARD_INQUIRY_DATE'] %></td>
                                                 </tr>
@@ -40,7 +40,25 @@
                                     </table> <!-- comm_table End -->
                             </div>
                             <div class="my_comment_list"><!-- 내가 작성한 댓글 -->
-                                
+                                <!-- my_comment -->
+                                <table class="gk_default_table gk_th_border_table">
+                                    <thead>
+                                        <tr>
+                                            <th>게시글 번호</th>
+                                            <th>댓글내용</th>
+                                            <th>작성일</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%  models.my_comment.forEach((post, idx) => { %>
+                                            <tr>
+                                                <td><%= post['BOARD_INQUIRY_ID'] %></td>
+                                                <td class="comm_title"><a href="/comm_view/inquiry&<%= post['BOARD_INQUIRY_ID'] %>" target="_blank"><%= post['COMMENT_INQUIRY_CONTENT'] %></a></td>
+                                                <td><%= post['COMMENT_INQUIRY_DATE'] %></td>
+                                            </tr>
+                                        <% }); %>
+                                    </tbody>
+                                </table> <!-- comm_table End -->
                             </div>
                         <% } else if(models.lev == 2){ %>
                             <div class="my_info"><!-- 나의 정보 -->

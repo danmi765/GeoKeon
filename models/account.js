@@ -283,7 +283,8 @@ exports.mypage = function(req, res){
 
         console.log("user_id -----> ", user_id);
         
-        dbconn.instance[defaultDB.db].query(queries.select.get_comm_board, [tables['INQUIRY'], 'BOARD_INQUIRY_WRITER' ,user_id], function (error, results, fields) {
+        // 게시글 select
+        dbconn.instance[defaultDB.db].query(queries.select.get_comm_board, [tables['INQUIRY'], 'BOARD_INQUIRY_WRITER' ,user_id,'BOARD_INQUIRY_DATE'], function (error, results, fields) {
 
             console.log("res =====> ", results);
 
@@ -291,8 +292,19 @@ exports.mypage = function(req, res){
                 return { ...mypage_comm, 'BOARD_INQUIRY_DATE': getFormmatedDt(mypage_comm['BOARD_INQUIRY_DATE']).date }
             });
 
+            // 댓글 select
+            dbconn.instance[defaultDB.db].query(queries.select.get_comment_list, [tables['COMMENT_INQUIRY'], 'COMMENT_INQUIRY_WRITER' ,user_id, 'COMMENT_INQUIRY_DATE'], function (error, results, fields) {
+                
+                console.log("res =====> ", results);
+
+                let my_comment = results.map((mypage_comm)=>{
+                    return { ...mypage_comm, 'COMMENT_INQUIRY_DATE': getFormmatedDt(mypage_comm['COMMENT_INQUIRY_DATE']).date }
+                });
+
+                res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post, my_comment : my_comment}});
+
+            });
             
-            res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post}});
 
         });
 

@@ -116,6 +116,29 @@ CREATE TABLE IF NOT EXISTS `GK2018`.`GK_USERS` (
   PRIMARY KEY (`GK_USERS_ID`))
 ENGINE = InnoDB;
 
+
+-- -----------------------------------------------------
+-- Table `GK2018`.`BOARD_DELIMITER_LIST`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `GK2018`.`BOARD_DELIMITER_LIST` ;
+
+CREATE TABLE IF NOT EXISTS `GK2018`.`BOARD_DELIMITER_LIST` (
+  `DELIMITER_NAME` VARCHAR(20) NOT NULL COMMENT '사용자가 게시판을 생성할 때 자동으로 생성되는 테이블 이름\n(예 : BOARD1, BOARD2 ..)',
+  `BOARD_NAME` VARCHAR(30) NULL COMMENT '사용자가 지정하는 게시판 이름은 10자이내로 한다.',
+  PRIMARY KEY (`DELIMITER_NAME`))
+ENGINE = InnoDB;
+
+ALTER TABLE `gk2018`.`board_delimiter_list` 
+CHARACTER SET = utf8 ;
+
+ALTER TABLE `gk2018`.`board_delimiter_list` 
+CHANGE COLUMN `DELIMITER_NAME` `DELIMITER_NAME` VARCHAR(20) NOT NULL COMMENT '사용자가 게시판을 생성할 때 자동으로 생성되는 테이블 이름\n(예 : BOARD1, BOARD2 ..)' ,
+CHANGE COLUMN `BOARD_NAME` `BOARD_NAME` VARCHAR(30) NULL DEFAULT NULL COMMENT '사용자가 지정하는 게시판 이름은 10자이내로 한다.' ;
+
+
+
+
+
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;

@@ -1,4 +1,3 @@
-
 # Created by https://www.gitignore.io/api/node
 
 ### Node ###
@@ -72,3 +71,4 @@ typings/
 
 # End of https://www.gitignore.io/api/node
 .prop/props.js
+/esktop/gg_d.css
