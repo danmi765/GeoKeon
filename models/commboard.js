@@ -87,7 +87,6 @@ const list = (req, res) => {
 exports.getComm = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
-    const commName = req.params.commName;
     let cntUp, query, board_date;
 
     console.log("req.params", req.params)
@@ -113,7 +112,7 @@ exports.getComm = function(req, res){
                 return { ...commboard, DATE: getFormmatedDt(commboard['DATE']).datetime }
             })
 
-            return res.render('index', {pages : 'comm_view.ejs', models : { comms : comms[0], title : '커뮤니티 : 공지?', page_title : '공지? - 글보기', comm_name : req.params.commName }} );
+            return res.render('index', {pages : 'comm_view.ejs', models : { comms : comms[0], title : '커뮤니티 : 공지?', page_title : '공지? - 글보기' }} );
 
         }); // 조회수증가 dbconn E
 

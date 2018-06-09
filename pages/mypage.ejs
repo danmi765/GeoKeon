@@ -21,19 +21,17 @@
                                 <table class="gk_default_table gk_th_border_table">
                                         <thead>
                                             <tr>
-                                                <th>번호</th>
+                                                <th>게시판</th>
                                                 <th>제목</th>
-                                                <th>작성자</th>
                                                 <th>작성일</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <%  models.my_post.forEach((post, idx) => { %>
                                                 <tr>
-                                                    <td><%= post['BOARD_INQUIRY_ID'] %></td>
-                                                    <td class="comm_title"><a href="/comm_view/inquiry&<%= post['BOARD_INQUIRY_ID'] %>" target="_blank"><%= post['BOARD_INQUIRY_TITLE'] %></a></td>
-                                                    <td><%= post['BOARD_INQUIRY_WRITER'] %></td>
-                                                    <td><%= post['BOARD_INQUIRY_DATE'] %></td>
+                                                    <td><%= post['BOARD_NAME'] %></td>
+                                                    <td class="comm_title"><a href="/comm_view/<%= post['BOARD_ID'] %>" target="_blank"><%= post['TITLE'] %></a></td>
+                                                    <td><%= post['DATE'] %></td>
                                                 </tr>
                                             <% }); %>
                                         </tbody>
@@ -44,7 +42,7 @@
                                 <table class="gk_default_table gk_th_border_table">
                                     <thead>
                                         <tr>
-                                            <th>게시글 번호</th>
+                                            <th>게시글 제목</th>
                                             <th>댓글내용</th>
                                             <th>작성일</th>
                                         </tr>
@@ -52,9 +50,9 @@
                                     <tbody>
                                         <%  models.my_comment.forEach((post, idx) => { %>
                                             <tr>
-                                                <td><%= post['BOARD_INQUIRY_ID'] %></td>
-                                                <td class="comm_title"><a href="/comm_view/inquiry&<%= post['BOARD_INQUIRY_ID'] %>" target="_blank"><%= post['COMMENT_INQUIRY_CONTENT'] %></a></td>
-                                                <td><%= post['COMMENT_INQUIRY_DATE'] %></td>
+                                                <td><a href="/comm_view/<%= post['BOARD_ID'] %>" target="_blank"><%= post['TITLE'] %></a></td>
+                                                <td class="comm_title"><%= post['CONTENT'] %></td>
+                                                <td><%= post['DATE'] %></td>
                                             </tr>
                                         <% }); %>
                                     </tbody>
