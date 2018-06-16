@@ -102,5 +102,16 @@
     /* 가입 페이지 */
     .login_contents input[name=user_mail_dir]{display:none;}
 
+    /* 마이페이지 */
+    .mypage_contents > .mypage_contents_menu .selected_btn{background:#333;color:#fff;}
+
+    .mypage_contents{}
+    .mypage_contents_menu:after{content:'';display:block;clear:both;}
+    .mypage_contents_menu{width:400px; margin:0 auto 50px;}
+    .mypage_contents_menu > li{float:left;}
+    .mypage_contents_menu > li > a:link, .mypage_contents_menu > li > a:visited{padding:10px 20px;}
+
+    .my_comment_list{width:80%;margin:0 auto;}
+
 
 }

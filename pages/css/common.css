@@ -44,13 +44,16 @@ box-shadow:1px 1px 4px #ddd;
 .gk_default_table > thead > tr > th:nth-child(4){width:100px;}
 .gk_default_table > thead > tr > th:nth-child(5){width:70px;}
 .gk_default_table > tbody > tr > td{text-align:center;padding:7px 5px;border-bottom:1px solid #ddd;}
-.gk_default_table > tbody > tr > td:nth-child(2){text-align:left;}
+.gk_default_table > tbody > tr > td:nth-child(2) {text-align:left;}
+
 
 .gk_th_border_table > thead > tr > th{border-top:2px solid #000; border-bottom:2px solid #000;}
 
 .gk_top_border_table > thead > tr > th{border-top:2px solid #38c;border-bottom:1px solid #ddd;}
 
 .gk_th_bgcolor_table > thead > tr > th{background:#f1f1f1;border-top:1px solid #aaa; border-bottom:1px solid #aaa;}
+
+
 
 
 /* 테이블 페이징 */

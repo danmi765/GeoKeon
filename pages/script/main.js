@@ -295,17 +295,21 @@ function joinIdDupCheck(){
 
         if(user.user_id.length < 6 || user.user_id.length > 20){
             alert("아이디는 영문자로 시작하는 6~20자 영문자 또는 숫자이어야 합니다.");
+            $(".login_contents input[name='user_id']").focus();
     
         }else if( checkCombination(user.user_id) == false ){
             alert("아이디는 영문자로 시작하는 6~20자 영문자 또는 숫자이어야 합니다.");
+            $(".login_contents input[name='user_id']").focus();
     
         }else if(checkSpace(user.user_id) == true ){
             // 띄어쓰기 포함되어있음
             alert("아이디는 공백을 입력할 수 없습니다.");
+            $(".login_contents input[name='user_id']").focus();
     
         }else if(checkSpecial(user.user_id) == true){
             // 특수문자 포함되어있음
             alert("아이디는 특수문자를 사용할 수 없습니다.");
+            $(".login_contents input[name='user_id']").focus();
             
         }else{
 

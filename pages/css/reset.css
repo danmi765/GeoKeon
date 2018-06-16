@@ -33,3 +33,4 @@ table{border-collapse: collapse; }
 .removeitem{text-indent:-9999em; position:absolute;}
 legend{text-indent: -9999em;position:absolute;}
 button{background:none}
+a:link, a:visited{text-decoration: none;}

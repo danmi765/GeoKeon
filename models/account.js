@@ -273,8 +273,11 @@ exports.findPw = function(req, res){
 exports.mypage = function(req, res){
 
     /** lev = 1 ---> 내작성글
-        lev = 2 ---> 정보수정 **/
+        lev = 2 ---> 정보수정 
+        lev = 3 ---> 내댓글   **/
     console.log(req.query.lev);
+
+    var user_id = req.session.authId;
 
     if( req.query.lev == 1 ){
 
@@ -295,18 +298,8 @@ exports.mypage = function(req, res){
                 return { ...mypage_comm, DATE : getFormmatedDt(mypage_comm['DATE']).date }
             });
 
-            // 댓글 select
-            dbconn.instance[defaultDB.db].query(queries.select.get_comment_list_for_user_id, [user_id], function (error, results, fields) {
-                
-                console.log("res =====> ", results);
+            res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post}});
 
-                let my_comment = results.map((mypage_comm)=>{
-                    return { ...mypage_comm,  DATE : getFormmatedDt(mypage_comm['DATE']).date }
-                });
-
-                res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post, my_comment : my_comment}});
-
-            });
             
 
         });
@@ -320,6 +313,20 @@ exports.mypage = function(req, res){
 
         res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '2'}});
 
+    }else if( req.query.lev == 3){
+
+        // 댓글 select
+        dbconn.instance[defaultDB.db].query(queries.select.get_comment_list_for_user_id, [user_id], function (error, results, fields) {
+                
+            console.log("res =====> ", results);
+
+            let my_comment = results.map((mypage_comm)=>{
+                return { ...mypage_comm,  DATE : getFormmatedDt(mypage_comm['DATE']).date }
+            });
+
+            res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '3',  my_comment : my_comment}});
+
+        });
     }
     
 };
