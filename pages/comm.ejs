@@ -36,7 +36,7 @@ let comm_name ;
                                 <%  models.comms.forEach((comm, idx) => { %>
                                     <tr>
                                         <th><%= comm.display_num %></th>
-                                        <td class="comm_title"><a href="/comm_view/<%=models.comm_name%>&<%= comm['BOARD_ID'] %>"><%= comm['TITLE'] %></a></td>
+                                        <td class="comm_title"><a href="/comm_view/<%= comm['BOARD_ID'] %>"><%= comm['TITLE'] %></a></td>
                                         <td><%= comm['USER_ID'] %></td>
                                         <td><%= comm['DATE'] %></td>
                                     </tr>
