@@ -68,6 +68,9 @@ exports.login = function(req, res){
                 const loginDt = {    
                     loginDt : new Date()
                 }
+                // 사용한 salt key(joins)값 삭제(추가함.- 거성)
+                req.session.joins = '';
+
                 // 세션 존재하면 기존세션 제거 후 발급 : 중복로그인 방지
                 req.session.authId = user_db_data.user_id; // 사용자 아이디 세션에 저장
 

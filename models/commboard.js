@@ -5,6 +5,21 @@ const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
 const { getFormmatedDt } = require('../utils/utils');
 const { getSessionStorage } = require('../utils/sessionStorage');
+const bcrypt = require('bcrypt');
+const CryptoJS = require("crypto-js");
+
+/** 게시판 목록 리스트 불러오기 **/
+exports.loadcommlist = function(req, res){
+    console.log('[loadcommlist] defaultDB', defaultDB);
+    let sql = dbconn.instance[defaultDB.db].query(queries.select.get_board_domain_list, [], function (error, results, fields) {
+        if (error){
+            console.log('[loadcommlist]error', error);
+            return res.send({'error': error});
+        }
+        
+        res.send(results);
+    });
+}
 
 /** 게시판 리스트 보기 & 검색하기 **/
 const list = (req, res) => {
@@ -77,11 +92,15 @@ const list = (req, res) => {
                     DATE : getFormmatedDt(commboard['DATE']).date , 
                     display_num: (limitNo.start+idx)+1   /* display_num : 프론트에 보여지는 rownum. Backend의 board_XX_id와는 별개. */
                 }
-            })
+            });
+            
             console.log('[board list]actual sql', execQuery.sql);
-            return res.render('index', { pages : 'comm.ejs', models:{comms : comms ,title : '커뮤니티 : 공지?', page_title : '공지?', comm_name : req.params.commName } } );
+            console.log('[board list]comms', comms);
+
+            return res.render('index', { pages : 'comm.ejs', models:{comms : comms , comm_name : req.params.commName } } );
         }); //end query
 }; //end list()
+
 
 /** 게시판 글 보기 **/
 exports.getComm = function(req, res){
@@ -113,7 +132,13 @@ exports.getComm = function(req, res){
                 return { ...commboard, DATE: getFormmatedDt(commboard['DATE']).datetime }
             })
 
-            return res.render('index', {pages : 'comm_view.ejs', models : { comms : comms[0], title : '커뮤니티 : 공지?', page_title : '공지? - 글보기', comm_name : req.params.commName }} );
+            let salt = bcrypt.genSaltSync(10); // salt key 생성
+            req.session.joins = salt; // 세션에 저장
+            
+            req.session.save(function(){ // 세션 저장 후 렌더
+                return res.render('index', {pages : 'comm_view.ejs', models : { comms : comms[0], comm_name : req.params.commName, salt: salt }} );
+            });
+
 
         }); // 조회수증가 dbconn E
 
@@ -137,14 +162,78 @@ exports.modifyPage = function(req, res){
             return res.send({'error': error});
         }
 
-        console.log('ddd-->', ddd.sql);
         console.log('/commboard/modifyPage results', results);
+
         let comms = results.map((commboard)=>{
             return { ...commboard, DATE: getFormmatedDt(commboard['DATE']).datetime }
         })
 
-        return res.render('index', {pages : 'comm_write', models : { comms : comms[0], title : '커뮤니티 : 공지?', page_title : '공지? - 글수정', comm_name : req.params.commName }});
+        let salt = bcrypt.genSaltSync(10); // salt key 생성
+        req.session.joins = salt; // 세션에 저장
+        req.session.save(function(){ // 세션 저장 후 렌더
+            return res.render('index', {pages : 'comm_write', models : { comms : comms[0], comm_name : req.params.commName, salt: salt }});
+        });
+
     });
+};
+
+/** (ajax)게시판 글수정하기 **/
+exports.modifyAjax = function(req, res){
+    const reqBody = req.body;
+    const commId = req.params.commId.replace('amp;','');    //Ajax로 요청하면 params가 &까지 딸려서 온다.
+    const commName = req.params.commName.replace('amp;','');    //Ajax로 요청하면 params가 &까지 딸려서 온다.
+
+    console.log('[ajax:modifyAjax] req.session.joins:', req.session.joins);
+    console.log('[ajax:modifyAjax] reqBody:', reqBody, ' / commId: ', commId, '/ commName:', commName);
+    
+    // 복호화
+    var bytes = CryptoJS.AES.decrypt(reqBody.user_data.posts_pw, req.session.joins);
+    var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
+    var user_db_data = JSON.parse(decryptedPW);
+
+    // DB connection 1
+    dbconn.instance[defaultDB.db].query(
+        queries.select.get_comm_board ,
+        [ 
+            commId 
+        ], 
+        function (error, results, fields) {
+            if (error){
+                console.log('[modify]error', error);
+                return res.send({'error': error});
+            }
+            console.log('[ajax:modifyAjax] select results', results);
+            if (results.length === 0){
+                console.log('[ajax:modifyAjax] 아무런 결과가 없어');
+                return res.send({'error': '존재하지 않는 게시물입니다. 다시 시도해 보세요.'});
+            }
+
+            // 비밀번호 불일치
+            // bcrypt는 int를 인자로 넣으면 에러를 뱉으므로 숫자데이터도 .toString()으로 변형할 것
+            if(!bcrypt.compareSync(user_db_data.toString(), results[0]['PASSWORD'])){
+                return res.send({'error': '게시글의 비밀번호가 일치하지 않습니다.'});
+            }
+            
+            // DB connection 2
+            dbconn.instance[defaultDB.db].query(
+                queries.update.update_board_content , 
+                [
+                    reqBody.user_data.posts_title, 
+                    reqBody.user_data.editor1, 
+                    commId
+                ], 
+                function (error, modifyResult, fields) {
+                    if (error){
+                        console.log('[modify]error', error);
+                        return res.send({'error': error});
+                    }
+                    console.log('[ajax:modifyAjax] modifyResult', modifyResult);
+                    
+                    res.send({board_type: results[0]['BOARD_DOMAIN_ID']});
+                }
+            ); // dbconn E
+        }
+    ); // dbconn E
 };
 
 /** 게시판 글수정하기 **/
@@ -156,7 +245,7 @@ exports.modify = function(req, res){
 
     console.log('/commboard/modify reqBody: ', reqBody, ' / commId: ', commId);
 
-    dbconn.instance[defaultDB.db].query(queries.update.update_baord_content , [reqBody.posts_title, reqBody.editor1 , commId], function (error, results, fields) {
+    dbconn.instance[defaultDB.db].query(queries.update.update_board_content , [reqBody.posts_title, reqBody.editor1 , commId], function (error, results, fields) {
         if (error){
             console.log('[modify]error', error);
             return res.send({'error': error});
@@ -171,7 +260,13 @@ exports.modify = function(req, res){
 
 /** 게시판 글쓰기 페이지 **/
 exports.writePage = function(req, res){
-    return res.render('index', { pages : 'comm_write.ejs',models :{ comms: null, title : '커뮤니티 : 공지?', page_title : '공지? - 글쓰기', comm_name : req.params.commName }});
+    let salt = bcrypt.genSaltSync(10); // salt key 생성
+    req.session.joins = salt; // 세션에 저장
+    
+    req.session.save(function(){ // 세션 저장 후 렌더
+       return res.render('index', { pages : 'comm_write.ejs',models :{ comms: null, title : '커뮤니티 : 공지?', page_title : '공지? - 글쓰기', comm_name : req.params.commName, salt: salt }});
+    });
+
 };
 
 /** 게시판 글쓰기 **/
@@ -182,36 +277,95 @@ exports.write = function(req, res){
     const reqBody = req.body;
     const commName = req.params.commName;
 
+    // 복호화
+    var bytes = CryptoJS.AES.decrypt(req.body.posts_pw , req.session.joins);
+    var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
+    var user_db_data = JSON.parse(decryptedPW);
 
     // 글쓰기 시 비밀번호 암호화하여 DB저장 필요!@!!!
-
-    dbconn.instance[defaultDB.db].query(queries.insert.add_board_post, [reqBody.posts_title, reqBody.editor1, reqBody.posts_pw, new Date(), '0', req.session.authId ,commName ], function (error, results, fields) {
-        if (error){
-            console.log('[WritePage]error', error);
-            return res.send({'error': error});
-        }
-
-        return list(req, res);
+    // 세션에 저장되어있는 salt key(joins)를 이용해서 비밀번호 암호화/ DB저장
+    // bcrypt는 int를 인자로 넣으면 에러를 뱉으므로 숫자데이터도 .toString()으로 변형할 것
+    bcrypt.hash(user_db_data.toString(), req.session.joins,  function(err, hash) {
+        console.log('--------hash------------------->', hash);
+        dbconn.instance[defaultDB.db].query(
+            queries.insert.add_board_post, 
+            [
+                reqBody.posts_title, 
+                reqBody.editor1, 
+                hash, 
+                new Date(), 
+                '0', 
+                req.session.authId, 
+                commName 
+            ], 
+        function (error, results, fields) {
+            if (error){
+                console.log('[WritePage]error', error);
+                return res.send({'error': error});
+            }
+            // 사용한 salt key(joins)값 삭제
+            req.session.joins = '';
+            res.redirect('/comm/'+req.params.commName);
+        });
     });
+
 };
 
-/** 게시판 글삭제하기 **/
+/** (ajax)게시판 글삭제하기 **/
 exports.remove = function(req, res){
     const reqBody = req.body;
-    const commId = req.params.commId;
+    const commId = reqBody.user_data.commId;
 
-    const commName = req.params.commName;
+    console.log('[ajax:remove] req.session.joins:', req.session.joins);
+    console.log('/commboard/remove reqBody:', reqBody, ' / commId:', commId);
 
-    console.log('/commboard/remove reqBody: ', reqBody, ' / commId: ', commId);
+    // 복호화
+    var bytes = CryptoJS.AES.decrypt(reqBody.user_data.posts_pw, req.session.joins);
+    var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
+    var user_db_pw = JSON.parse(decryptedPW);
 
-    dbconn.instance[defaultDB.db].query(queries.delete.delete_comm_board, [commId], function (error, results, fields) {
-        if (error){
-            console.log('[remove]error', error);
-            return res.send({'error': error});
+    console.log('[ajax:remove] user_db_pw:', user_db_pw);
+
+    let sql1 = dbconn.instance[defaultDB.db].query(queries.select.get_comm_board, 
+        [
+            commId
+        ], 
+        function (error, results, fields) {
+            console.log('sql1:', sql1.sql);
+            if (error){
+                console.log('[remove]error', error);
+                return res.send({'error': error});
+            }
+            // 비밀번호 불일치
+            // bcrypt는 int를 인자로 넣으면 에러를 뱉으므로 숫자데이터도 .toString()으로 변형할 것
+            if(!bcrypt.compareSync(user_db_pw.toString(), results[0]['PASSWORD'])){
+                return res.send({'error': '게시글의 비밀번호가 일치하지 않습니다.'});
+            }
+            let sql2 = dbconn.instance[defaultDB.db].query(queries.delete.delete_comm_board, 
+                [
+                    commId, results[0]['PASSWORD']
+                ], 
+                function (error, results, fields) {
+                    console.log('sql2:', sql2.sql);
+                    if (error){
+                        console.log('[remove]error', error);
+                        return res.send({'error': error});
+                    }
+                    console.log('/commboard/remove results', results);
+
+                    if(results.affectedRows === 0){
+                        console.log('[remove]error', error);
+                        return res.send({'error': '삭제하려는 게시글 번호가 옳지 않거나 게시글 비밀번호가 옳지 않습니다.'});
+                    }
+                    
+                    // 사용한 salt key(joins)값 삭제
+                    req.session.joins = '';
+
+                    res.send({data: 1});
+                }
+            ); //end sql2
         }
-        console.log('/commboard/remove results', results);
-        return list(req, res);
-    });
+    ); //end sql1
 };
 
 /** 게시판 댓글 목록보기 **/

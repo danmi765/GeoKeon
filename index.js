@@ -55,25 +55,8 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 /* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
 // GET index
 app.get('/', function(req, res) {
-
-    dbconn.instance[defaultDB].query(queries.select.get_board_domain_list, [], function (error, results, fields) {
-        if (error){
-            console.log('[getComm]error', error);
-            return res.send({'error': error});
-        }
-
-        req.session.board_domain_list = results; // 게시판 목록 세션에 저장
-    
-        req.session.save(function(){ // 세션 저장 후 렌더
-           res.redirect('/main');
-           
-        });
-    });
-
-});
-
-app.get('/main', function(req, res) {
     res.render('index', {pages : 'main.ejs', models : { title : '메인' }});
+
 });
 
 // GET intro

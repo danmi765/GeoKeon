@@ -8,7 +8,7 @@ let comm_name ;
  }
 
 %>
-                <h2 class="contents_title"><%= models.page_title %></h2>
+                <h2 class="contents_title"></h2>
                 <div class="contents_area">
                     <div class="comm_contents">
                         <div class="comm_search_bar">
@@ -44,25 +44,30 @@ let comm_name ;
                             </tbody>
                         </table> <!-- comm_table End -->
                         <div class="comm_btn_area">
+                            <%
+                                // 로그인 후 세션에 존재하는 userId가 없으면 글쓰기 버튼 노출시키지 않는다.
+                                if(locals.authId){
+                            %>
                             <button onclick="location.href='/comm_write/<%= models.comm_name%>'" type="button" title="글쓰기" class="comm_write_btn gk_simple1_btn" ><span>글쓰기</span></button>
+                            <% } %>
                         </div>
                         <div class="gk_default_paging gk_basic2_paging">
                             <span><a href="">prev</a></span>
-                                <ul>
-                                    <% 
-                                    if(models.comms.length > 0){
-                                        for(var i=0; i < Math.ceil(Number(models.comms[0].COUNT) / Number(locals.rowsPerPage)) ; i++) { %>
-                                            <li><a href="?page=<%= (i+1) %>&comm_search_select=<%=locals.type%>&comm_search_text=<%=locals.query%>" class="selected"><%= (i+1) %></a></li>
-                                    <%  
-                                        } // end for
-                                    }else{ 
-                                    %>
-                                        <li><a href="" class="selected">1</a></li>
-                                    <% 
-                                    } // end if
-                                    %>
-                                </ul>
-                                <span><a href="">next</a></span>
+                            <ul>
+                                <% 
+                                if(models.comms.length > 0){
+                                    for(var i=0; i < Math.ceil(Number(models.comms[0].display_num) / Number(locals.rowsPerPage)) ; i++) { %>
+                                        <li><a href="?page=<%= (i+1) %>&comm_search_select=<%=locals.type%>&comm_search_text=<%=locals.query%>" class="selected"><%= (i+1) %></a></li>
+                                <%  
+                                    } // end for
+                                }else{ 
+                                %>
+                                    <li><a href="" class="selected">1</a></li>
+                                <% 
+                                } // end if
+                                %>
+                            </ul>
+                            <span><a href="">next</a></span>
                         </div>
                     </div> <!-- comm_contents -->
                 </div> <!-- contents_area End -->

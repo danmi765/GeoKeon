@@ -1,6 +1,6 @@
 
 
-    <h2 class="contents_title"><%= models.page_title %></h2>
+    <h2 class="contents_title"></h2>
         <div class="contents_area">
             <div class="comm_contents">
                 <table id="comm_view_table">
@@ -39,21 +39,72 @@
                     </tbody>
                 </table>
                 <div class="comm_view_btn_area">
-                    <form method="post" action="/comm_remove/<%=models.comm_name%>&<%= models.comms['BOARD_ID']%>">
+                    <!-- <form method="post" action="/comm_remove/<%=models.comm_name%>&<%= models.comms['BOARD_ID']%>" name="frm" onsubmit="return chkDeletion()"> -->
                         <button onclick="location.href='/comm/<%=models.comm_name%>'" type="button" title="목록" class="comm_view_list_btn gk_simple1_btn">목록</button>
                         <%
+                            console.log('[comm_view] models.salt', models.salt);
                             // 로그인 후 세션에 존재하는 userId와 res.render할때 models객체에 담겨있는 글쓴이가 일치한다면...
                             if(locals.authId === models.comms.USER_ID){
                         %>
+                            <input type="hidden" name="pw" value="">
                             <button onclick="location.href='/comm_modify/<%=models.comm_name%>&<%=models.comms['BOARD_ID']%>'" type="button" title="수정" class="comm_view_modi_btn gk_simple1_btn">수정</button>
                             <button type="submit" title="삭제" class="comm_view_del_btn gk_simple1_btn">삭제</button>
                         <% } %>
-                    </form>
+                    <!-- </form> -->
                 </div>
             </div> <!-- comm_contents End -->
         </div> <!-- contents_area End -->
         <script>
             $(window).on("load", function(){
                 listComment('<%=locals.authId%>', '<%=models.comm_name%>', '<%=models.comms["BOARD_ID"]%>');
+
+                $('.comm_view_btn_area').find('.comm_view_del_btn').on('click', function(e){
+                    var board_pw = prompt('게시물 삭제를 위한 해당 게시물 작성 시 비밀번호를 입력해 주세요.', '');
+                    console.log('[button:onclick] board_pw:', board_pw);
+                    if (board_pw.length > 0) {
+                        ajaxDeletion(board_pw);
+                        return true;
+                    }else{
+                        alert('비밀번호를 제대로 입력해 주세요.');
+                        return false;
+                    }
+                })
             })
+
+            function ajaxDeletion(pw){
+                // 암호화 param
+                var commType = location.pathname.split('/')[2].split('&')[0];
+                var commId = location.pathname.split('/')[2].split('&')[1];
+                var board_param = {
+                    commId: commId,
+                    posts_pw: CryptoJS.AES.encrypt(pw, '<%= models.salt %>').toString()
+                }
+                console.log('board_param:', board_param);
+                // CryptoJS.AES.encrypt(JSON.stringify({posts_pw: document.frm.posts_pw.value}), saltKey).toString();
+                connectToServer('/comm_remove', {user_data: board_param}, 'POST', function(err, res){
+                    if(err){
+                        // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
+                        console.log("서버오류 ---> ", err);
+                        return false;
+                    }
+                    //실패
+                    if(res.error){
+                        /* 
+                            [ res.error.errno ]
+                            1406 ---> Data Too Long
+                            1054 ---> Bad Sql
+                            1062 ---> PK 중복
+                        */
+                        // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
+                        // console.log("DB오류 ---> ", res.error.errno);
+                        alert(res.error);
+                        console.log("DB오류 ---> ", res.error);
+                        return false ;
+                    }
+                    console.log('[ajax remove result]', res);
+                    /* 서버에서 받은 게시판 타입(숫자)를 받아서 redirect하기. */
+                    location.href='/comm/'+commType;
+                });
+                return false;
+            }
         </script>

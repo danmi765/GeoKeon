@@ -3,15 +3,19 @@
                <div class="contents_area">
                     <div class="comm_contents">
                         <%
-                        
+                        console.log('models.salt', models.salt);
+
                         if(!models.comms){
                             act = '/comm_write/' + models.comm_name;
                         }else{
-                            act = '/comm_modify/' + models.comm_name +'&' + models.comms['BOARD_ID'];
+                            // ejs 통신
+                            // act = '/comm_modify/' + models.comm_name +'&' + models.comms['BOARD_ID'];
+                            // Ajax 통신
+                            act = '/comm_modify_ajax/' + models.comm_name +'&' + models.comms['BOARD_ID'];
                         }
                         
                         %>
-                        <form action="<%=act%>" method="post">
+                        <form action="<%=act%>" method="post" name="frm" onsubmit="return chkValidation()">
                             <fieldset>
                                 <table id="comm_write_table">
                                     <tbody>
@@ -59,5 +63,72 @@
                 filebrowserUploadUrl: '/upload',
 
             });
+
+            /* 작성 잘 되었나 확인하기 */
+            function chkValidation(){
+                if(!confirm('해당 내용으로 게시글 작성하실거에요?')){
+                    return false;
+                }
+                var posts_content_html = $('.comm_contents').find('textarea[name="editor1"]').siblings('div').find('iframe').contents().find('body').html();
+                var posts_content_text = $('.comm_contents').find('textarea[name="editor1"]').siblings('div').find('iframe').contents().find('body').text();
+                
+                if(document.frm.posts_pw.value.length == 0){
+                    alert('비밀번호가 입력되지 않았습니다.');
+                    return false;
+                }else if(document.frm.posts_pw.value.length > 4 || document.frm.posts_pw.value.match(/\d/g).length < 4){
+                    alert('비밀번호는 숫자 4자리 로만 입력되어야 합니다.');
+                    return false;
+                }
+                
+                if(document.frm.posts_title.value.length == 0){
+                    alert('제목이 입력되지 않았습니다.');
+                    return false;
+                }
+                if(posts_content_text.length == 0){
+                    alert('내용이 입력되지 않았습니다.');
+                    return false;
+                }
+                
+                /* (글수정하기) 수정모드일 때에는 Ajax통신을 통하여 게시물 비번을 대조하고, 성공하면 화면을 빠져나가게 한다. */
+                <% if(models.comms){ %>
+                    // 암호화 param
+                    var board_param = {
+                        posts_title: document.frm.posts_title.value, 
+                        editor1: posts_content_text, 
+                        posts_pw: CryptoJS.AES.encrypt(document.frm.posts_pw.value, '<%= models.salt %>').toString()
+                    }
+                    console.log('board_pw:', document.frm.posts_pw.value);
+                    console.log('board_param:', board_param);
+                    // CryptoJS.AES.encrypt(JSON.stringify({posts_pw: document.frm.posts_pw.value}), saltKey).toString();
+                    connectToServer('<%=act%>', {user_data: board_param}, 'POST', function(err, res){
+                        if(err){
+                            // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
+                            console.log("서버오류 ---> ", err);
+                            return false;
+                        }
+                        //실패
+                        if(res.error){
+                            /* 
+                                [ res.error.errno ]
+                                1406 ---> Data Too Long
+                                1054 ---> Bad Sql
+                                1062 ---> PK 중복
+                            */
+                            // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
+                            // console.log("DB오류 ---> ", res.error.errno);
+                            alert(res.error);
+                            console.log("DB오류 ---> ", res.error);
+                            return false ;
+                        }
+                        console.log('/<%=act%> result', res);
+                        /* 서버에서 받은 게시판 타입(숫자)를 받아서 redirect하기. */
+                        location.href='/comm/'+res.board_type;
+                    });
+                    return false;
+                <% }else{ %>
+                    // (글쓰기) 암호화
+                    document.frm.posts_pw.value = CryptoJS.AES.encrypt(document.frm.posts_pw.value, '<%= models.salt %>').toString()
+                <% } %>
+            } //end chkValidation
 
         </script>

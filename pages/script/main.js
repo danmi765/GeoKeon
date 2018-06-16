@@ -1,8 +1,43 @@
 var id_chk = 0; // 아이디 중복체크 유효성 검사용 변수
 var joins; // 암호화를 위함 key
 
+loadBoardDomainList();  // (로드 될때마다 실행)게시판 목록 불러오기
+
 // 회원탈퇴박스 가리기
 $(".reasons_box").hide();
+
+// 게시판 목록 불러오기
+function loadBoardDomainList(param){
+    connectToServer('/loadcommlist', '', 'GET', function(err, res){
+        if(err){
+            console.log("서버오류 ---> ", err);
+            return false;
+        }
+        //실패
+        if(res.error){
+            /* 
+                [ res.error.errno ]
+                1406 ---> Data Too Long
+                1054 ---> Bad Sql
+                1062 ---> PK 중복
+            */
+            console.log("DB오류 ---> " + res.error.errno);
+            return false ;
+        }
+
+        console.log('[loadBoardDomainList]res', res);
+
+        res.forEach(function(d,i){
+            /* 페이지 제목 주기 */
+            /* url의 맨 마지막 파라미터와 반복문 돌고 있는 BOARD_DOMAIN_ID와 일치하면 페이지 제목 주기 */
+            if($('.contents_title').length > 0 && d['BOARD_DOMAIN_ID']==Number(location.pathname.split('/')[2])){
+                $('.contents_title').text('커뮤니티 : ' + d['BOARD_NAME']);
+            }
+            $('.header_area_wrapper').find('.header_sub_menu')
+                .append('<li><a href="/comm/' +d.BOARD_DOMAIN_ID+ '">' +d.BOARD_NAME+ '</a></li>');
+        })
+    })
+}
 
 // 숫자만 입력받기 ( 가입 : 휴대전화번호 )
 function checkNumber(check_form){
@@ -129,9 +164,6 @@ function goLogin(saltKey){
         }
 
     }); // callback function End
- 
- 
-
 }
 
 
@@ -548,6 +580,13 @@ function submitComment(writer, comm_name, comm_id){
         alert('댓글 내용이 입력되지 않았습니다.');
         return;
     }
+    /* 확인 창 */
+    if (!confirm("해당 내용으로 댓글 작성 하실거에요?")){
+        return;
+    }
+    
+    
+    출처: http://h5bak.tistory.com/134 [이준빈은 호박머리]
     var content = {
         commName: comm_name,
         commId: comm_id,
@@ -576,6 +615,9 @@ function submitComment(writer, comm_name, comm_id){
             console.log("DB오류 ---> " + res.error.errno);
             return false ;
         }
+        /* 댓글 작성 후 input text 내용 삭제하기 */
+        $('#comm_view_table > tbody > tr.comm_comment_area > td > div.comm_comment_write_area > textarea').val('');
+
         renderComment(writer, comm_name, comm_id, res); /* 서버로부터 받아온 댓글리스트 뷰에 렌더링하기 */
 
     }); // callback function End
@@ -673,6 +715,10 @@ function renderComment(authId, comm_name, comm_id, commentlist){
     @commentId : 제거하고자 하는 댓글번호
 */
 function removeComment(authId, comm_name, comm_id, commentId){
+    /* 확인 창 */
+    if (!confirm("정말 댓글 삭제 하실거에요?")){
+        return;
+    }
     var content = {
         commName: comm_name,
         commentId: commentId,
@@ -710,6 +756,10 @@ function removeComment(authId, comm_name, comm_id, commentId){
     @commentContent : 수정하고자하는 댓글내용
 */
 function modifyComment(authId, comm_name, comm_id, commentId, commentContent){
+    /* 확인 창 */
+    if (!confirm("해당 내용으로 댓글 수정 하실거에요?")){
+        return;
+    }
     var content = {
         commName: comm_name,
         commId: comm_id,
@@ -744,9 +794,6 @@ function modifyComment(authId, comm_name, comm_id, commentId, commentContent){
 
 /*Ajax 통신을 위한 펑션 */
 function connectToServer(url, data, method, callback){
-    console.log('[connectToServer]url:', url);
-    console.log('[connectToServer]data:', data);
-
     $.ajax({
         url: url,
         data: JSON.stringify((data)?data:''),
