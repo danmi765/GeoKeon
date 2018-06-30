@@ -55,21 +55,19 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 /* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
 
 const urls = {
-    sub_dir : "/pages/sub/" ,
+    sub_dir : "sub/" ,
     sub_img : ""
 }
 
 
 // GET index
 app.get('/', function(req, res) {
-    res.render('index', {pages : 'main.ejs', models : { title : '메인' }});
-
+    res.render('index', {urls: urls, pages : 'main.ejs', models : { title : '메인' }});
 });
 
 // GET intro
 app.get('/intro', function(req, res) {
-
-    res.render('index',  {pages : 'intro.ejs' ,models : { title : '소개', page_title : '소개'}});
+    res.render('index',  {pages: 'intro.ejs' ,models: { title : '소개', page_title : '소개'}});
 });
 
 // design_collention
