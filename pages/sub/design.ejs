@@ -13,7 +13,7 @@
                         <ul class="design_thumbnail">
                             <% models.designs.forEach((design, idx) => { %>
                                 <li>
-                                    <img src="./img/<%=design.PORTPOLIO_IMG%>" alt="">
+                                    <img src="<%=locals.urls.img_path %><%=design.PORTPOLIO_IMG%>" alt="">
                                     <div class="design_thumbnail_cover">
                                         <span>
                                             <a href="#"
