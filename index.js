@@ -25,6 +25,8 @@ app.use(session({
     }
 }));
 
+const r = "http://127.0.0.1:8000/";
+
 // 세션을 전역으로 사용할 수 있도록 함
 app.use(function(req, res, next) {
     res.locals = req.session;   /* 로그인 할때 authId와 loggedDt속성이 추가로 들어간다 */
@@ -33,7 +35,14 @@ app.use(function(req, res, next) {
     res.locals = {
         ...res.locals,
         lastLoginInfo : getSessionStorage((req.session.authId)?req.session.authId:null),  /* 세션 스토리지 저장소(js)에 있는 회원의 최신 로그인시간을 불러온다 */
-        // rowsPerPage: 15,    /* 게시판 한페이지당 노출될 행 갯수 */
+        urls : {
+            css_path : r + "css/",
+            js_path : r + "script/",
+            lib_path : r + "lib/",
+            sub_path : "sub/" ,
+            r_sub_path : r + "sub/", 
+            img_path :  r + "img/"
+        }
     }
     next();
 });
@@ -54,22 +63,20 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 
 /* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
 
-const urls = {
-    sub_dir : "/pages/sub/" ,
-    sub_img : ""
-}
+
+
 
 
 // GET index
 app.get('/', function(req, res) {
-    res.render('index', {pages : 'main.ejs', models : { title : '메인' }});
+    res.render('sub/main', { pages : 'main.ejs', models : { title : '메인' }});
 
 });
 
 // GET intro
 app.get('/intro', function(req, res) {
 
-    res.render('index',  {pages : 'intro.ejs' ,models : { title : '소개', page_title : '소개'}});
+    res.render('sub/intro',  {pages : 'intro.ejs' ,models : { title : '소개', page_title : '소개'}});
 });
 
 // design_collention
