@@ -276,8 +276,11 @@ exports.findPw = function(req, res){
 exports.mypage = function(req, res){
 
     /** lev = 1 ---> 내작성글
-        lev = 2 ---> 정보수정 **/
+        lev = 2 ---> 정보수정 
+        lev = 3 ---> 내댓글   **/
     console.log(req.query.lev);
+
+    var user_id = req.session.authId;
 
     if( req.query.lev == 1 ){
 
@@ -290,26 +293,16 @@ exports.mypage = function(req, res){
         console.log("user_id -----> ", user_id);
         
         // 게시글 select
-        dbconn.instance[defaultDB.db].query(queries.select.get_comm_board, [tables['INQUIRY'], 'BOARD_INQUIRY_WRITER' ,user_id,'BOARD_INQUIRY_DATE'], function (error, results, fields) {
+        dbconn.instance[defaultDB.db].query(queries.select.get_comm_board_for_user_id, [user_id], function (error, results, fields) {
 
             console.log("res =====> ", results);
 
             let my_post = results.map((mypage_comm)=>{
-                return { ...mypage_comm, 'BOARD_INQUIRY_DATE': getFormmatedDt(mypage_comm['BOARD_INQUIRY_DATE']).date }
+                return { ...mypage_comm, DATE : getFormmatedDt(mypage_comm['DATE']).date }
             });
 
-            // 댓글 select
-            dbconn.instance[defaultDB.db].query(queries.select.get_comment_list, [tables['COMMENT_INQUIRY'], 'COMMENT_INQUIRY_WRITER' ,user_id, 'COMMENT_INQUIRY_DATE'], function (error, results, fields) {
-                
-                console.log("res =====> ", results);
+            res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post}});
 
-                let my_comment = results.map((mypage_comm)=>{
-                    return { ...mypage_comm, 'COMMENT_INQUIRY_DATE': getFormmatedDt(mypage_comm['COMMENT_INQUIRY_DATE']).date }
-                });
-
-                res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post, my_comment : my_comment}});
-
-            });
             
 
         });
@@ -323,6 +316,20 @@ exports.mypage = function(req, res){
 
         res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '2'}});
 
+    }else if( req.query.lev == 3){
+
+        // 댓글 select
+        dbconn.instance[defaultDB.db].query(queries.select.get_comment_list_for_user_id, [user_id], function (error, results, fields) {
+                
+            console.log("res =====> ", results);
+
+            let my_comment = results.map((mypage_comm)=>{
+                return { ...mypage_comm,  DATE : getFormmatedDt(mypage_comm['DATE']).date }
+            });
+
+            res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '3',  my_comment : my_comment}});
+
+        });
     }
     
 };
@@ -338,7 +345,7 @@ exports.myInfoPage = function(req, res){
         var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
 
         // 비밀번호 불일치
-        if( !bcrypt.compareSync(decryptedPW, results[0].GK_USERS_PW) ){
+        if( !bcrypt.compareSync(decryptedPW, results[0].USER_PW) ){
             return res.send({data : false, msg : '비밀번호가 일치하지 않습니다.'});
 
         // 비밀번호 일치
@@ -367,15 +374,15 @@ exports.myModiPage = function(req, res){
         console.log("res----> ", results);
 
         var user_data = {
-            user_id : results[0].GK_USERS_ID ,
-            user_name : results[0].GK_USERS_NAME,
-            user_email_id :  results[0].GK_USERS_EMAIL.split('@')[0],
-            user_email_mail :  results[0].GK_USERS_EMAIL.split('@')[1],
-            user_phone1 :  results[0].GK_USERS_PHONE.substr(0,3),
-            user_phone2 :  results[0].GK_USERS_PHONE.substr(3,4),
-            user_phone3 :  results[0].GK_USERS_PHONE.substr(7,10),
-            user_join_date : results[0].GK_USERS_JOIN_DATE,
-            user_status : results[0].GK_USERS_STATUS
+            user_id : results[0].USER_ID ,
+            user_name : results[0].USER_NAME,
+            user_email_id :  results[0].USER_EMAIL.split('@')[0],
+            user_email_mail :  results[0].USER_EMAIL.split('@')[1],
+            user_phone1 :  results[0].USER_PHONE.substr(0,3),
+            user_phone2 :  results[0].USER_PHONE.substr(3,4),
+            user_phone3 :  results[0].USER_PHONE.substr(7,10),
+            user_join_date : results[0].JOIN_DATE,
+            user_status : results[0].STATUS
         }
 
         console.log("user_data ------>",  user_data);

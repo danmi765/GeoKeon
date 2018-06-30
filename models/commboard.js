@@ -106,7 +106,6 @@ const list = (req, res) => {
 exports.getComm = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
-    const commName = req.params.commName;
     let cntUp, query, board_date;
 
     console.log("req.params", req.params)
