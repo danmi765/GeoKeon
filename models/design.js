@@ -14,7 +14,7 @@ exports.list = (req, res) => {
             return res.send({'error': error});
         }
         console.log('/design/list results', results);
-        return res.render('index', {pages : 'design.ejs', models : {designs:results, title : '디자인', page_title : '디자인'} });
+        return res.render('sub/design', {pages : 'design.ejs', models : {designs:results, title : '디자인', page_title : '디자인'} });
     });
 };
 
