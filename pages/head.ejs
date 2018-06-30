@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title><%= models.title %></title>
+        <meta name="description" content="An interactive getting started guide for Brackets.">
+
+        <!--[if lt IE 9]>
+         <script type="text/javascript" src="js/respond.min.js"></script>
+         <![endif]-->
+
+        <!-- jQuery Mobile : Local -->
+        <script src="/lib/jquery-1.11.1.min.js"></script>
+
+        <!-- Custom Stylesheet -->
+        <link rel="stylesheet" href="/css/main.css" />
+        <link rel="stylesheet" href="/css/reset.css" />
+        <link rel="stylesheet" href="/css/common.css" />
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- fadeIn/Out Banner -->
+        <link rel="stylesheet" href="/css/slideBanner.css" />
+
+        <!-- CKEditor -->
+        <script src="/lib/ckeditor/ckeditor.js"></script>
+
+        <!—- CryptoJS v3.1.2 -—>
+        <script src="/lib/CryptoJSv3.1.2/rollups/aes.js"></script>
+        <script src="/lib/CryptoJSv3.1.2/components/aes.js"></script>
+        <script src="/lib/CryptoJSv3.1.2/rollups/sha256.js"></script>
+        <script src="/lib/CryptoJSv3.1.2/components/sha256.js"></script>
+    </head>
+    <body>
+
+
+        <% 
+
+            if(models.find_pw == '1'){  %>
+                <script>
+                    alert('비밀번호를 이메일로 발송하였습니다.');
+                </script>
+
+        
+        <% }%>
+        
+        
+      <div id="comm_page" class="wrapper">

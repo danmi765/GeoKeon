@@ -53,6 +53,13 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 
 
 /* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
+
+const urls = {
+    sub_dir : "/pages/sub/" ,
+    sub_img : ""
+}
+
+
 // GET index
 app.get('/', function(req, res) {
 
@@ -73,7 +80,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/main', function(req, res) {
-    res.render('index', {pages : 'main.ejs', models : { title : '메인' }});
+    res.render('index', {urls : urls, pages : 'main.ejs', models : { title : '메인' }});
 });
 
 // GET intro

@@ -1,124 +1,16 @@
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <title><%= models.title %></title>
-        <meta name="description" content="An interactive getting started guide for Brackets.">
 
-        <!--[if lt IE 9]>
-         <script type="text/javascript" src="js/respond.min.js"></script>
-         <![endif]-->
-
-        <!-- jQuery Mobile : Local -->
-        <script src="/lib/jquery-1.11.1.min.js"></script>
-
-        <!-- Custom Stylesheet -->
-        <link rel="stylesheet" href="/css/main.css" />
-        <link rel="stylesheet" href="/css/reset.css" />
-        <link rel="stylesheet" href="/css/common.css" />
-
-        <!-- Font Awesome -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
-        <!-- fadeIn/Out Banner -->
-        <link rel="stylesheet" href="/css/slideBanner.css" />
-
-        <!-- CKEditor -->
-        <script src="/lib/ckeditor/ckeditor.js"></script>
-
-        <!—- CryptoJS v3.1.2 -—>
-        <script src="/lib/CryptoJSv3.1.2/rollups/aes.js"></script>
-        <script src="/lib/CryptoJSv3.1.2/components/aes.js"></script>
-        <script src="/lib/CryptoJSv3.1.2/rollups/sha256.js"></script>
-        <script src="/lib/CryptoJSv3.1.2/components/sha256.js"></script>
-    </head>
-    <body>
-
-
-        <% 
-
-            if(models.find_pw == '1'){  %>
-                <script>
-                    alert('비밀번호를 이메일로 발송하였습니다.');
-                </script>
+        <% include ./head %>
+        <% include ./header %>
         
-        <% }%>
-        
-      <div id="comm_page" class="wrapper">
-            <header class='header_area'>
-                <div class='header_area_wrapper'>
-                    <h1 class="header_logo"><a href="/">LOGO</a></h1>
-                    <ul class="header_main_menu">
-                        <li><a href='/intro'>소개</a></li>
-                        <li><a href='/design'>디자인</a></li>
-                        <li>
-                            <a href='/comm/1'>커뮤니티</a> <!-- 커뮤니티 클릭하면 공지사항으로  -->
-                            <ul class="header_sub_menu clocking">
-                                <%  locals.board_domain_list.forEach((domain, idx) => { %>
-                                    <li><a href="/comm/<%=domain.BOARD_DOMAIN_ID%>"><%=domain.BOARD_NAME%></a></li>
-                                <% }); %>
-                            </ul>
-                        </li>
-                    </ul>
-                    <ul class="header_local_menu">
-
-                        <%
-                        if(locals){
-                            console.log('---------------');
-                            console.log('locals.authId:', (locals.authId)?locals.authId:null);
-                            console.log('locals.currentSession:', (locals.authId)?locals[authId]:null);
-                            console.log('locals.sessionStorage:', locals.lastLoginInfo);
-                            console.log('locals.rowsPerPage:', locals.rowsPerPage);
-                            console.log('---------------');
-                        }
-
-                        // 세션 이용 --->  locals.변수명
-                        
-                            // 회원아이디가 존재하지 않으면 or 옛날 세션일 경우 login을 띄우고
-                            if(!locals.authId || (new Date(locals[authId].loginDt) < new Date(locals.lastLoginInfo.loginDt))){
-                        %>
-                            <li><a href="/loginPage">login</a></li>
-
-
-                        <%  // 회원아이디가 존재하면 회원아이디와 logout버튼을 띄운다.
-                            } else{ %>
-
-                            <li><a href="/mypage?lev=1"><%= locals.authId%></a>
-                            <li><a href="/logout">logout</a>
-
-                        <% } %>
-                        <li><a href="/">home</a></li>
-                    </ul>
-                </div>
-            </header>
 
             <div role="main" class="contets_wrapper">
-                <!-- contents -->
-                <%- include(pages, {models}) %>
+                
+                <%- include(urls.sub_dir + pages, {models}) %>
 
             </div>
 
 
+        <% include ./footer %>
+        <% include ./foot %>
 
-            <footer class='footer_area'>
-
-                <div class='footer_area_wrapper'>
-                    <h2 class="footer_logo"><a href="" class="removeitem">logo</a></h2>
-                    <div class="footer_contents">하단 컨텐츠</div>
-                </div>
-
-            </footer>
-
-
-            <!-- ●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●●js -->
-
-            <script src="/script/main.js"></script>
-
-            <!-- 배너 스크립트 -->
-            <script src="/script/slideBanner.js"></script>
-
-        <!-- </div> -->
-    </body>
-</html>
