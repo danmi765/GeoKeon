@@ -67,8 +67,7 @@ typings/
 .vscode/
 
 # our properties
-.prop/
+.prop/props.js
 
 # End of https://www.gitignore.io/api/node
-.prop/props.js
 /esktop/gg_d.css

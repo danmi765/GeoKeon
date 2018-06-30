@@ -97,7 +97,7 @@ const list = (req, res) => {
             console.log('[board list]actual sql', execQuery.sql);
             console.log('[board list]comms', comms);
 
-            return res.render('index', { pages : 'comm.ejs', models:{comms : comms , comm_name : req.params.commName } } );
+            return res.render('board/list/list', { models:{comms : comms , comm_name : req.params.commName } } );
         }); //end query
 }; //end list()
 
@@ -119,7 +119,6 @@ exports.getComm = function(req, res){
 
         console.log('/commboard/getComm results', results);
 
-
         // 게시물 조회수
         cntUp = results[0].HITS +1;
 
@@ -135,7 +134,7 @@ exports.getComm = function(req, res){
             req.session.joins = salt; // 세션에 저장
             
             req.session.save(function(){ // 세션 저장 후 렌더
-                return res.render('index', {pages : 'comm_view.ejs', models : { comms : comms[0], comm_name : req.params.commName, salt: salt }} );
+                return res.render('board/list/view', { models : { comms : comms[0], comm_name : req.params.commName, salt: salt }} );
             });
 
 
@@ -170,7 +169,7 @@ exports.modifyPage = function(req, res){
         let salt = bcrypt.genSaltSync(10); // salt key 생성
         req.session.joins = salt; // 세션에 저장
         req.session.save(function(){ // 세션 저장 후 렌더
-            return res.render('index', {pages : 'comm_write', models : { comms : comms[0], comm_name : req.params.commName, salt: salt }});
+            return res.render('board/list/write', {pages : 'comm_write', models : { comms : comms[0], comm_name : req.params.commName, salt: salt }});
         });
 
     });
@@ -263,7 +262,7 @@ exports.writePage = function(req, res){
     req.session.joins = salt; // 세션에 저장
     
     req.session.save(function(){ // 세션 저장 후 렌더
-       return res.render('index', { pages : 'comm_write.ejs',models :{ comms: null, title : '커뮤니티 : 공지?', page_title : '공지? - 글쓰기', comm_name : req.params.commName, salt: salt }});
+       return res.render('board/list/write', { pages : 'comm_write.ejs',models :{ comms: null, title : '커뮤니티 : 공지?', page_title : '공지? - 글쓰기', comm_name : req.params.commName, salt: salt }});
     });
 
 };
