@@ -1,9 +1,5 @@
 <% include ../../head %>
 <% include ../../header %>
-<%
-    console.log('## board/list - req.locals', locals);
-    console.log('## board/list - models', models);
-%>
 <div role="main" class="contets_wrapper"></div>
     <h2 class="contents_title"></h2>
     <div class="contents_area">
@@ -32,8 +28,8 @@
                 <tbody>
                     <%  models.comms.forEach((comm, idx) => { %>
                         <tr>
-                            <th><%= comm.display_num %></th>
-                            <td class="comm_title"><a href="/comm_view/<%= comm['BOARD_ID'] %>"><%= comm['TITLE'] %></a></td>
+                            <th><%= comm['ROWNUM'] %></th>
+                            <td class="comm_title"><a href="/comm_view/<%=comm['BOARD_DOMAIN_ID']%>&<%= comm['BOARD_ID'] %>"><%= comm['TITLE'] %></a></td>
                             <td><%= comm['USER_ID'] %></td>
                             <td><%= comm['DATE'] %></td>
                         </tr>
