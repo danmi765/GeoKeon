@@ -15,6 +15,7 @@ const session = require('express-session');
 
 const { getSessionStorage, setSessionStorage } = require('./utils/sessionStorage');
 const queries = require('./dbconn/queries');
+const { loadcommlistInner } = require('./models/commboard');
 
 app.use(session({
     secret : 'keyboard cat',
@@ -30,10 +31,7 @@ const r = "http://127.0.0.1:8000/";
 // 세션을 전역으로 사용할 수 있도록 함
 app.use(function(req, res, next) {
     res.locals = req.session;   /* 로그인 할때 authId와 loggedDt속성이 추가로 들어간다 */
-    
-    // console.log('[index.js]req.session', req.session);
     res.locals = {
-        ...res.locals,
         lastLoginInfo : getSessionStorage((req.session.authId)?req.session.authId:null),  /* 세션 스토리지 저장소(js)에 있는 회원의 최신 로그인시간을 불러온다 */
         urls : {
             css_path : r + "css/",
@@ -71,8 +69,8 @@ const urls = {
 
 // GET index
 app.get('/', function(req, res) {
+    res.locals.boardList = boardList;
     res.render('sub/main', { pages : 'main.ejs', models : { title : '메인' }});
-
 });
 
 // GET intro

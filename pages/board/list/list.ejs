@@ -1,15 +1,9 @@
-<%
-let comm_name ;
-
- if(models.comm_name == 'notice'){
-     comm_name = 'BOARD_NOTICE';
- }else if(models.comm_name == 'inquiry'){
-     comm_name = 'BOARD_INQUIRY';
- }
-
-%>
 <% include ../../head %>
 <% include ../../header %>
+<%
+    console.log('## board/list - req.locals', locals);
+    console.log('## board/list - models', models);
+%>
 <div role="main" class="contets_wrapper"></div>
     <h2 class="contents_title"></h2>
     <div class="contents_area">

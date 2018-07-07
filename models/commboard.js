@@ -20,7 +20,6 @@ exports.loadcommlist = function(req, res){
         res.send(results);
     });
 }
-
 /** 게시판 리스트 보기 & 검색하기 **/
 /*
     URL : /comm/:BOARD_DOMAIN_ID
