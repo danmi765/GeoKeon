@@ -69,6 +69,7 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 
 // GET index
 app.get('/', function(req, res) {
+    console.log("locals.joins---> " , req.session.joins);
     res.render('sub/main', { pages : 'main.ejs', models : { title : '메인' }});
 
 });
