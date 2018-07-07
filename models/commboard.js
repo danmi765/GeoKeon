@@ -33,11 +33,17 @@ const list = (req, res) => {
     */
     const reqBody = req.body;
     const reqQuery = req.query;
-    const commName = req.params.commName; 
+    const commName = req.params.commName;   /* 게시판 분류(board_domain_id) */
     let board_date; /* 게시판 작성일 변환을 위해 존재하는 변수 */
-    let search_type, search_column, search_query = reqQuery.comm_search_text;  /* SQL 검색 관련 변수 */
+    let search_type, 
+        search_column = {
+            't' : 'TITLE',
+            'w' : 'USER_ID', 
+            'c' : 'CONTENT'
+        },
+        search_query = reqQuery.comm_search_text;  /* SQL 검색 관련 변수 */
     let query_params, query;  /* SQL Query 지정하는 변수 */
-
+    
     /* 페이징에 쓰일 변수 */
     let pageNo = (reqQuery.page!==undefined)?reqQuery.page:1;
     let rowsPerPage = 10;   /* 한페이지당 노출될 행 갯수 */
@@ -58,42 +64,35 @@ const list = (req, res) => {
         query = queries.select.search_comm_board;
         search_type = reqQuery.comm_search_select;
         query_params = [
-            tables[commName], colId, tables[commName], search_column[search_type], 
             '%'+search_query+'%', search_column[search_type], '%'+search_query+'%', 
-            colId, limitNo.start, rowsPerPage
+            commName, limitNo.start, rowsPerPage
         ];
     }else{  /* 검색분류가 지정 안 되었을 때 */
         query = queries.select.list_comm_board;
         query_params = [
-            commName
+            commName, pageNo
         ];
     }
 
-    console.log("[board list]commName : " + commName);
-    
     // 쿼리 실행
-    const execQuery = dbconn.instance[defaultDB.db].query(
-        query, 
-        query_params, 
-        function (error, results, fields) {
-            // 예외처리
-            if (error){
-                console.log('[list]error', error);
-                return res.send({'error': error});
+    const execQuery = dbconn.instance[defaultDB.db].query(query, query_params, function (error, results, fields) {
+        // 예외처리
+        if (error) {
+            console.log('[list]error', error);
+            return res.send({'error': error});
+        }
+        let comms = results.map((commboard, idx) => {
+            return { 
+                ...commboard, 
+                DATE : getFormmatedDt(commboard['DATE']).date
             }
-            let comms = results.map((commboard, idx)=>{
-                return { 
-                    ...commboard, 
-                    DATE : getFormmatedDt(commboard['DATE']).date , 
-                    display_num: (limitNo.start+idx)+1   /* display_num : 프론트에 보여지는 rownum. Backend의 board_XX_id와는 별개. */
-                }
-            });
-            
-            console.log('[board list]actual sql', execQuery.sql);
-            console.log('[board list]comms', comms);
+        });
+        
+        console.log('[board list]actual sql', execQuery.sql);
+        console.log('[board list]comms', comms);
 
-            return res.render('board/list/list', { models:{comms : comms , comm_name : req.params.commName } } );
-        }); //end query
+        return res.render('board/list/list', { models:{comms : comms , comm_name : req.params.commName } } );
+    }); //end query
 }; //end list()
 
 
@@ -101,9 +100,9 @@ const list = (req, res) => {
 exports.getComm = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
-    let cntUp, query, board_date;
+    let cntUp, query, board_date, comm_name;
 
-    console.log("req.params", req.params)
+    console.log("/commboard/getComm req.params", req.params)
     console.log('/commboard/getComm reqBody: ', reqBody, ' / commId: ', commId);
 
     dbconn.instance[defaultDB.db].query(queries.select.get_comm_board, [commId], function (error, results, fields) {
@@ -116,6 +115,7 @@ exports.getComm = function(req, res){
 
         // 게시물 조회수
         cntUp = results[0].HITS +1;
+        comm_name = results[0].BOARD_DOMAIN_ID;
 
         // 조회수 증가
         dbconn.instance[defaultDB.db].query(queries.update.update_board_hits, [cntUp, commId], function(error, updateRes, fields){
@@ -125,18 +125,16 @@ exports.getComm = function(req, res){
                 return { ...commboard, DATE: getFormmatedDt(commboard['DATE']).datetime }
             })
 
+            console.log('[commboard/comms]', comms);
+
             let salt = bcrypt.genSaltSync(10); // salt key 생성
             req.session.joins = salt; // 세션에 저장
             
             req.session.save(function(){ // 세션 저장 후 렌더
-                return res.render('board/list/view', { models : { comms : comms[0], comm_name : req.params.commName, salt: salt }} );
+                return res.render('board/list/view', { models : { comms : comms[0], comm_name : comm_name, salt: salt }} );
             });
-
-
         }); // 조회수증가 dbconn E
-
     }); // select dbconn E
-
 };
 
 /** 게시판 글수정하기 페이지 **/
@@ -178,6 +176,7 @@ exports.modifyAjax = function(req, res){
 
     console.log('[ajax:modifyAjax] req.session.joins:', req.session.joins);
     console.log('[ajax:modifyAjax] reqBody:', reqBody, ' / commId: ', commId, '/ commName:', commName);
+    console.log('[ajax:modifyAjax] session joins:', req.session.joins);
     
     // 복호화
     var bytes = CryptoJS.AES.decrypt(reqBody.user_data.posts_pw, req.session.joins);
@@ -338,15 +337,15 @@ exports.remove = function(req, res){
                 [
                     commId, results[0]['PASSWORD']
                 ], 
-                function (error, results, fields) {
+                function (error, removeResult, fields) {
                     console.log('sql2:', sql2.sql);
                     if (error){
                         console.log('[remove]error', error);
                         return res.send({'error': error});
                     }
-                    console.log('/commboard/remove results', results);
+                    console.log('/commboard/remove removeResult', removeResult);
 
-                    if(results.affectedRows === 0){
+                    if(removeResult.affectedRows === 0){
                         console.log('[remove]error', error);
                         return res.send({'error': '삭제하려는 게시글 번호가 옳지 않거나 게시글 비밀번호가 옳지 않습니다.'});
                     }
@@ -354,7 +353,7 @@ exports.remove = function(req, res){
                     // 사용한 salt key(joins)값 삭제
                     req.session.joins = '';
 
-                    res.send({data: 1});
+                    res.send({commType: results[0]['BOARD_DOMAIN_ID']});
                 }
             ); //end sql2
         }
@@ -364,28 +363,27 @@ exports.remove = function(req, res){
 /** 게시판 댓글 목록보기 **/
 const listComment = (req, res) => {
     const reqBody = req.body;
-    const commName = reqBody.commName; // 게시판 테이블명 대문자로 변환
     const commId = reqBody.commId;
 
     console.log('/commboard/listComment reqBody: ', reqBody);
 
-    const dbquery = dbconn.instance[defaultDB.db].query(queries.select.get_comment_list, [ commId], function (error, results, fields) {
-            if (error){
-                console.log('[listComment]error', error);
-                return res.send({'error': error});
+    const dbquery = dbconn.instance[defaultDB.db].query(queries.select.get_comment_list, [commId], function (error, results, fields) {
+        if (error){
+            console.log('[listComment]error', error);
+            return res.send({'error': error});
+        }
+
+        console.log('/commboard/listComment dbquery', dbquery.sql);
+        console.log('/commboard/listComment results', results);
+
+        let comms = results.map((commboard, idx)=>{
+            return { 
+                ...commboard, 
+                DATE : getFormmatedDt(commboard['DATE']).datetime
             }
-
-            console.log('/commboard/listComment dbquery', dbquery.sql);
-            console.log('/commboard/listComment results', results);
-
-            let comms = results.map((commboard, idx)=>{
-                return { 
-                    ...commboard, 
-                    DATE : getFormmatedDt(commboard['DATE']).datetime
-                }
-            })
-            return res.send(comms);
-        });
+        })
+        return res.send(comms);
+    });
 }
 /** 게시판 댓글 등록하기 **/
 exports.submitComment = function(req, res){

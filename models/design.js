@@ -8,7 +8,7 @@ exports.list = (req, res) => {
     console.log('/design/list defaultDB:', defaultDB);
     const reqBody = req.body;
 
-    dbconn.instance[defaultDB.db].query(queries.select.list_portpolio, function (error, results, fields) {
+    dbconn.instance[defaultDB.db].query(queries.select.list_portfolio, function (error, results, fields) {
         if (error){
             console.log('[list]error', error);
             return res.send({'error': error});

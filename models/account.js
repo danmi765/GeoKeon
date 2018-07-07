@@ -123,9 +123,6 @@ exports.join = function(req, res){
                 return res.send({'error': error});
             }
 
-            // 사용한 salt key(joins)값 삭제
-            req.session.joins = "";
-
             // 회원가입 성공
             if(results.affectedRows == 1){
                 return res.send({data : true});

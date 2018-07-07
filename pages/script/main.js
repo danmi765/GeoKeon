@@ -25,14 +25,21 @@ function loadBoardDomainList(param){
             return false ;
         }
 
-        console.log('[loadBoardDomainList]res', res);
+        // console.log('[loadBoardDomainList]res', res);
 
         res.forEach(function(d,i){
             /* 페이지 제목 주기 */
             /* url의 맨 마지막 파라미터와 반복문 돌고 있는 BOARD_DOMAIN_ID와 일치하면 페이지 제목 주기 */
-            if($('.contents_title').length > 0 && d['BOARD_DOMAIN_ID']==Number(location.pathname.split('/')[2])){
+            var commName;
+            if(location.pathname.split('/')[2] && Number(location.pathname.split('/')[2]) == NaN){
+                commName = Number(location.pathname.split('/')[2]);
+            }else if(location.pathname.split('/')[2]){
+                commName = Number(location.pathname.split('/')[2].split('&')[0]);
+            }
+            if($('.contents_title').length > 0 && d['BOARD_DOMAIN_ID'] == commName){
                 $('.contents_title').text('커뮤니티 : ' + d['BOARD_NAME']);
             }
+            /* 상단메뉴에 게시판 종류 넣기 */
             $('.header_area_wrapper').find('.header_sub_menu')
                 .append('<li><a href="/comm/' +d.BOARD_DOMAIN_ID+ '">' +d.BOARD_NAME+ '</a></li>');
         })
@@ -636,7 +643,6 @@ function submitComment(writer, comm_name, comm_id){
 */
 function listComment(authId, comm_name, comm_id){
     var content = {
-        commName: comm_name,
         commId: comm_id,
     }
     

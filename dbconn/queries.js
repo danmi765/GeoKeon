@@ -1,16 +1,49 @@
 module.exports = {
     'select' : {
         /* 게시글이 하나도 없을 때 처리쿼리 필요 */
+        // 'list_comm_board' : `SELECT BOARD.BOARD_ID, BOARD.TITLE, BOARD.CONTENT, BOARD.PASSWORD, BOARD.DATE, BOARD.HITS, BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID FROM BOARD WHERE BOARD_DOMAIN_ID = ? ORDER BY DATE DESC`,
         'list_comm_board' : `
-            SELECT 
-                BOARD.BOARD_ID, BOARD.TITLE, BOARD.CONTENT, BOARD.PASSWORD, BOARD.DATE, BOARD.HITS, 
-                BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID
-            FROM BOARD 
-            WHERE 
-                BOARD_DOMAIN_ID = ?
-            ORDER BY DATE DESC`,
-        'search_comm_board' : 'SELECT BOARD.*, CNT.COUNT FROM ?? BOARD, (SELECT COUNT(??) as COUNT FROM ?? WHERE ?? LIKE ?) CNT WHERE ?? LIKE ? ORDER BY ? DESC LIMIT ?, ?',
-        'list_portpolio' : 'SELECT * FROM PORTPOLIO',
+            SELECT
+                T.PAGE, T.BOARD_ID, T.TITLE, T.CONTENT, T.DATE, T.HITS, T.USER_ID, T.BOARD_DOMAIN_ID, T.ROWNUM
+            FROM (
+                SELECT 
+                    CEILING( A.ROWNUM / 10 ) AS PAGE, 
+                    A.BOARD_ID, A.TITLE, A.CONTENT, A.DATE, A.HITS, A.USER_ID, A.BOARD_DOMAIN_ID, A.ROWNUM
+                FROM (
+                        SELECT 
+                            BOARD.BOARD_ID, BOARD.TITLE, BOARD.CONTENT, 
+                            BOARD.DATE, BOARD.HITS, 
+                            BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID,
+                            @RNUM := @RNUM + 1 AS ROWNUM
+                        FROM (SELECT * FROM BOARD ORDER BY DATE ASC) BOARD, (SELECT @RNUM :=0 ) AS R
+                        WHERE BOARD.BOARD_DOMAIN_ID = ?
+                ) A 
+            ) T
+            WHERE T.PAGE = ?
+            ORDER BY T.ROWNUM DESC
+        `,
+        // 'search_comm_board' : 'SELECT BOARD.*, CNT.COUNT FROM ?? BOARD, (SELECT COUNT(??) as COUNT FROM ?? WHERE ?? LIKE ?) CNT WHERE ?? LIKE ? ORDER BY ? DESC LIMIT ?, ?',
+        'search_comm_board' : `
+            SELECT
+                T.PAGE, T.BOARD_ID, T.TITLE, T.CONTENT, T.DATE, T.HITS, T.USER_ID, T.BOARD_DOMAIN_ID, T.ROWNUM
+            FROM (
+                SELECT 
+                    CEILING( A.ROWNUM / 10 ) AS PAGE, 
+                    A.BOARD_ID, A.TITLE, A.CONTENT, A.DATE, A.HITS, A.USER_ID, A.BOARD_DOMAIN_ID, A.ROWNUM
+                FROM (
+                        SELECT 
+                            BOARD.BOARD_ID, BOARD.TITLE, BOARD.CONTENT, 
+                            BOARD.DATE, BOARD.HITS, 
+                            BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID,
+                            @RNUM := @RNUM + 1 AS ROWNUM
+                        FROM (SELECT * FROM BOARD ORDER BY DATE ASC) BOARD, (SELECT @RNUM :=0 ) AS R
+                        WHERE BOARD.BOARD_DOMAIN_ID = ?
+                ) A 
+            ) T
+            WHERE T.PAGE = ?
+            ORDER BY T.ROWNUM DESC
+        `,
+        'list_portfolio' : 'SELECT * FROM PORTFOLIO',
         'get_comm_board' : 'SELECT * FROM BOARD WHERE BOARD_ID = ?',
         'get_comm_board_for_user_id' : `
                                         SELECT T.*
