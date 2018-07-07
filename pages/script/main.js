@@ -37,7 +37,13 @@ function loadBoardDomainList(param){
                 commName = Number(location.pathname.split('/')[2].split('&')[0]);
             }
             if($('.contents_title').length > 0 && d['BOARD_DOMAIN_ID'] == commName){
+                /* 페이지 헤더 타이틀 넣기 */
+                $('title').text('커뮤니티 : ' + d['BOARD_NAME']);
+                /* 페이지 본문영역 타이틀 넣기 */
                 $('.contents_title').text('커뮤니티 : ' + d['BOARD_NAME']);
+            }else if(d['BOARD_DOMAIN_ID'] == commName){
+                /* 페이지 헤더 타이틀 넣기 */
+                $('title').text('커뮤니티 : ' + d['BOARD_NAME']);
             }
             /* 상단메뉴에 게시판 종류 넣기 */
             $('.header_area_wrapper').find('.header_sub_menu')

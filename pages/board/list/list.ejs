@@ -42,9 +42,11 @@
                     if(locals.authId){
                 %>
                 <button onclick="location.href='/comm_write/<%= models.comm_name%>'" type="button" title="글쓰기" class="comm_write_btn gk_simple1_btn" ><span>글쓰기</span></button>
-                <% } %>
+                <%  } %>
             </div>
-            <div class="gk_default_paging gk_basic2_paging">
+            <!-- 페이징박스 인클루드 -->
+            <% include ../paging %>
+            <!-- <div class="gk_default_paging gk_basic2_paging">
                 <span><a href="">prev</a></span>
                 <ul>
                     <% 
@@ -61,7 +63,7 @@
                     %>
                 </ul>
                 <span><a href="">next</a></span>
-            </div>
+            </div> -->
         </div> <!-- comm_contents -->
     </div> <!-- contents_area End -->
 </div>

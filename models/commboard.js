@@ -31,8 +31,8 @@ const list = (req, res) => {
         @type : 검색분류 (t: title / c: content / w: writer)
         @query : 검색단어    
     */
-    const reqBody = req.body;
-    const reqQuery = req.query;
+    const reqBody = req.body;   /* POST method parameters */
+    const reqQuery = req.query; /* GET url parameters */
     const commName = req.params.commName;   /* 게시판 분류(board_domain_id) */
     var c_page = req.query.page; // url로 넘어온 페이지번호
     var v_cnt = req.query.cnt; // url로 넘어온 보여질 게시물 수 
@@ -48,20 +48,19 @@ const list = (req, res) => {
     
     /* 페이징에 쓰일 변수 */
     let pageNo = (reqQuery.page!==undefined)?reqQuery.page:1;
-    let rowsPerPage = 10;   /* 한페이지당 노출될 행 갯수 */
-    let limitNo = { /* 쿼리에서 쓰일 파라미터. LIMIT [start],[end] */
-        start : (pageNo-1) * rowsPerPage, 
-        end : pageNo * rowsPerPage
-    }
     if(!c_page){
         c_page = '1';
     }
     if(!v_cnt){
         v_cnt = 10;
     }
+    let limitNo = { /* 쿼리에서 쓰일 파라미터. LIMIT [start],[end] */
+        start : (pageNo-1) * v_cnt, 
+        end : pageNo * v_cnt
+    }
 
     /* [res 전역변수 지정] */
-    res.locals.rowsPerPage= rowsPerPage;    /* 게시판 한페이지당 노출될 행 갯수 */
+    res.locals.v_cnt= v_cnt;    /* 게시판 한페이지당 노출될 행 갯수 */
     res.locals.query = (reqQuery.comm_search_text)?reqQuery.comm_search_text:'';  /* 검색단어 */
     res.locals.type = (reqQuery.comm_search_select)?reqQuery.comm_search_select:'';     /* 검색타입 */
     
@@ -74,13 +73,12 @@ const list = (req, res) => {
         query = queries.select.search_comm_board;
         search_type = reqQuery.comm_search_select;
         query_params = [
-            '%'+search_query+'%', search_column[search_type], '%'+search_query+'%', 
-            commName, limitNo.start, rowsPerPage
+            commName, search_column[search_type], '%'+search_query+'%', c_page
         ];
     }else{  /* 검색분류가 지정 안 되었을 때 */
         query = queries.select.list_comm_board;
         query_params = [
-            commName, pageNo
+            commName, c_page
         ];
     }
 
@@ -109,18 +107,30 @@ const list = (req, res) => {
             console.log('[board list] totalCnt', totalCnt);
             
             // 페이징에 필요한 변수들 
+            var next_page = (Number(c_page)+1);
+            var prev_page = (Number(c_page)-1); 
+            if(next_page > Math.ceil(totalCnt[0].CNT / v_cnt)){
+                next_page = Math.ceil(totalCnt[0].CNT / v_cnt);
+            }
+            if(prev_page == 0){
+                prev_page = "1";
+            }
             var paging_var = {
                 totalCnt : totalCnt[0].CNT, // 총 게시글 수
                 totalPages : Math.ceil(totalCnt[0].CNT / v_cnt), // 총 페이지 수
-                nowPage : c_page // 현재 페이지
+                nowPage : c_page, // 현재 페이지
+                next_url : `/comm/${commName}?page=${next_page}`, // 다음페이지
+                prev_url : `/comm/${commName}?page=${prev_page}`, // 이전페이지
+                url : `/comm/${commName}?page=`  //이동 시 사용할 url
             }
             
-            console.log('[board list]comms', comms);
+            console.log('[board list]comms[0]', comms[0]);
             console.log('[board list]paging_var', paging_var);
             console.log('---------------------------------------------')
             
             return res.render('board/list/list', { 
-                models:{
+                models: {
+                    title : '',
                     comms : comms , 
                     comm_name : req.params.commName ,
                     paging_var: paging_var
@@ -160,13 +170,19 @@ exports.getComm = function(req, res){
                 return { ...commboard, DATE: getFormmatedDt(commboard['DATE']).datetime }
             })
 
-            console.log('[commboard/comms]', comms);
+            console.log('[getComm] comms[0]', comms[0]);
 
             let salt = bcrypt.genSaltSync(10); // salt key 생성
             req.session.joins = salt; // 세션에 저장
-            
             req.session.save(function(){ // 세션 저장 후 렌더
-                return res.render('board/list/view', { models : { comms : comms[0], comm_name : comm_name, salt: salt }} );
+                return res.render('board/list/view', { 
+                    models : { 
+                        title : '',
+                        comms : comms[0], 
+                        comm_name : comm_name, 
+                        salt: salt 
+                    }
+                });
             });
         }); // 조회수증가 dbconn E
     }); // select dbconn E
@@ -197,7 +213,15 @@ exports.modifyPage = function(req, res){
         let salt = bcrypt.genSaltSync(10); // salt key 생성
         req.session.joins = salt; // 세션에 저장
         req.session.save(function(){ // 세션 저장 후 렌더
-            return res.render('board/list/write', {pages : 'comm_write', models : { comms : comms[0], comm_name : req.params.commName, salt: salt }});
+            return res.render('board/list/write', {
+                pages : 'comm_write', 
+                models : { 
+                    title : '',
+                    comms : comms[0], 
+                    comm_name : req.params.commName, 
+                    salt: salt 
+                }
+            });
         });
 
     });
@@ -256,7 +280,9 @@ exports.modifyAjax = function(req, res){
                     }
                     console.log('[ajax:modifyAjax] modifyResult', modifyResult);
                     
-                    res.send({board_type: results[0]['BOARD_DOMAIN_ID']});
+                    res.send({
+                        board_type: results[0]['BOARD_DOMAIN_ID']
+                    });
                 }
             ); // dbconn E
         }
@@ -291,7 +317,15 @@ exports.writePage = function(req, res){
     req.session.joins = salt; // 세션에 저장
     
     req.session.save(function(){ // 세션 저장 후 렌더
-       return res.render('board/list/write', { pages : 'comm_write.ejs',models :{ comms: null, title : '커뮤니티 : 공지?', page_title : '공지? - 글쓰기', comm_name : req.params.commName, salt: salt }});
+        return res.render('board/list/write', { 
+            pages : 'comm_write.ejs',
+            models :{ 
+                title : '', 
+                comms: null, 
+                comm_name : req.params.commName, 
+                salt: salt 
+            }
+        });
     });
 
 };
