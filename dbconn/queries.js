@@ -2,6 +2,9 @@ module.exports = {
     'select' : {
         /* 게시글이 하나도 없을 때 처리쿼리 필요 */
         // 'list_comm_board' : `SELECT BOARD.BOARD_ID, BOARD.TITLE, BOARD.CONTENT, BOARD.PASSWORD, BOARD.DATE, BOARD.HITS, BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID FROM BOARD WHERE BOARD_DOMAIN_ID = ? ORDER BY DATE DESC`,
+        'get_comm_board_length' : `
+            SELECT COUNT(BOARD_ID) AS CNT FROM BOARD WHERE BOARD.BOARD_DOMAIN_ID = ?
+        `,
         'list_comm_board' : `
             SELECT
                 T.PAGE, T.BOARD_ID, T.TITLE, T.CONTENT, T.DATE, T.HITS, T.USER_ID, T.BOARD_DOMAIN_ID, T.ROWNUM
