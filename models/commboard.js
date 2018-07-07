@@ -22,18 +22,15 @@ exports.loadcommlist = function(req, res){
 }
 
 /** 게시판 리스트 보기 & 검색하기 **/
+/*
+    URL : /comm/:BOARD_DOMAIN_ID
+    BOARD_DOMAIN_ID : 기볻 1-공지사항 / 2-문의사항
+*/
 const list = (req, res) => {
     /* queryString
         @page : 페이지 번호 (http://주소?page=1 할때의 page=1부분이 query이며, {page:1} 형태로 파싱됨)
         @type : 검색분류 (t: title / c: content / w: writer)
         @query : 검색단어    
-    */
-
-    /*
-    
-        URL : /comm/:BOARD_DOMAIN_ID
-        BOARD_DOMAIN_ID : 기볻 1-공지사항 / 2-문의사항
-    
     */
     const reqBody = req.body;
     const reqQuery = req.query;
@@ -56,7 +53,6 @@ const list = (req, res) => {
     
     console.log('[reqQuery]', reqQuery);
     console.log('[reqParam]', req.params);
-
 
     /* 검색 분류(제목/작성자/내용)에 따른 쿼리 및 파라미터 정의 */
     if(reqQuery.comm_search_select){  /* 검색분류가 지정되었을 때 */

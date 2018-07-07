@@ -35,17 +35,10 @@
         <script src="<%=locals.urls.lib_path %>CryptoJSv3.1.2/components/sha256.js"></script>
     </head>
     <body>
-
-
-        <% 
-
-            if(models.find_pw == '1'){  %>
-                <script>
-                    alert('비밀번호를 이메일로 발송하였습니다.');
-                </script>
-
-        
-        <% }%>
-        
-        
-      <div id="comm_page" class="wrapper">
+        <% if(models.find_pw == '1'){  %>
+            <script>
+                alert('비밀번호를 이메일로 발송하였습니다.');
+            </script>        
+        <% } %>
+    <!-- 페이지 전체를 감싸는 부분 -->
+    <div id="comm_page" class="wrapper">
