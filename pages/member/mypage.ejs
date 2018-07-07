@@ -43,6 +43,9 @@
                                     </table> <!-- comm_table End -->
                             </div>
                             
+                            <!-- 페이징박스 인클루드 -->
+                            <% include ../board/paging %>
+                            
                         <% } else if(models.lev == 3){ %>
 
                             <div class="my_comment_list"><!-- 내가 작성한 댓글 -->
@@ -58,7 +61,7 @@
                             
                             <!-- 페이징박스 인클루드 -->
                             <% include ../board/paging %>
-                            
+
 
                         <% } else if(models.lev == 2){ %>
                             <div class="my_info"><!-- 나의 정보 -->
