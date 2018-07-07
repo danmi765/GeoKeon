@@ -40,7 +40,7 @@ module.exports = {
                             BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID,
                             @RNUM := @RNUM + 1 AS ROWNUM
                         FROM (SELECT * FROM BOARD ORDER BY DATE ASC) BOARD, (SELECT @RNUM :=0 ) AS R
-                        WHERE BOARD.BOARD_DOMAIN_ID = ?
+                        WHERE BOARD.BOARD_DOMAIN_ID = ? AND BOARD.?? LIKE ?
                 ) A 
             ) T
             WHERE T.PAGE = ?
