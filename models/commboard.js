@@ -34,6 +34,8 @@ const list = (req, res) => {
     const reqBody = req.body;
     const reqQuery = req.query;
     const commName = req.params.commName;   /* 게시판 분류(board_domain_id) */
+    var c_page = req.query.page; // url로 넘어온 페이지번호
+    var v_cnt = req.query.cnt; // url로 넘어온 보여질 게시물 수 
     let board_date; /* 게시판 작성일 변환을 위해 존재하는 변수 */
     let search_type, 
         search_column = {
@@ -51,13 +53,21 @@ const list = (req, res) => {
         start : (pageNo-1) * rowsPerPage, 
         end : pageNo * rowsPerPage
     }
+    if(!c_page){
+        c_page = '1';
+    }
+    if(!v_cnt){
+        v_cnt = 10;
+    }
+
     /* [res 전역변수 지정] */
     res.locals.rowsPerPage= rowsPerPage;    /* 게시판 한페이지당 노출될 행 갯수 */
     res.locals.query = (reqQuery.comm_search_text)?reqQuery.comm_search_text:'';  /* 검색단어 */
     res.locals.type = (reqQuery.comm_search_select)?reqQuery.comm_search_select:'';     /* 검색타입 */
     
-    console.log('[reqQuery]', reqQuery);
-    console.log('[reqParam]', req.params);
+    console.log('---------------------------------------------')
+    console.log('[board list:reqQuery]', reqQuery);
+    console.log('[board list:reqParam]', req.params);
 
     /* 검색 분류(제목/작성자/내용)에 따른 쿼리 및 파라미터 정의 */
     if(reqQuery.comm_search_select){  /* 검색분류가 지정되었을 때 */
@@ -74,25 +84,50 @@ const list = (req, res) => {
         ];
     }
 
-    // 쿼리 실행
-    const execQuery = dbconn.instance[defaultDB.db].query(query, query_params, function (error, results, fields) {
+    // 해당 게시판의 총 길이 계산
+    const getTotalCntQuery = dbconn.instance[defaultDB.db].query(queries.select.get_comm_board_length, commName, function (error, totalCnt, fields) {
         // 예외처리
         if (error) {
             console.log('[list]error', error);
             return res.send({'error': error});
         }
-        let comms = results.map((commboard, idx) => {
-            return { 
-                ...commboard, 
-                DATE : getFormmatedDt(commboard['DATE']).date
+        // 게시글 불러오기 실행
+        const execQuery = dbconn.instance[defaultDB.db].query(query, query_params, function (error, results, fields) {
+            console.log('[board list]actual sql', execQuery.sql);
+            // 예외처리
+            if (error) {
+                console.log('[list]error', error);
+                return res.send({'error': error});
             }
-        });
-        
-        console.log('[board list]actual sql', execQuery.sql);
-        console.log('[board list]comms', comms);
-
-        return res.render('board/list/list', { models:{comms : comms , comm_name : req.params.commName } } );
-    }); //end query
+            let comms = results.map((commboard, idx) => {
+                return { 
+                    ...commboard, 
+                    DATE : getFormmatedDt(commboard['DATE']).date
+                }
+            });
+            
+            console.log('[board list] totalCnt', totalCnt);
+            
+            // 페이징에 필요한 변수들 
+            var paging_var = {
+                totalCnt : totalCnt[0].CNT, // 총 게시글 수
+                totalPages : Math.ceil(totalCnt[0].CNT / v_cnt), // 총 페이지 수
+                nowPage : c_page // 현재 페이지
+            }
+            
+            console.log('[board list]comms', comms);
+            console.log('[board list]paging_var', paging_var);
+            console.log('---------------------------------------------')
+            
+            return res.render('board/list/list', { 
+                models:{
+                    comms : comms , 
+                    comm_name : req.params.commName ,
+                    paging_var: paging_var
+                } 
+            });
+        }); //end execQuery
+    }); //end getTotalCntQuery
 }; //end list()
 
 
