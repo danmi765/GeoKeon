@@ -19,13 +19,13 @@
 
 
 <div class="paging_box gk_default_paging gk_basic2_paging">
-    <span><a class="paging_prev_btn" href="">prev</a></span>
+    <span><a class="paging_prev_btn" href="<%=models.paging_var.prev_url%>">prev</a></span>
     <ul>
         <%  for(var i=0; i < Number(models.paging_var.totalPages); i++){ %>    
-        <li><a href="/mypage?lev=3&page=<%= i+1 %>" ><%= i+1 %></a></li>
+        <li><a href="<%= models.paging_var.url%><%= i+1 %>" ><%= i+1 %></a></li>
         <% }; %>
     </ul>
-    <span><a class="paging_next_btn" href="/mypage?lev=3&page=<%=  Number(models.paging_var.nowPage)+1 %>">next</a></span>
+    <span><a class="paging_next_btn" href="<%=models.paging_var.next_url%>">next</a></span>
 </div>
 
 
@@ -33,7 +33,4 @@
      // 해당 페이지 번호에 selected 클래스 부여
     $(".paging_box ul > li:eq("+ (Number(now_page)-1) +") > a").addClass("selected");
     
-    // 이전, 다음버튼 href값 작성
-    $(".paging_prev_btn").prop('href', "/mypage?lev=3&page="+prev_page);
-    $(".paging_next_btn").prop('href', "/mypage?lev=3&page="+next_page);
 </script>

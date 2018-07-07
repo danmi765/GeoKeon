@@ -12,7 +12,19 @@ module.exports = {
         'search_comm_board' : 'SELECT BOARD.*, CNT.COUNT FROM ?? BOARD, (SELECT COUNT(??) as COUNT FROM ?? WHERE ?? LIKE ?) CNT WHERE ?? LIKE ? ORDER BY ? DESC LIMIT ?, ?',
         'list_portpolio' : 'SELECT * FROM PORTPOLIO',
         'get_comm_board' : 'SELECT * FROM BOARD WHERE BOARD_ID = ?',
-        'get_comm_board_for_user_id' : 'SELECT BOARD.*, BOARD_DOMAIN.BOARD_NAME FROM BOARD, BOARD_DOMAIN WHERE BOARD.BOARD_DOMAIN_ID = BOARD_DOMAIN.BOARD_DOMAIN_ID AND USER_ID = ? ORDER BY DATE DESC',
+        'get_comm_board_for_user_id' : `
+                                        SELECT T.*
+                                        FROM (
+                                                SELECT CEILING( A.ROWNUM / ? ) AS PAGE, A.*
+                                                FROM (
+                                                        SELECT BOARD.*, BOARD_DOMAIN.BOARD_NAME , @RNUM := @RNUM + 1 AS ROWNUM
+                                                        FROM (SELECT * FROM BOARD ORDER BY DATE DESC) BOARD, BOARD_DOMAIN , (SELECT @RNUM :=0 ) AS R
+                                                        WHERE BOARD.BOARD_DOMAIN_ID = BOARD_DOMAIN.BOARD_DOMAIN_ID AND USER_ID = ?
+                                                    ) A 
+                                            ) T
+                                        WHERE T.PAGE = ?
+        `,
+        'get_board_all_cnt_for_user_id' : 'SELECT cOUNT(*) AS CNT FROM BOARD WHERE USER_ID = ?',
         'get_user_id' : 'SELECT * FROM GK_USERS WHERE USER_ID = ?',
         'get_user_id_for_email' : "SELECT CONCAT( SUBSTR( USER_ID, 1, LENGTH(USER_ID)-3 ), '***' ) AS USER_ID FROM GK_USERS WHERE USER_EMAIL = ?",
         'get_user_pw_for_user_id' : 'SELECT USER_PW FROM GK_USERS WHERE USER_ID = ?',
