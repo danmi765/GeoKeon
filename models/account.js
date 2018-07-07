@@ -28,7 +28,7 @@ exports.loginPage = function(req, res){
     
     req.session.save(function(){ // 세션 저장 후 렌더
        //  res.redirect('/login');
-        res.render('index', {pages : 'login.ejs', models : {title : '로그인', page_title : '로그인', salt: salt}});
+        res.render('member/login', {models : {title : '로그인', page_title : '로그인', salt: salt}});
        
     });
 }
@@ -101,7 +101,7 @@ exports.login = function(req, res){
 
 // 가입 페이지 
 exports.joinPage = function(req, res){
-    res.render('index', {pages : 'join.ejs', models : {title : '회원가입', page_title : '회원가입'}});
+    res.render('member/memberJoin', {models : {title : '회원가입', page_title : '회원가입'}});
 }
 
 // 가입하기
@@ -163,7 +163,7 @@ exports.checkid = function(req, res){
 
 // 아이디 찾기
 exports.findIdPage = function(req, res){
-    res.render('index', {pages : 'findid.ejs', models : {title : '아이디찾기', page_title : '아이디찾기'}});
+    res.render('member/findMyId', {models : {title : '아이디찾기', page_title : '아이디찾기'}});
 };
 
 exports.findId = function(req, res){
@@ -180,13 +180,13 @@ exports.findId = function(req, res){
         
         // 해당 이메일에 아이디 존재하지 않음.
         if(results.length == 0){
-            res.render('index', {pages : 'findid.ejs', models : {title : '아이디찾기', page_title : '아이디찾기', msg : '아이디가 존재하지 않습니다.'}});
+            res.render('member/findMyId', {models : {title : '아이디찾기', page_title : '아이디찾기', msg : '아이디가 존재하지 않습니다.'}});
         }
 
         // 해당 이메일에 아이디가 존재할 경우.
         if(results.length >= 1){
             console.log("results ---> ", results);
-            res.render('index', {pages : 'findid.ejs', models : {title : '아이디찾기', page_title : '아이디찾기', find_id : '아이디가 존재합니다', find_id_res : results}});
+            res.render('member/findMyId', {models : {title : '아이디찾기', page_title : '아이디찾기', find_id : '아이디가 존재합니다', find_id_res : results}});
             
         }
 
@@ -196,7 +196,7 @@ exports.findId = function(req, res){
 
 // 비밀번호 찾기
 exports.findPwPage = function(req, res){
-    res.render('index', {pages : 'findpw.ejs', models : {title : '비밀번호찾기', page_title : '비밀번호찾기'}});
+    res.render('member/findMyPw', {models : {title : '비밀번호찾기', page_title : '비밀번호찾기'}});
 };
 
 exports.findPw = function(req, res){
@@ -265,7 +265,7 @@ exports.findPw = function(req, res){
 
             });// 해싱 끝
 
-            res.render('index', {pages : 'main.ejs', models : {title : '로그인', page_title : '로그인', find_pw : '1'}});
+            res.render('sub/main', {models : {title : '로그인', page_title : '로그인', find_pw : '1'}});
 
         }
     }); // dbconn End
@@ -301,7 +301,7 @@ exports.mypage = function(req, res){
                 return { ...mypage_comm, DATE : getFormmatedDt(mypage_comm['DATE']).date }
             });
 
-            res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post}});
+            res.render('member/mypage', {models : {title : '마이페이지', page_title : '마이페이지', lev : '1', my_post : my_post}});
 
             
 
@@ -314,7 +314,7 @@ exports.mypage = function(req, res){
 
         // 해당회원의 정보를 select하여 ejs로 보낸다.
 
-        res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '2'}});
+        res.render('member/mypage', {models : {title : '마이페이지', page_title : '마이페이지', lev : '2'}});
 
     }else if( req.query.lev == 3){
 
@@ -327,7 +327,7 @@ exports.mypage = function(req, res){
                 return { ...mypage_comm,  DATE : getFormmatedDt(mypage_comm['DATE']).date }
             });
 
-            res.render('index', {pages : 'mypage.ejs', models : {title : '마이페이지', page_title : '마이페이지', lev : '3',  my_comment : my_comment}});
+            res.render('member/mypage', {models : {title : '마이페이지', page_title : '마이페이지', lev : '3',  my_comment : my_comment}});
 
         });
     }
@@ -387,7 +387,7 @@ exports.myModiPage = function(req, res){
 
         console.log("user_data ------>",  user_data);
 
-        res.render('index', {pages : 'mypage_infomodi.ejs', models : {title : '내정보수정', page_title : '내정보수정', user_data : user_data}});
+        res.render('member/myModi', { models : {title : '내정보수정', page_title : '내정보수정', user_data : user_data}});
 
     });
 };
@@ -413,7 +413,7 @@ exports.myModi = function(req, res){
 // 비밀번호 변경 페이지 이동
 exports.changePwPage = function(req, res){
 
-    res.render('index', {pages : 'mypage_pwmodi.ejs', models : {title : '비밀번호변경', page_title : '비밀번호변경'}});
+    res.render('member/myPwChange', {models : {title : '비밀번호변경', page_title : '비밀번호변경'}});
 
 };
 

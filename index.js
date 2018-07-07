@@ -15,7 +15,6 @@ const session = require('express-session');
 
 const { getSessionStorage, setSessionStorage } = require('./utils/sessionStorage');
 const queries = require('./dbconn/queries');
-const { loadcommlistInner } = require('./models/commboard');
 
 app.use(session({
     secret : 'keyboard cat',
@@ -69,7 +68,6 @@ const urls = {
 
 // GET index
 app.get('/', function(req, res) {
-    res.locals.boardList = boardList;
     res.render('sub/main', { pages : 'main.ejs', models : { title : '메인' }});
 });
 

@@ -387,7 +387,10 @@ function joinIdDupCheck(){
 // 정보수정하기 페이지이동
 function goModiMyInfoPage(saltKey){
 
+    console.log("saltKey-->",saltKey);
+
     var user_pw = $("input[name=user_pw]").val() ;
+    console.log("user_pw-->",user_pw);
 
     // 암호화
     var en_user = CryptoJS.AES.encrypt(user_pw, saltKey).toString();
