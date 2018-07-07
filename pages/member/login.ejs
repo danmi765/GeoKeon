@@ -40,7 +40,7 @@
                             </tr>
                             <tr>
                                 <td><span>password</span></td>
-                                <td><input type="password" maxlength="10" name="user_pw" /></td>
+                                <td><input type="password" maxlength="10" name="user_pw" onkeypress="if(event.keyCode==13) {goLogin(joins); return false;}" /></td>
                             </tr>
                         </table>
                         <ul>

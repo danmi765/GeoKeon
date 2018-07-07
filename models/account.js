@@ -68,8 +68,6 @@ exports.login = function(req, res){
                 const loginDt = {    
                     loginDt : new Date()
                 }
-                // 사용한 salt key(joins)값 삭제(추가함.- 거성)
-                req.session.joins = '';
 
                 // 세션 존재하면 기존세션 제거 후 발급 : 중복로그인 방지
                 req.session.authId = user_db_data.user_id; // 사용자 아이디 세션에 저장
@@ -318,18 +316,53 @@ exports.mypage = function(req, res){
 
     }else if( req.query.lev == 3){
 
-        // 댓글 select
-        dbconn.instance[defaultDB.db].query(queries.select.get_comment_list_for_user_id, [user_id], function (error, results, fields) {
-                
-            console.log("res =====> ", results);
+        // paging
+        var c_page = req.query.page; // url로 넘어온 페이지번호
+        var v_cnt = req.query.cnt; // url로 넘어온 보여질 게시물 수 
 
-            let my_comment = results.map((mypage_comm)=>{
-                return { ...mypage_comm,  DATE : getFormmatedDt(mypage_comm['DATE']).date }
-            });
+        console.log("c_page ===== > " , c_page);
+        if(!c_page){
+            c_page = '1';
+        }
+        if(!v_cnt){
+            v_cnt = 10;
+        }
 
-            res.render('member/mypage', {models : {title : '마이페이지', page_title : '마이페이지', lev : '3',  my_comment : my_comment}});
+        // 총 갯수 SELECT
+        dbconn.instance[defaultDB.db].query(queries.select.get_commet_all_cnt_for_user_id, [user_id], function (error, results_cnt, fields) {
+            if (error){
+                console.log("에러났어요------------>", error);
+                return res.send({'error': error});
+            }  
 
-        });
+            // 댓글 select
+            dbconn.instance[defaultDB.db].query(queries.select.get_comment_list_for_user_id, [v_cnt, user_id, c_page], function (error, results, fields) {
+                if (error){
+                    console.log("에러났어요------------>", error);
+                    return res.send({'error': error});
+                }     
+
+                console.log("res =====> ", results);
+
+                let my_comment = results.map((mypage_comm)=>{
+                    return { ...mypage_comm,  DATE : getFormmatedDt(mypage_comm['DATE']).date }
+                });
+
+                // 페이징에 필요한 변수들 
+                var paging_var = {
+                    totalCnt : results_cnt[0].CNT, // 총 게시글 수
+                    totalPages : Math.ceil(results_cnt[0].CNT / v_cnt), // 총 페이지 수
+                    nowPage : c_page // 현재 페이지
+                }
+
+                console.log("totalCnt === > ", paging_var.totalCnt);
+                console.log("totalPages === > ", paging_var.totalPages);
+
+
+                res.render('member/mypage', {models : {title : '마이페이지', page_title : '마이페이지', lev : '3',  my_comment : my_comment, paging_var : paging_var }});
+
+            }); // 댓글 가져오기 끝
+        });// 총 갯수가져오기 끝
     }
     
 };

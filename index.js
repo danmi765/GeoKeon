@@ -31,6 +31,7 @@ const r = "http://127.0.0.1:8000/";
 app.use(function(req, res, next) {
     res.locals = req.session;   /* 로그인 할때 authId와 loggedDt속성이 추가로 들어간다 */
     res.locals = {
+        ...res.locals,
         lastLoginInfo : getSessionStorage((req.session.authId)?req.session.authId:null),  /* 세션 스토리지 저장소(js)에 있는 회원의 최신 로그인시간을 불러온다 */
         urls : {
             css_path : r + "css/",
@@ -79,7 +80,7 @@ app.get('/intro', function(req, res) {
 
 // design_collention
 app.get('/design_collection', function(req, res) {
-    res.render('design_collection');
+    res.render('sub/design_collection');
 });
 
 

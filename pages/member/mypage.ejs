@@ -1,5 +1,6 @@
 <% include ../head %>
 <% include ../header %>
+
 <div role="main" class="contets_wrapper"></div>
 
 
@@ -11,7 +12,7 @@
                         <!-- 마이페이지 탭 (내작성글 / 정보수정)-->
                         <ul class="mypage_contents_menu">
                             <li><a href="/mypage?lev=1" class="gk_corner_all gk_simple2_btn">내가쓴글</a></li>
-                            <li><a href="/mypage?lev=3" class="gk_corner_all gk_simple2_btn">내가쓴댓글</a></li>
+                            <li><a href="/mypage?lev=3&page=1" class="gk_corner_all gk_simple2_btn">내가쓴댓글</a></li>
                             <li><a href="/mypage?lev=2" class="gk_corner_all gk_simple2_btn">정보변경</a></li>
                         </ul>
                         <div class="mypage_local_contents">
@@ -43,7 +44,7 @@
                             </div>
                             
                         <% } else if(models.lev == 3){ %>
-                            
+
                             <div class="my_comment_list"><!-- 내가 작성한 댓글 -->
                             <%  models.my_comment.forEach((post, idx) => { %>
                                 <div class="comm_comment_row" id="<%= post['COMMENT_ID'] %>">
@@ -54,6 +55,10 @@
                                 </div>
                             <% }); %>
                             </div>
+                            
+                            <!-- 페이징박스 인클루드 -->
+                            <% include ../board/paging %>
+                            
 
                         <% } else if(models.lev == 2){ %>
                             <div class="my_info"><!-- 나의 정보 -->
@@ -63,6 +68,7 @@
                                 </div>
                                 <div><button onclick="return goModiMyInfoPage(joins)" type="button" title="정보수정하기" class="gk_simple1_btn"><span>정보수정</span></button></div>
                             </div>
+
                         <% } %>
 
                         </div> <!-- mypage_local_contents End -->
