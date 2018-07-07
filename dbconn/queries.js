@@ -50,7 +50,18 @@ module.exports = {
         'get_user_id_for_email' : "SELECT CONCAT( SUBSTR( USER_ID, 1, LENGTH(USER_ID)-3 ), '***' ) AS USER_ID FROM GK_USERS WHERE USER_EMAIL = ?",
         'get_user_pw_for_user_id' : 'SELECT USER_PW FROM GK_USERS WHERE USER_ID = ?',
         'get_comment_list' : 'SELECT * FROM COMMENT WHERE BOARD_ID = ? ORDER BY DATE DESC',
-        'get_comment_list_for_user_id' : 'SELECT COMMENT.*, BOARD.TITLE FROM COMMENT, BOARD WHERE COMMENT.BOARD_ID = BOARD.BOARD_ID AND COMMENT.USER_ID = ? ORDER BY DATE DESC',
+        'get_comment_list_for_user_id' : `SELECT T.*
+                                            FROM (
+                                                    SELECT CEILING( A.ROWNUM / ? ) AS PAGE, A.*
+                                                    FROM (
+                                                            SELECT COMMENT.*, BOARD.TITLE, @RNUM := @RNUM + 1 AS ROWNUM
+                                                            FROM (SELECT * FROM COMMENT ORDER BY DATE DESC) COMMENT, BOARD, (SELECT @RNUM :=0 ) AS R
+                                                            WHERE COMMENT.BOARD_ID = BOARD.BOARD_ID AND COMMENT.USER_ID = ?
+                                                        ) A 
+                                                ) T
+                                            WHERE T.PAGE = ?
+                                            ORDER BY T.ROWNUM DESC`,
+        'get_commet_all_cnt_for_user_id' : 'SELECT COUNT(*) AS CNT FROM COMMENT WHERE USER_ID = ? ',
         'get_board_domain_list' : 'SELECT * FROM BOARD_DOMAIN'
     },
     'insert' : {

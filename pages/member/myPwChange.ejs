@@ -5,13 +5,6 @@
 <div role="main" class="contets_wrapper"></div>
 
 
-<% if (locals.joins) { %>
-    <script>
-        $(window).on("load", function(){
-            joins = "<%= locals.joins %>" ;
-        })
-    </script>
-<% } %>
 
                 <h2 class="contents_title"><%= models.page_title%></h2>
                 <div class="contents_area">

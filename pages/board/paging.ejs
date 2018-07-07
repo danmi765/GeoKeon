@@ -1,0 +1,39 @@
+<script>
+
+    var now_page = "<%=models.paging_var.nowPage%>"; // 현제페이지
+    var next_page = Number(now_page)+1; // 다음페이지
+    var prev_page = Number(now_page)-1; // 이전페이지
+    var tot_page = "<%=models.paging_var.totalPages%>"; // 총 페이지 수
+
+    // 이전 페이지값이 0 이면 1로
+    if(prev_page == 0){
+        prev_page = 1;
+    }
+
+    // 다음 페이지값이 총 페이지 수보다 크면 총 페이지 수로 
+    if(next_page > tot_page){
+        next_page = tot_page;
+    }
+
+</script>
+
+
+<div class="paging_box gk_default_paging gk_basic2_paging">
+    <span><a class="paging_prev_btn" href="">prev</a></span>
+    <ul>
+        <%  for(var i=0; i < Number(models.paging_var.totalPages); i++){ %>    
+        <li><a href="/mypage?lev=3&page=<%= i+1 %>" ><%= i+1 %></a></li>
+        <% }; %>
+    </ul>
+    <span><a class="paging_next_btn" href="/mypage?lev=3&page=<%=  Number(models.paging_var.nowPage)+1 %>">next</a></span>
+</div>
+
+
+<script>
+     // 해당 페이지 번호에 selected 클래스 부여
+    $(".paging_box ul > li:eq("+ (Number(now_page)-1) +") > a").addClass("selected");
+    
+    // 이전, 다음버튼 href값 작성
+    $(".paging_prev_btn").prop('href', "/mypage?lev=3&page="+prev_page);
+    $(".paging_next_btn").prop('href', "/mypage?lev=3&page="+next_page);
+</script>

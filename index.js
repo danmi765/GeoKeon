@@ -80,7 +80,7 @@ app.get('/intro', function(req, res) {
 
 // design_collention
 app.get('/design_collection', function(req, res) {
-    res.render('design_collection');
+    res.render('sub/design_collection');
 });
 
 
