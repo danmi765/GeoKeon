@@ -5,6 +5,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "node",
+            "request": "launch",
+            "name": "geokeon program",
+            "program": "${workspaceFolder}/index.js"
+        },
+        {
             "type": "chrome",
             "request": "launch",
             "name": "localhost에 대해 Chrome 시작",
