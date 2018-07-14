@@ -39,7 +39,8 @@ app.use(function(req, res, next) {
             lib_path : r + "lib/",
             sub_path : "sub/" ,
             r_sub_path : r + "sub/", 
-            img_path :  r + "img/"
+            img_path :  r + "img/",
+            upload_img_path : r + "img/upload/"
         }
     }
     next();

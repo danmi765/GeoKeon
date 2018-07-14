@@ -6,6 +6,38 @@ loadBoardDomainList();  // (로드 될때마다 실행)게시판 목록 불러�
 // 회원탈퇴박스 가리기
 $(".reasons_box").hide();
 
+// 게시판 팝업 내용 변경하고 띄우기
+function loadCommPopup(title, message, callback){
+    var popupDom = $('.comm-popup-wrapper');
+    /* 기존의 에러메시지와 입력값 초기화시키기 */
+    popupDom.find('.comm-popup-header').text('');
+    popupDom.find('.comm-popup-input').val('');
+    popupDom.find('.comm-popup-errmsg').text('');
+    /* 팝업 헤더에 제목 넣기 */
+    popupDom.find('.comm-popup-header').text(title);
+    /* 팝업에 메시지 넣기 */
+    popupDom.find('.comm-popup-message').text(message);
+    /* 팝업 비추기 */
+    popupDom.removeClass('gk-clocking');
+    /* 스크롤 막기 */
+    $('body').addClass('contets_wrapper');
+}
+// 게시판 팝업 에러메시지 세팅 후 비추기
+function setCommPopupError(message, callback){
+    var popupDom = $('.comm-popup-wrapper');
+    var errmsgDom = popupDom.find('.comm-popup-errmsg');
+    errmsgDom.text(message);
+    callback(false);
+}
+// 게시판 팝업 감추기
+function unloadCommPopup(callback){
+    var popupDom = $('.comm-popup-wrapper');
+    /* 팝업 감추기 */
+    popupDom.addClass('gk-clocking');
+    /* 스크롤 막기 해제 */
+    $('body').removeClass('contets_wrapper');
+}
+
 // 게시판 목록 불러오기
 function loadBoardDomainList(param){
     connectToServer('/loadcommlist', '', 'GET', function(err, res){

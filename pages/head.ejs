@@ -48,6 +48,19 @@
 
     </head>
     <body>
+<script>
+    // 전역으로 사용되는 path
+    var css_path = "<%=locals.urls.css_path %>";
+    var js_path = "<%=locals.urls.js_path %>";
+    var lib_path = "<%=locals.urls.lib_path %>";
+    var sub_path = "<%=locals.urls.sub_path %>";
+    var r_sub_path = "<%=locals.urls.r_sub_path %>";
+    var img_path = "<%=locals.urls.img_path %>";
+    var upload_img_path = "<%=locals.urls.upload_img_path %>";
+
+</script>
+
+
         <% if(models.find_pw == '1'){  %>
             <script>
                 alert('비밀번호를 이메일로 발송하였습니다.');

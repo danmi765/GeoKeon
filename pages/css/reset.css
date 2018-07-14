@@ -34,3 +34,4 @@ table{border-collapse: collapse; }
 legend{text-indent: -9999em;position:absolute;}
 button{background:none}
 a:link, a:visited{text-decoration: none;}
+.overflow_hidden_item{overflow:hidden;}

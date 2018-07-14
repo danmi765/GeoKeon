@@ -61,38 +61,41 @@
             listComment('<%=locals.authId%>', '<%=models.comm_name%>', '<%=models.comms["BOARD_ID"]%>');
 
             $('.comm_view_btn_area').find('.comm_view_del_btn').off('click').on('click', function(e){
-                var popupDom = $('.comm-popup-wrapper');
+                var popup_title = '항목 삭제';
                 var popup_msg = '게시물 삭제를 위한 해당 게시물 작성 시 비밀번호를 입력해 주세요.';
-                /* 기존의 에러메시지와 입력값 초기화시키기 */
-                popupDom.find('.comm-popup-input').val('');
-                popupDom.find('.comm-popup-errmsg').text('');
-                /* 팝업에 메시지 넣기 */
-                popupDom.find('.comm-popup-message').text(popup_msg);
-                /* 팝업 비추기 */
-                popupDom.removeClass('gk-clocking');
+                /* 게시판 팝업 내용 변경하고 띄우기 */
+                loadCommPopup(popup_title, popup_msg);
             });
 
             $('.comm-cancel-btn').off('click').on('click', function(e){
-                $('.comm-popup-wrapper').addClass('gk-clocking');
+                /* 게시판 팝업 감추기 */
+                return unloadCommPopup();
             });
             $('.comm-ok-btn').off('click').on('click', function(e){
-                var popupDom = $('.comm-popup-wrapper');
-                var errmsgDom = popupDom.find('.comm-popup-errmsg');
-                var board_pw = popupDom.find('.comm-popup-input').val();
+                var board_pw = $('.comm-popup-wrapper').find('.comm-popup-input').val();
 
                 if (board_pw.length > 0) {
-                    ajaxDeletion(board_pw, errmsgDom, function(){
-                        popupDom.addClass('gk-clocking');
+                    if(isNaN(board_pw)){
+                        /* 게시판 팝업 에러메시지 세팅 후 비추기 */
+                        return setCommPopupError('숫자만 입력되어야 합니다.', function(result){
+                            return result;
+                        });
+                    }
+                    return ajaxDeletion(board_pw, function(){
+                        /* 팝업 감추기 */
+                        unloadCommPopup();
+                        return true;
                     });
-                    return true;
                 }else{
-                    popupDom.find('.comm-popup-errmsg').text('비밀번호를 제대로 입력해 주세요.');
-                    return false;
+                    /* 게시판 팝업 에러메시지 세팅 후 비추기 */
+                    return setCommPopupError('비밀번호를 제대로 입력해 주세요.', function(result){
+                        return result;
+                    });
                 }
             });
         })
 
-        function ajaxDeletion(pw, errmsgDom, callback){
+        function ajaxDeletion(pw, callback){
             // 암호화 param
             var commId = location.pathname.split('/')[2].split('&')[1];
             var board_param = {
@@ -116,11 +119,12 @@
                         1054 ---> Bad Sql
                         1062 ---> PK 중복
                     */
-                    // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
-                    // console.log("DB오류 ---> ", res.error.errno);
-                    errmsgDom.text(res.error);
                     console.log("DB오류 ---> ", res.error);
-                    return false ;
+                   
+                    /* 게시판 팝업 에러메시지 세팅 후 비추기 */
+                    return setCommPopupError(res.error, function(result){
+                        return result;
+                    });
                 }
                 console.log('[ajax remove result]', res);
                 /* 서버에서 받은 게시판 타입(숫자)를 받아서 redirect하기. */
