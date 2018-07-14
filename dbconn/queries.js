@@ -6,24 +6,26 @@ module.exports = {
             SELECT COUNT(BOARD_ID) AS CNT FROM BOARD WHERE BOARD.BOARD_DOMAIN_ID = ?
         `,
         'list_comm_board' : `
-            SELECT
-                T.PAGE, T.BOARD_ID, T.TITLE, T.CONTENT, T.DATE, T.HITS, T.USER_ID, T.BOARD_DOMAIN_ID, T.ROWNUM
-            FROM (
-                SELECT 
-                    CEILING( A.ROWNUM / 10 ) AS PAGE, 
-                    A.BOARD_ID, A.TITLE, A.CONTENT, A.DATE, A.HITS, A.USER_ID, A.BOARD_DOMAIN_ID, A.ROWNUM
+            SELECT 
+                CEILING( T.ROWNUM_B / 10 ) AS BOARD_PAGE,
+                T.BOARD_ID, T.TITLE, T.CONTENT, T.DATE, T.HITS, T.USER_ID, T.BOARD_DOMAIN_ID, 
+                T.ROWNUM_A AS ROWNUM
+            FROM 
+                (SELECT 
+                    A.BOARD_ID, A.TITLE, A.CONTENT, A.DATE, A.HITS, A.USER_ID, A.BOARD_DOMAIN_ID, A.ROWNUM_A,
+                    @RNUM_B := @RNUM_B + 1 AS ROWNUM_B
                 FROM (
                         SELECT 
                             BOARD.BOARD_ID, BOARD.TITLE, BOARD.CONTENT, 
                             BOARD.DATE, BOARD.HITS, 
                             BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID,
-                            @RNUM := @RNUM + 1 AS ROWNUM
-                        FROM (SELECT * FROM BOARD ORDER BY DATE ASC) BOARD, (SELECT @RNUM :=0 ) AS R
+                            @RNUM_A := @RNUM_A + 1 AS ROWNUM_A
+                        FROM (SELECT * FROM BOARD ORDER BY DATE ASC) BOARD, (SELECT @RNUM_A :=0 ) AS R
                         WHERE BOARD.BOARD_DOMAIN_ID = ?
-                ) A 
-            ) T
-            WHERE T.PAGE = ?
-            ORDER BY T.ROWNUM DESC
+                        ORDER BY ROWNUM_A DESC
+                    ) A, (SELECT @RNUM_B :=0 ) AS R
+                ) T
+            WHERE CEILING( T.ROWNUM_B / 10 ) = ?
         `,
         // 'search_comm_board' : 'SELECT BOARD.*, CNT.COUNT FROM ?? BOARD, (SELECT COUNT(??) as COUNT FROM ?? WHERE ?? LIKE ?) CNT WHERE ?? LIKE ? ORDER BY ? DESC LIMIT ?, ?',
         'search_comm_board' : `

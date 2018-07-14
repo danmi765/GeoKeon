@@ -130,6 +130,7 @@ const list = (req, res) => {
             
             return res.render('board/list/list', { 
                 models: {
+                    title : '',
                     comms : comms , 
                     comm_name : req.params.commName ,
                     paging_var: paging_var
@@ -176,6 +177,7 @@ exports.getComm = function(req, res){
             req.session.save(function(){ // 세션 저장 후 렌더
                 return res.render('board/list/view', { 
                     models : { 
+                        title : '',
                         comms : comms[0], 
                         comm_name : comm_name, 
                         salt: salt 
@@ -214,6 +216,7 @@ exports.modifyPage = function(req, res){
             return res.render('board/list/write', {
                 pages : 'comm_write', 
                 models : { 
+                    title : '',
                     comms : comms[0], 
                     comm_name : req.params.commName, 
                     salt: salt 
@@ -317,10 +320,10 @@ exports.writePage = function(req, res){
         return res.render('board/list/write', { 
             pages : 'comm_write.ejs',
             models :{ 
-               comms: null, 
-               title : '커뮤니티 : 공지', 
-               comm_name : req.params.commName, 
-               salt: salt 
+                title : '', 
+                comms: null, 
+                comm_name : req.params.commName, 
+                salt: salt 
             }
         });
     });
