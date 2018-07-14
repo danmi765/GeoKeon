@@ -21,7 +21,7 @@
 <div class="paging_box gk_default_paging gk_basic2_paging">
     <span><a class="paging_prev_btn" href="<%=models.paging_var.prev_url%>">prev</a></span>
     <ul>
-        <%  for(var i=0; i < Number(models.paging_var.totalPages); i++){ %>    
+        <% for(var i=0; i < Number(models.paging_var.totalPages); i++){ %>    
         <li><a href="<%= models.paging_var.url%><%= i+1 %>" ><%= i+1 %></a></li>
         <% }; %>
     </ul>
