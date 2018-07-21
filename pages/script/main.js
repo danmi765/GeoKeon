@@ -6,6 +6,38 @@ loadBoardDomainList();  // (로드 될때마다 실행)게시판 목록 불러�
 // 회원탈퇴박스 가리기
 $(".reasons_box").hide();
 
+// 게시판 팝업 내용 변경하고 띄우기
+function loadCommPopup(title, message, callback){
+    var popupDom = $('.comm-popup-wrapper');
+    /* 기존의 에러메시지와 입력값 초기화시키기 */
+    popupDom.find('.comm-popup-header').text('');
+    popupDom.find('.comm-popup-input').val('');
+    popupDom.find('.comm-popup-errmsg').text('');
+    /* 팝업 헤더에 제목 넣기 */
+    popupDom.find('.comm-popup-header').text(title);
+    /* 팝업에 메시지 넣기 */
+    popupDom.find('.comm-popup-message').text(message);
+    /* 팝업 비추기 */
+    popupDom.removeClass('gk-clocking');
+    /* 스크롤 막기 */
+    $('body').addClass('contets_wrapper');
+}
+// 게시판 팝업 에러메시지 세팅 후 비추기
+function setCommPopupError(message, callback){
+    var popupDom = $('.comm-popup-wrapper');
+    var errmsgDom = popupDom.find('.comm-popup-errmsg');
+    errmsgDom.text(message);
+    callback(false);
+}
+// 게시판 팝업 감추기
+function unloadCommPopup(callback){
+    var popupDom = $('.comm-popup-wrapper');
+    /* 팝업 감추기 */
+    popupDom.addClass('gk-clocking');
+    /* 스크롤 막기 해제 */
+    $('body').removeClass('contets_wrapper');
+}
+
 // 게시판 목록 불러오기
 function loadBoardDomainList(param){
     connectToServer('/loadcommlist', '', 'GET', function(err, res){
@@ -25,14 +57,27 @@ function loadBoardDomainList(param){
             return false ;
         }
 
-        console.log('[loadBoardDomainList]res', res);
+        // console.log('[loadBoardDomainList]res', res);
 
         res.forEach(function(d,i){
             /* 페이지 제목 주기 */
             /* url의 맨 마지막 파라미터와 반복문 돌고 있는 BOARD_DOMAIN_ID와 일치하면 페이지 제목 주기 */
-            if($('.contents_title').length > 0 && d['BOARD_DOMAIN_ID']==Number(location.pathname.split('/')[2])){
-                $('.contents_title').text('커뮤니티 : ' + d['BOARD_NAME']);
+            var commName;
+            if(location.pathname.split('/')[2] && Number(location.pathname.split('/')[2]) == NaN){
+                commName = Number(location.pathname.split('/')[2]);
+            }else if(location.pathname.split('/')[2]){
+                commName = Number(location.pathname.split('/')[2].split('&')[0]);
             }
+            if($('.contents_title').length > 0 && d['BOARD_DOMAIN_ID'] == commName){
+                /* 페이지 헤더 타이틀 넣기 */
+                $('title').text('커뮤니티 : ' + d['BOARD_NAME']);
+                /* 페이지 본문영역 타이틀 넣기 */
+                $('.contents_title').text('커뮤니티 : ' + d['BOARD_NAME']);
+            }else if(d['BOARD_DOMAIN_ID'] == commName){
+                /* 페이지 헤더 타이틀 넣기 */
+                $('title').text('커뮤니티 : ' + d['BOARD_NAME']);
+            }
+            /* 상단메뉴에 게시판 종류 넣기 */
             $('.header_area_wrapper').find('.header_sub_menu')
                 .append('<li><a href="/comm/' +d.BOARD_DOMAIN_ID+ '">' +d.BOARD_NAME+ '</a></li>');
         })
@@ -636,7 +681,6 @@ function submitComment(writer, comm_name, comm_id){
 */
 function listComment(authId, comm_name, comm_id){
     var content = {
-        commName: comm_name,
         commId: comm_id,
     }
     
