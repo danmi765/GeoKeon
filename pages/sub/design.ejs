@@ -1,17 +1,9 @@
 
-<!-- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ 
-
-    썸네일 클릭 시 PC, 테블릿, 모바일 순으로 이미지 정렬
-    이미지 클릭 시 해당이미지 크기 커지고 나머지 둘은 줄어들게
-    PC, 테블릿, 모바일 메인이미지 1개씩만 등록한다는 가정,
-
-
- ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ -->
-
 
 <script>
 // db에 저장된 이미지정보를 저장 할 배열.
  var img_list_arr = [];
+
 </script>
 
 
@@ -19,102 +11,59 @@
 <% include ../header %>
 <div role="main" class="contets_wrapper">
 
-        <!-- 썸네일 팝업 -->
-        <div class="design_thumbnail_pop">
-            <div class="design_thumbnail_pop_img_box">
-                <div class="design_thumbnail_pop_close_btn removeitem">닫기</div>
-                <div class="design_thumbnail_main_img">
-                    <img src="" alt="" />
-                </div>
-                <ul class="design_thumbnail_sub_img">
-                    <li><img src="" alt="" /></li>
-                </ul>
-            </div>
+    <!-- 썸네일 팝업 -->
+    <div class="design_thumbnail_pop">
+        <div class="design_thumbnail_pop_img_box">
+            <div class="design_thumbnail_pop_close_btn removeitem">닫기</div>
+            <ul class="design_thumbnail_img">
+                <li><img nimg="" /></li>
+                <li><img nimg="" /></li>
+                <li><img nimg="" /></li>
+                <li>이미지가 없습니다.</li>
+            </ul>
+            <ul class="design_thumbnail_cate_btn">
+                <li aim="0">PC</li>
+                <li aim="1">모바일</li>
+                <li aim="2">테블릿</li>
+            </ul>
         </div>
+    </div>
 
-                <h2 class="contents_title"><%= models.page_title%></h2>
-                <div class="contents_area">
-                    <div class="design_contents">
-                        <ul class="design_business_menu">
-                            <li><a href="" class="gk_corner_all gk_simple2_btn">업종1</a></li>
-                            <li><a href="" class="gk_corner_all gk_simple2_btn">업종2</a></li>
-                            <li><a href="" class="gk_corner_all gk_simple2_btn">업종3</a></li>
-                        </ul>
-                        <ul class="design_thumbnail">
-                            <% models.designs.forEach((design, idx) => { %>
-                                <li>
-                                    <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
-                                    <div class="design_thumbnail_cover"></div>
-                                    <div class="design_title">디자인 <%= design.POTRPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</div>
-                                </li>
-                                <script>
-                                    // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
-                                    img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));    
-                                </script>
-                            <% }); %>
-                        </ul> <!-- design_thumbnail End -->
-                        <!-- <div class="design_thumbnail_more_btn"></div> -->
-                    </div> <!-- design_contents End -->
-                </div> <!-- contents_area End -->
+    <!-- 본문 -->
+    <h2 class="contents_title"><%= models.page_title%></h2>
+    <div class="contents_area">
+        <div class="design_contents">
+            <ul class="design_business_menu">
+                <% models.dmoain_list.forEach((dmoain_list, idx) => {  %>
+                    <li><a href="/design?tab=<%=dmoain_list.BUSINESS_ID%>" class="gk_corner_all gk_simple2_btn"><%=dmoain_list.BUSINESS_NAME%></a></li>
+                <% }); %>
+            </ul>
+            <ul class="design_thumbnail">
+                    <% models.designs.forEach((design, idx) => { %>
+                        <li>
+                            <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
+                            <div class="design_thumbnail_cover"></div>
+                            <div class="design_title">디자인 <%= design.POTRPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</div>
+                        </li>
+                        <script>
+                            // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
+                            img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));    
+                        </script>
+                    <% }); %>
+            </ul> <!-- design_thumbnail End -->
+            <!-- <div class="design_thumbnail_more_btn"></div> -->
+        </div> <!-- design_contents End -->
+    </div> <!-- contents_area End -->
+
+    <script>
+    // 해당업종번호 불러와서 해당 탭에 css주기
+    var tap_num = "<%=models.bisuness_domain_num%>";
+
+    $(".design_business_menu > li").eq(Number(tap_num)-1).children("a").css("border","1px solid #000");
+    </script>
 
                 
 </div>
 <% include ../footer %>
 <% include ../foot %>
             
-<script>
-
-// 리스트 메인이미지 삽입
-for(var i =0; i<img_list_arr.length; i++){
-    $(".list_main_img_"+i).attr("src", upload_img_path + img_list_arr[i][0]);
-}
-
- // 메인이미지 마우스오버 시 디자인타이틀 텍스트 숨김
- $(".design_thumbnail > li > img").hover(function(){
-        $(this).siblings(".design_title").hide();
-        
-    // 메인이미지 마우스아웃 시 디자인타이틀 텍스트 보임
-    }, function(){
-        $(".design_title").show();
-    });
-
-    // 메인이미지 클릭 시 썸네일 팝 띄우기
-    $(".design_thumbnail > li > img").click(function(ab){
-
-        // 썸네일 배경 생성
-        $(".design_thumbnail_pop").show();
-        // 브라우저 스크롤바 제거
-        $("html").addClass("overflow_hidden_item");
-        // 썸네일 팝업창 애니메이션 효과주며 생성
-        $(".design_thumbnail_pop_img_box").stop().animate({"height" : "85%"}, 400, function(){
-            // 닫기버튼 생성
-            $(".design_thumbnail_pop_close_btn").show();
-
-            // 해당 li의 index를 이용하여 팝업의 이미지 삽입
-            var li_idx =  $(ab.target).attr("ab");
-
-            // 썸네일 메인이미지
-            $(".design_thumbnail_main_img > img").attr("src", upload_img_path + img_list_arr[li_idx][0]);
-            // 썸네일 서브이미지
-            for(var i=1; i<img_list_arr[li_idx].length; i++){
-                $(".design_thumbnail_sub_img > li").eq(i-1).children("img").attr("src", upload_img_path + img_list_arr[li_idx][i]);
-                console.log(i + " : " + img_list_arr[li_idx][i]);
-            }
-
-        });
-    });
-
-    // 썸네일 팝 닫기
-    $(".design_thumbnail_pop_close_btn").click(function(){
-        // 닫기버튼 제거
-        $(".design_thumbnail_pop_close_btn").hide();
-        // 썸네일 팝업창 애니메이션 효과주며 제거
-        $(".design_thumbnail_pop_img_box").stop().animate({"height" : "10%"}, 400, function(){
-            // 썸네일 배경 제거
-            $(".design_thumbnail_pop").hide();
-            // 브라우저 스크롤바 생성
-            $("html").removeClass("overflow_hidden_item");
-        });
-    });
-
-</script>
