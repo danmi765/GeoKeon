@@ -2,15 +2,17 @@
 -------------- 공통 -------------- 
 # ejs render하는 서버로직에서 에러 났을 때 error.ejs파일에 에러내용 렌더링하도록 하기
 
-ex)
-  if (error) {
-    return res.render('error/500', {
-      error: {
-        msg: [에러내용],
-        msg: [에러내용],
-      }
-    });
-  }
+- Ajax에서 에러가 뜰 때에는..
+```
+  connectToServer("/error", {msg : res}, "post", function(err, res){
+      $('html').html(res);
+  });
+```
+
+- 서버 내부 로직에서 에러가 뜰 때에는..
+```
+  return res.render('error/error', {msg: 'error'});
+```
 -------------------------------------
 
 

@@ -35,7 +35,6 @@ exports.loginPage = function(req, res){
 
 
 exports.login = function(req, res){
-
     console.log('login req.body:', req.body);
     console.log('session.joins ===> ', req.session.joins);
 
@@ -44,7 +43,7 @@ exports.login = function(req, res){
     var decryptedPW = bytes.toString(CryptoJS.enc.Utf8);
     var user_db_data = JSON.parse(decryptedPW);
 
-    dbconn.instance[defaultDB.db].query(queries.select.get_user_id, [user_db_data.user_id], function (error, results, fields) {
+    let sql1 = dbconn.instance[defaultDB.db].query(queries.select.get_user_id, [user_db_data.user_id], function (error, results, fields) {
         if (error){
             return res.send({'error': error});
         }
