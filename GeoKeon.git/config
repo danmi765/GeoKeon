@@ -1,9 +1,9 @@
 [core]
 	repositoryformatversion = 0
-	filemode = true
+	filemode = false
 	bare = true
+	symlinks = false
 	ignorecase = true
-	precomposeunicode = true
 [remote "origin"]
 	url = https://github.com/danmi765/GeoKeon.git
 	fetch = +refs/*:refs/*
