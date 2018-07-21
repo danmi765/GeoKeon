@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Geokeon : Error!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" media="screen" href="/error/error.css" />
+  <!-- jQuery Mobile : Local -->
+  <script src="<%=locals.urls.lib_path %>jquery-1.11.1.min.js"></script>
+</head>
+<body>
+  <div class="err-wrapper">
+    <div class="err-content-area">
+      <!-- <div id="aa"><%=mode%></div> -->
+      <div class="err-title">Error!!!</div>
+      <div class="err-content">에러 이유 : <%= msg %></div>
+      <div class="err-notice">
+        <span>이 페이지는...</span>
+        <span id="err-tictoc"></span>
+        <span>초 후 폭발합니다</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    errorRender('<%=mode%>');
+  </script>
+</body>
+</html>
