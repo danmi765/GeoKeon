@@ -34,9 +34,10 @@
         <script src="<%=locals.urls.lib_path %>CryptoJSv3.1.2/rollups/sha256.js"></script>
         <script src="<%=locals.urls.lib_path %>CryptoJSv3.1.2/components/sha256.js"></script>
 
-
+        <!-- 에러처리 -->
+        <script src="/error/error.js"></script>
         
-            <!-- 암호화에 필요한 key 값 저장 -->
+        <!-- 암호화에 필요한 key 값 저장 -->
         <% if (locals.joins) { %>
             <script>
                 $(window).on("load", function(){

@@ -54,6 +54,9 @@ function loadBoardDomainList(param){
                 1062 ---> PK 중복
             */
             console.log("DB오류 ---> " + res.error.errno);
+            connectToServer("/error", {msg : res.error.code}, "post", function(err, res){
+                $('html').html(res);
+            });
             return false ;
         }
 
@@ -183,6 +186,9 @@ function goLogin(saltKey){
                 1062 ---> PK 중복
             */
             console.log("DB오류 ---> " + res.error.errno);
+            connectToServer("/error", {msg : res.error.code}, "post", function(err, res){
+                $('html').html(res);
+            });
             return false ;
         }
 
@@ -313,17 +319,22 @@ function goJoin(saltKey){
 
         if($("select[name=user_mail] > option:selected").index() == 4){
             user.user_email = $("input[name=user_mail_id]").val() + "@" + $("input[name=user_mail_dir]").val();
-
         }else{
             user.user_email = $("input[name=user_mail_id]").val() + "@" + $("select[name=user_mail]").val();
-            console.log("jn");
         }
         user.user_phone =  $("input[name=user_phone1]").val() + $("input[name=user_phone2]").val() + $("input[name=user_phone3]").val();
 
         console.log("user --> ", user);
 
-        // 암호화
-        var en_user = CryptoJS.AES.encrypt(JSON.stringify(user), saltKey).toString();
+        try{
+            // 암호화
+            var en_user = CryptoJS.AES.encrypt(JSON.stringify(user), saltKey).toString();
+        }catch(e){
+            if(!saltKey){
+                return alert('no Saltkey: 잘못된 접근입니다. 로그인 페이지부터 다시 들어와 주세요.');
+            }
+            return console.log('catch', e);
+        }
 
         console.log('en_user:', en_user);
 
@@ -332,6 +343,9 @@ function goJoin(saltKey){
             // 성공하면 res.data = 1, 실패하면 res.data = 0
             if(err){
                 console.log("서버오류 ---> ", err);
+                connectToServer("/error", {msg : err}, "post", function(err, res){
+                    $('html').html(res);
+                });
                 return false;
             }
     
@@ -344,6 +358,9 @@ function goJoin(saltKey){
                     1062 ---> PK 중복
                 */
                 console.log("DB오류 ---> " + res.error.errno);
+                connectToServer("/error", {msg : res.error.code}, "post", function(err, res){
+                    $('html').html(res);
+                });
                 return false ;
             }
     
@@ -407,7 +424,10 @@ function joinIdDupCheck(){
                         1062 ---> PK 중복
                     */
                     console.log("DB오류 ---> " + res.error.errno);
-                    return false ;
+                    connectToServer("/error", {msg : res.error.code}, "post", function(err, res){
+                        $('html').html(res);
+                        return false ;
+                    });
                 }
 
                 console.log("res.data -----> ", res.data);
