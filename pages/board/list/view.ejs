@@ -1,5 +1,8 @@
 <% include ../../head %>
 <% include ../../header %>
+<%
+    console.log('## board/view - models', models);
+%>
 <div role="main" class="contets_wrapper"></div>
     <h2 class="contents_title"></h2>
     <div class="contents_area">
@@ -25,10 +28,8 @@
                     <tr class="comm_comment_area">
                         <td colspan="4">
                         <%
-                            console.log('comms locals:', locals.authId);
                             /* 로그인 된 회원만 댓글작성가능 */
                             if(locals.authId){
-                                console.log('#### true');
                         %>
                             <div class="comm_comment_write_area">
                                 <textarea rows="4"></textarea>
@@ -59,22 +60,43 @@
         $(window).on("load", function(){
             listComment('<%=locals.authId%>', '<%=models.comm_name%>', '<%=models.comms["BOARD_ID"]%>');
 
-            $('.comm_view_btn_area').find('.comm_view_del_btn').on('click', function(e){
-                var board_pw = prompt('게시물 삭제를 위한 해당 게시물 작성 시 비밀번호를 입력해 주세요.', '');
-                console.log('[button:onclick] board_pw:', board_pw);
+            $('.comm_view_btn_area').find('.comm_view_del_btn').off('click').on('click', function(e){
+                var popup_title = '항목 삭제';
+                var popup_msg = '게시물 삭제를 위한 해당 게시물 작성 시 비밀번호를 입력해 주세요.';
+                /* 게시판 팝업 내용 변경하고 띄우기 */
+                loadCommPopup(popup_title, popup_msg);
+            });
+
+            $('.comm-cancel-btn').off('click').on('click', function(e){
+                /* 게시판 팝업 감추기 */
+                return unloadCommPopup();
+            });
+            $('.comm-ok-btn').off('click').on('click', function(e){
+                var board_pw = $('.comm-popup-wrapper').find('.comm-popup-input').val();
+
                 if (board_pw.length > 0) {
-                    ajaxDeletion(board_pw);
-                    return true;
+                    if(isNaN(board_pw)){
+                        /* 게시판 팝업 에러메시지 세팅 후 비추기 */
+                        return setCommPopupError('숫자만 입력되어야 합니다.', function(result){
+                            return result;
+                        });
+                    }
+                    return ajaxDeletion(board_pw, function(){
+                        /* 팝업 감추기 */
+                        unloadCommPopup();
+                        return true;
+                    });
                 }else{
-                    alert('비밀번호를 제대로 입력해 주세요.');
-                    return false;
+                    /* 게시판 팝업 에러메시지 세팅 후 비추기 */
+                    return setCommPopupError('비밀번호를 제대로 입력해 주세요.', function(result){
+                        return result;
+                    });
                 }
-            })
+            });
         })
 
-        function ajaxDeletion(pw){
+        function ajaxDeletion(pw, callback){
             // 암호화 param
-            var commType = location.pathname.split('/')[2].split('&')[0];
             var commId = location.pathname.split('/')[2].split('&')[1];
             var board_param = {
                 commId: commId,
@@ -86,6 +108,7 @@
                 if(err){
                     // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
                     console.log("서버오류 ---> ", err);
+                    alert(err);
                     return false;
                 }
                 //실패
@@ -96,15 +119,18 @@
                         1054 ---> Bad Sql
                         1062 ---> PK 중복
                     */
-                    // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
-                    // console.log("DB오류 ---> ", res.error.errno);
-                    alert(res.error);
                     console.log("DB오류 ---> ", res.error);
-                    return false ;
+                   
+                    /* 게시판 팝업 에러메시지 세팅 후 비추기 */
+                    return setCommPopupError(res.error, function(result){
+                        return result;
+                    });
                 }
                 console.log('[ajax remove result]', res);
                 /* 서버에서 받은 게시판 타입(숫자)를 받아서 redirect하기. */
-                location.href='/comm/'+commType;
+                location.href='/comm/'+res.commType;
+                /* 해당 작업(비동기)을 모두 완료 후 호출한 위치로 돌아가서 해당 시점 이후의 로직을 적용하라고 한다. */
+                callback();
             });
             return false;
         }
