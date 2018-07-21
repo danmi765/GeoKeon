@@ -12,7 +12,8 @@ router.post('/join', accountController.join);
 
 /** 로그인 **/
 router.get('/login', function(req, res){
-    res.render('index', {pages : 'login.ejs', models : {title : '로그인', page_title : '로그인'}});
+    // res.render('index', {pages : 'login.ejs', models : {title : '로그인', page_title : '로그인'}});
+    return res.render('error/error', {msg: 'error'});
 });
 
 router.get('/loginPage', accountController.loginPage);
