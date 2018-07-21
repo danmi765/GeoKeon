@@ -144,7 +144,7 @@ app.post('/upload*', uploadSetting.single('upload'), function(req, res) {
 /* ■■■■■■■■■■■■커뮤니티 게시판 라우팅■■■■■■■■■■■■ */
 app.use('/', require('./routes/commboard'));
 /* ■■■■■■■■■■■■디자인 메뉴 라우팅■■■■■■■■■■■■ */
-app.use('/design', require('./routes/design'));
+app.use('/', require('./routes/design'));
 /* ■■■■■■■■■■■■로그인/가입 라우팅■■■■■■■■■■■■ */
 app.use('/', require('./routes/account'));
 

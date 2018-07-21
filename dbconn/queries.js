@@ -10,7 +10,8 @@ module.exports = {
                 BOARD_DOMAIN_ID = ?
             ORDER BY DATE DESC`,
         'search_comm_board' : 'SELECT BOARD.*, CNT.COUNT FROM ?? BOARD, (SELECT COUNT(??) as COUNT FROM ?? WHERE ?? LIKE ?) CNT WHERE ?? LIKE ? ORDER BY ? DESC LIMIT ?, ?',
-        'list_portpolio' : 'SELECT * FROM PORTPOLIO',
+        'list_portpolio' : 'SELECT * FROM PORTPOLIO WHERE BUSINESS_ID = ?',
+        'list_business_domain' : 'SELECT * FROM BUSINESS_DOMAIN',
         'get_comm_board' : 'SELECT * FROM BOARD WHERE BOARD_ID = ?',
         'get_comm_board_for_user_id' : `
                                         SELECT T.*

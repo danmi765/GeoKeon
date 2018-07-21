@@ -3,28 +3,66 @@ const dbconn = require('../dbconn/conn');
 const queries = require('../dbconn/queries');
 const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
+var multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
+var upload = multer({ dest: 'pages/img/designUploads' });
 
 exports.list = (req, res) => {
-    console.log('/design/list defaultDB:', defaultDB);
-    const reqBody = req.body;
 
-    dbconn.instance[defaultDB.db].query(queries.select.list_portpolio, function (error, results, fields) {
-        if (error){
-            console.log('[list]error', error);
-            return res.send({'error': error});
-        }
-        console.log('/design/list results', results);
-        return res.render('sub/design', {pages : 'design.ejs', models : {designs:results, title : '디자인', page_title : '디자인'} });
+    let url_tab = req.query.tab;
+    if(!url_tab){ 
+        url_tab = "1";
+    }
+    console.log("url_tab ----> ", url_tab);
+
+    domainList((domain_results) => {
+        console.log('bisiness domain list results', domain_results);
+
+        // 업종 별 포트폴리오 받아오기
+        dbconn.instance[defaultDB.db].query(queries.select.list_portpolio, [url_tab] , function (error, results, fields) {
+            if (error){
+                console.log('[list]error', error);
+                return res.send({'error': error});
+            }
+
+            console.log("designs results ", results);
+            
+            return res.render('sub/design', {pages : 'design.ejs', models : {title : '디자인', page_title : '디자인', designs : results, dmoain_list : domain_results, bisuness_domain_num : url_tab } });
+        });
+
+    });
+};
+
+exports.writePage = function(req, res){
+
+    domainList((domain_results) => {
+        return res.render('sub/designWrite', {pages : 'design.ejs', models : {title : '디자인-글쓰기', page_title : '디자인-글쓰기', dmoain_list : domain_results} });
     });
 };
 
 exports.write = function(req, res){
-    const reqBody = req.body;
-    dbconn.instance[defaultDB.db].query(queries.insert.add_comm_board, [tables['BOARD_INQUIRY'], reqBody], function (error, results, fields) {
+
+    // 파일업로드를 위한 multer작업 필요!
+
+        console.log("designWrite post file ---> ", req.file); // 콘솔(터미널)을 통해서 req.file Object 내용 확인 가능.
+
+        domainList((domain_results) => {
+
+            return res.render('sub/designWrite', {pages : 'design.ejs', models : {title : '디자인-글쓰기', page_title : '디자인-글쓰기', dmoain_list : domain_results} });
+        });
+       
+};
+
+
+// 업종리스트 받아오기
+const domainList = function(callback){
+    dbconn.instance[defaultDB.db].query(queries.select.list_business_domain, function (error, domain_results, fields) {
         if (error){
+            console.log('[list]error', error);
             return res.send({'error': error});
         }
-        console.log('/commboard/list results', results);
-        return res.send({'resp': results});
+
+        callback(domain_results);
     });
 };
+
+exports.domainList = domainList;
