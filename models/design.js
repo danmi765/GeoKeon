@@ -4,9 +4,7 @@ const queries = require('../dbconn/queries');
 const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
 
-var fs = require('fs');
-var multer = require('multer'); // express에 multer모듈 적용 (for 파일업로드)
-var upload = multer({ dest: 'pages/img/designUploads', limits: { fileSize: 5 * 1024 * 1024 } });
+
 
 exports.list = (req, res) => {
 
@@ -43,9 +41,20 @@ exports.writePage = function(req, res){
 
 exports.write = function(req, res){
 
+
+
     
+    var files = req.files;
+
+    console.log("req.body --->", req.body );
+    console.log("files --->", files );
 
 
+    for(var i = 0; i < files.length; i++){
+        console.log("[" + i + "]filename : " , files[i].originalname);
+        console.log("[" + i + "]destination : " , files[i].destination);
+        console.log("[" + i + "]fieldname : " , files[i].fieldname);
+    }
 
 
     res.redirect('/designWritePage');
