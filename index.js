@@ -75,8 +75,13 @@ app.get('/', function(req, res) {
 
 // GET intro
 app.get('/intro', function(req, res) {
-
     res.render('sub/intro',  {pages : 'intro.ejs' ,models : { title : '소개', page_title : '소개'}});
+});
+
+/* Ajax통신 시 에러떴을 때 내뱉는 에러 페이지 */
+// POST error
+app.post('/error', function(req, res) {
+    return res.render('error/error', {msg: req.body.msg, mode: 'ajax'});
 });
 
 // design_collention
@@ -90,11 +95,6 @@ app.get('/design_collection', function(req, res) {
 
 /* 이미지 업로드 */
 app.post('/upload*', uploadSetting.single('upload'), function(req, res) {
-    console.log('image upload[req.body]', req.body);
-    console.log('image upload[req.originalUrl]', req.originalUrl);  // 요청주소를 얻어낼 수 있다.
-    console.log('image upload[req.params]', req.params);
-    console.log('image upload[req.file]', req.file);
-
     const tmpPath = req.file.path;
     const uploadPath = "pages/img/upload/";
     let findFileName = req.file.originalname;
@@ -102,11 +102,9 @@ app.post('/upload*', uploadSetting.single('upload'), function(req, res) {
     
     while(true){
         const isFileExist = fs.existsSync(uploadPath+findFileName);
-        console.log('-----fs.existsSync', isFileExist);
         if(isFileExist){
             /* 파일명이 중복될 때 */
             /* 파일명 + 1 로 네이밍 한다. 그리고 네이밍한 파일명1도 중복되었는 지 확인하고 중복이 되었다면 파일명2로 하는 로직을 반복.. */
-            console.log('findFileName[before]:', findFileName);
             let dotIdx = findFileName.lastIndexOf('.');
             let fileIdx = findFileName.substring(0, dotIdx).match(/\d+/);
             let fileDuplicateIdx = (fileIdx != null)?Number(fileIdx[0])+1 : 1;   //중복되는 파일의 인덱스값을 숫자로 추출.
