@@ -20,6 +20,7 @@
                             <th>업종구분</th>
                             <td>
                                 <select name="business_num">
+                                    <option vlaue="0">업종선택</option>
                                     <% models.dmoain_list.forEach((dmoain_list, idx) => {  %>
                                     <option value="<%=dmoain_list.BUSINESS_ID%>"><%=dmoain_list.BUSINESS_NAME%></option>
                                     <% }); %>
@@ -46,7 +47,7 @@
                         </tr>
                     </fieldset>
                 </table>
-                <button type="submit" ><span>저장</span></button>
+                <button type="button" onclick="designUploadSubmit()" ><span>저장</span></button>
             </form>
             
         </div> <!-- design_contents End -->
@@ -54,6 +55,21 @@
 
 
     <script>
+
+        function designUploadSubmit(){
+
+            if( $("input[name=design_name]").val() == "" ){
+                alert("포트폴리오명을 입력해주세요.");
+                $("input[name=design_name]").focus();
+            }else if( $("select[name=business_num]").val() == "업종선택" || $("select[name=business_num]").val() == 0 ){
+                alert("업종을 선택하세요.");
+            }else if ( $("input[name=pc_main]").val() == "" && $("input[name=mobile_main]").val() == "" && $("input[name=tablet_main]").val() == "" ){
+                alert("포트폴리오 이미지는 적어도 하나 이상 존재해야 합니다.");
+            }else{
+                document.getElementById("design_img_upload_form").submit();
+            }
+
+        }
     
     </script>
 
