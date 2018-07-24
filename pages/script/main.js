@@ -1,6 +1,7 @@
 var id_chk = 0; // 아이디 중복체크 유효성 검사용 변수
 var joins; // 암호화를 위함 key
 
+
 loadBoardDomainList();  // (로드 될때마다 실행)게시판 목록 불러오기
 
 // 회원탈퇴박스 가리기

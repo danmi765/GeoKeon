@@ -1,8 +1,7 @@
 
-
 <script>
-// db에 저장된 이미지정보를 저장 할 배열.
- var img_list_arr = [];
+
+ var img_list_arr = []; // design 카테고리에서 사용될 db에 저장된 이미지정보를 저장 할 배열.
 
 </script>
 
@@ -55,15 +54,15 @@
         </div> <!-- design_contents End -->
     </div> <!-- contents_area End -->
 
+
     <script>
-    // 해당업종번호 불러와서 해당 탭에 css주기
-    var tap_num = "<%=models.bisuness_domain_num%>";
-
-    $(".design_business_menu > li").eq(Number(tap_num)-1).children("a").css("border","1px solid #000");
+        // 해당업종번호 불러와서 해당 탭에 css주기
+        var tap_num = "<%=models.bisuness_domain_num%>";
+    
+        $(".design_business_menu > li").eq(Number(tap_num)-1).children("a").css("border","1px solid #000");
     </script>
-
                 
+
 </div>
 <% include ../footer %>
 <% include ../foot %>
-            

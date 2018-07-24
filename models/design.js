@@ -41,25 +41,49 @@ exports.writePage = function(req, res){
 
 exports.write = function(req, res){
 
+    var files = req.files; // 업로드 될 이미지의 내용들
 
-
+    // DB저장하기 위한 파일명 ( 파일이 없을 땐 공백으로 입력함 )
+    var pc_main_img = " ";
+    var mobile_main_img = " ";
+    var tablet_main_img = " ";
+    var db_img;
     
-    var files = req.files;
-
     console.log("req.body --->", req.body );
-    console.log("files --->", files );
+    console.log("req.body design name --->", req.body.design_name ); // 포트폴리오명
+    console.log("req.body business num --->", req.body.business_num ); // 업종구분번호
+    console.log("files --->", files ); 
 
-
-    for(var i = 0; i < files.length; i++){
-        console.log("[" + i + "]filename : " , files[i].originalname);
-        console.log("[" + i + "]destination : " , files[i].destination);
-        console.log("[" + i + "]fieldname : " , files[i].fieldname);
+    // 해당이미지가 들어왔을 경우
+    if(files.pc_main){
+        pc_main_img = files.pc_main[0].originalname;
     }
+    if(files.mobile_main){
+        mobile_main_img = files.mobile_main[0].originalname;
+    }
+    if(files.tablet_main){
+        tablet_main_img = files.tablet_main[0].originalname;
+    }
+    console.log("pc_main_img -- >", pc_main_img);
+    console.log("mobile_main_img -- >", mobile_main_img);
+    console.log("tablet_main_img -- >", tablet_main_img);
 
+    // DB에 저장하기 위해 이미지명 ,를 구분자로 붙이기
+    db_img = pc_main_img + "," + mobile_main_img + "," + tablet_main_img;
+    console.log("db_img --- >", db_img);
 
-    res.redirect('/designWritePage');
+    // add_portpolio
+    dbconn.instance[defaultDB.db].query(queries.insert.add_portpolio, [db_img, req.body.design_name, req.body.business_num ] , function (error, results, fields) {
+        if (error){
+            console.log('[design img input]error', error);
+            return res.send({'error': error});
+        }
 
-       
+        // insert 후 design list로 redirect
+        res.redirect('/design');
+
+    });
+
 };
 
 
