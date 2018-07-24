@@ -30,6 +30,7 @@ router.get('/design', designController.list);
 router.get('/designWritePage',  designController.writePage);
 // router.post('/designWrite',upload.array('photos',3) , designController.write);
 router.post('/designWrite',upload.fields( [{ name: 'pc_main' },{ name: 'mobile_main'},{ name: 'tablet_main'}] ) , designController.write);
+// -----> array는 작동하는데 fields는 Unexpected field 발생함
 
 
 /** 디자인 글수정하기 **/

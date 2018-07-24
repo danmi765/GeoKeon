@@ -9,17 +9,17 @@
     <div class="contents_area">
         <div class="design_contents">
 
-            <form action="/designWrite" method="post" name="" enctype="multipart/form-data" >
+            <form action="/designWrite" method="post" name="" id="design_img_upload_form" enctype="multipart/form-data" >
                 <table>
                     <fieldset>
                         <tr>
                             <th>포트폴리오명</th>
-                            <td><input type="text" /></td>
+                            <td><input type="text" name="design_name" /></td>
                         </tr>
                         <tr>
                             <th>업종구분</th>
                             <td>
-                                <select>
+                                <select name="business_num">
                                     <% models.dmoain_list.forEach((dmoain_list, idx) => {  %>
                                     <option value="<%=dmoain_list.BUSINESS_ID%>"><%=dmoain_list.BUSINESS_NAME%></option>
                                     <% }); %>
@@ -28,15 +28,21 @@
                         </tr>
                         <tr>
                             <th>PC메인이미지</th>
-                            <td><input type="file" name="pc_main" /></td>
+                            <td>
+                                <input type="file" name="pc_main" />
+                            </td>
                         </tr>
                         <tr>
                             <th>모바일 메인이미지</th>
-                            <td><input type="file" name="mobile_main" /></td>
+                            <td>
+                                <input type="file" name="mobile_main" />
+                            </td>
                         </tr>
                         <tr>
                             <th>테블릿 메인이미지</th>
-                            <td><input type="file" name="tablet_main" /></td>
+                            <td>
+                                <input type="file" name="tablet_main" />
+                            </td>
                         </tr>
                     </fieldset>
                 </table>
@@ -46,6 +52,10 @@
         </div> <!-- design_contents End -->
     </div> <!-- contents_area End -->
 
+
+    <script>
+    
+    </script>
 
                 
 </div>

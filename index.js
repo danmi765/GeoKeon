@@ -62,10 +62,10 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 
 /* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
 
-const urls = {
-    sub_dir : "sub/" ,
-    sub_img : ""
-}
+// const urls = {
+//     sub_dir : "sub/" ,
+//     sub_img : ""
+// }
 
 
 // GET index
