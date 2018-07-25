@@ -26,16 +26,13 @@ const upload = multer({ storage: storage });
 
 /** 디자인 리스트 보기 **/
 router.get('/design', designController.list);
+
 /** 디자인 글쓰기 **/
 router.get('/designWritePage',  designController.writePage);
-// router.post('/designWrite',upload.array('photos',3) , designController.write);
 router.post('/designWrite',upload.fields( [{ name: 'pc_main' },{ name: 'mobile_main'},{ name: 'tablet_main'}] ) , designController.write);
-// -----> array는 작동하는데 fields는 Unexpected field 발생함
 
-
-/** 디자인 글수정하기 **/
-// router.put('/modify', designController.modify);
-/** 디자인 글삭제하기 **/
-// router.delete('/remove', designController.remove);
+/** 디자인 글수정,삭제하기 **/
+router.post('/designDelOrModi', designController.modifyDesign);
+router.get('/designDelOrModi', designController.deleteDesign);
 
 module.exports = router;

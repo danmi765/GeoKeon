@@ -56,13 +56,13 @@ exports.write = function(req, res){
 
     // 해당이미지가 들어왔을 경우
     if(files.pc_main){
-        pc_main_img = files.pc_main[0].originalname;
+        pc_main_img = files.pc_main[0].filename;
     }
     if(files.mobile_main){
-        mobile_main_img = files.mobile_main[0].originalname;
+        mobile_main_img = files.mobile_main[0].filename;
     }
     if(files.tablet_main){
-        tablet_main_img = files.tablet_main[0].originalname;
+        tablet_main_img = files.tablet_main[0].filename;
     }
     console.log("pc_main_img -- >", pc_main_img);
     console.log("mobile_main_img -- >", mobile_main_img);
@@ -86,10 +86,52 @@ exports.write = function(req, res){
 
 };
 
+exports.deleteDesign = function(req, res){
+
+    console.log("req.body.design_id ----> ", req.query);
+
+    //delete_design
+    dbconn.instance[defaultDB.db].query(queries.delete.delete_design, [req.query.design_id ] , function (error, results, fields) {
+        if (error){
+            console.log('[design img delete]error', error);
+            return res.send({'error': error});
+        }
+        
+        // 디자인 삭제 후 리스트로 이동
+        res.redirect('/design');
+
+    });
+};
+
+
+exports.modifyDesign = function(req, res){
+
+    console.log("req.body.design_id ---> ", req.body.design_id);
+
+    domainList((domain_results) => {
+
+        // get_portpolio_for_portpolio_id
+        dbconn.instance[defaultDB.db].query(queries.select.get_portpolio_for_portpolio_id, [req.body.design_id ] , function (error, results, fields) {
+            if (error){
+                console.log('[design img select]error', error);
+                return res.send({'error': error});
+            }
+
+            console.log("get_portpolio_for_portpolio_id results ---> ", results[0]);
+
+            return res.render('sub/designModi', {pages : 'design.ejs', models : {title : '디자인-수정하기', page_title : '디자인-수정하기', dmoain_list : domain_results, portpolio : results[0] }  });
+        });
+
+    });
+};
+
   
 
 
 
+// ■■■■■■■■■■■■■■■■■■■
+//      공통쿼리
+// ■■■■■■■■■■■■■■■■■■■
 
 
 // 업종리스트 받아오기

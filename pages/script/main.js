@@ -900,7 +900,7 @@ function connectToServer(url, data, method, callback){
 
 // 리스트 메인이미지 삽입
 for(var i =0; i<img_list_arr.length; i++){
-    $(".list_main_img_"+i).attr("src", upload_img_path + img_list_arr[i][0]);
+    $(".list_main_img_"+i).attr("src", img_path + "designUploads/" + img_list_arr[i][0]);
 }
 
  // 메인이미지 마우스오버 시 디자인타이틀 텍스트 숨김
@@ -914,6 +914,10 @@ for(var i =0; i<img_list_arr.length; i++){
 
     // 메인이미지 클릭 시 썸네일 팝 띄우기
     $(".design_thumbnail > li > img").click(function(ab){
+
+        // 포트폴리오 번호 저장
+        var pp_id = $(this).siblings(".design_title").attr("ppId");
+        $("input[name=design_id]").attr("value", pp_id);
 
         // 썸네일 배경 생성
         $(".design_thumbnail_pop").show();
@@ -937,7 +941,7 @@ for(var i =0; i<img_list_arr.length; i++){
 
                 // 이미자가 있을 경우
                 }else{
-                    $(".design_thumbnail_img > li").eq(i).children("img").attr("src", upload_img_path + img_list_arr[li_idx][i]);
+                    $(".design_thumbnail_img > li").eq(i).children("img").attr("src", img_path + "designUploads/" + img_list_arr[li_idx][i]);
                     console.log(i + " : " + img_list_arr[li_idx][i]);
                 }
             }

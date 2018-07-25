@@ -80,7 +80,8 @@ module.exports = {
                                             WHERE T.PAGE = ?
                                             ORDER BY T.ROWNUM DESC`,
         'get_commet_all_cnt_for_user_id' : 'SELECT COUNT(*) AS CNT FROM COMMENT WHERE USER_ID = ? ',
-        'get_board_domain_list' : 'SELECT * FROM BOARD_DOMAIN'
+        'get_board_domain_list' : 'SELECT * FROM BOARD_DOMAIN',
+        'get_portpolio_for_portpolio_id' : 'SELECT * FROM PORTPOLIO WHERE PORTPOLIO_ID = ?'
     },
     'insert' : {
         'add_board_post' : 'INSERT INTO board (`TITLE`, `CONTENT`, `PASSWORD`, `DATE`, `HITS`, `USER_ID`, `BOARD_DOMAIN_ID`) VALUES (?, ?, ?, ?, ?, ?, ? )',
@@ -90,7 +91,8 @@ module.exports = {
     },
     'delete' : {
         'delete_comm_board' : 'DELETE FROM BOARD WHERE BOARD_ID = ? AND PASSWORD = ?',
-        'delete_comment' : 'DELETE FROM COMMENT WHERE COMMENT_ID = ?'
+        'delete_comment' : 'DELETE FROM COMMENT WHERE COMMENT_ID = ?',
+        'delete_design' : 'DELETE FROM PORTPOLIO WHERE PORTPOLIO_ID = ?'
     },
     'update' : {
         'update_board_content' : 'UPDATE BOARD SET TITLE=?,   CONTENT= ? WHERE BOARD_ID= ? ',

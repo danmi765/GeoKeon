@@ -25,13 +25,45 @@
                 <li aim="1">모바일</li>
                 <li aim="2">테블릿</li>
             </ul>
+            <div class="design_thumbnail_delete_btn">
+                <form action="/designDelOrModi" id="design_del_or_modi_from" method="">
+                    <button type="button" onclick="designDelete()" class="gk_simple2_btn gk_corner_all"><span>삭제</span></button>
+                    <button type="button" onclick="designModify()" class="gk_simple2_btn gk_corner_all"><span>수정</span></button>
+                    <input type="hidden" name="design_id" value="" />
+                </form>
+            </div>
         </div>
     </div>
+
+    <script>
+    
+    //디자인 삭제
+    function designDelete(){
+        if( confirm('삭제하시겠습니까?') ){
+
+            $("#design_del_or_modi_from").attr("method","get");
+            $("#design_del_or_modi_from").attr("action","/designDelOrModi?design_id="+$("input[name=design_id]").val() );
+            document.getElementById('design_del_or_modi_from').submit();
+        }
+    }
+
+    //디자인 수정
+    function designModify(){
+
+         $("#design_del_or_modi_from").attr("method","post");
+            document.getElementById('design_del_or_modi_from').submit();
+    }
+    
+    </script>
+
 
     <!-- 본문 -->
     <h2 class="contents_title"><%= models.page_title%></h2>
     <div class="contents_area">
         <div class="design_contents">
+            <div class="design_regi_btn">
+                <button type="button" onclick="location.href='/designWritePage'"  class="gk_simple2_btn gk_corner_all" ><span>디자인등록</span></button>
+            </div>
             <ul class="design_business_menu">
                 <% models.dmoain_list.forEach((dmoain_list, idx) => {  %>
                     <li><a href="/design?tab=<%=dmoain_list.BUSINESS_ID%>" class="gk_corner_all gk_simple2_btn"><%=dmoain_list.BUSINESS_NAME%></a></li>
@@ -42,7 +74,7 @@
                         <li>
                             <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
                             <div class="design_thumbnail_cover"></div>
-                            <div class="design_title">디자인 <%= design.POTRPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</div>
+                            <div class="design_title" ppId="<%= design.PORTPOLIO_ID %>">디자인 <%= design.PORTPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</div>
                         </li>
                         <script>
                             // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
@@ -60,6 +92,8 @@
         var tap_num = "<%=models.bisuness_domain_num%>";
     
         $(".design_business_menu > li").eq(Number(tap_num)-1).children("a").css("border","1px solid #000");
+
+        
     </script>
                 
 

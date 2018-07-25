@@ -14,7 +14,7 @@
                     <fieldset>
                         <tr>
                             <th>포트폴리오명</th>
-                            <td><input type="text" name="design_name" /></td>
+                            <td><input type="text" name="design_name" value="<%= models.portpolio.PORTPOLIO_NAME%>" /></td>
                         </tr>
                         <tr>
                             <th>업종구분</th>
@@ -22,11 +22,16 @@
                                 <select name="business_num">
                                     <option vlaue="0">업종선택</option>
                                     <% models.dmoain_list.forEach((dmoain_list, idx) => {  %>
-                                    <option value="<%=dmoain_list.BUSINESS_ID%>"><%=dmoain_list.BUSINESS_NAME%></option>
+                                    <option value="<%=dmoain_list.BUSINESS_ID%>" selected="(<%=models.portpolio.BUSINESS_ID%> eq <%=dmoain_list.BUSINESS_ID %>)?selected:n" ><%=dmoain_list.BUSINESS_NAME%></option>
                                     <% }); %>
                                 </select>
                             </td>
                         </tr>
+                        <script>
+                        
+                        $("select").children
+                        
+                        </script>
                         <tr>
                             <th>PC메인이미지</th>
                             <td>
