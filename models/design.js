@@ -104,7 +104,7 @@ exports.deleteDesign = function(req, res){
 };
 
 
-exports.modifyDesign = function(req, res){
+exports.modifyDesignPage = function(req, res){
 
     console.log("req.body.design_id ---> ", req.body.design_id);
 
@@ -125,6 +125,19 @@ exports.modifyDesign = function(req, res){
     });
 };
 
+
+exports.modifyDesign = function(req, res){
+
+    console.log("design-modify req.body --->" ,req.body);
+    console.log("design-modify req.files --->" ,req.files);
+
+    // 포트폴리오명, 업종구분번호, 
+    // 추가된 이미지정보가 들어오면
+    // 기존이미지는 유지하고 혹은 변경하고, 새로입력된 이미지정보는 저장한다.
+
+    res.redirect('/design');
+
+};
   
 
 

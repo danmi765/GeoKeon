@@ -9,9 +9,12 @@
     <div class="contents_area">
         <div class="design_contents">
 
-            <form action="/designWrite" method="post" name="" id="design_img_upload_form" enctype="multipart/form-data" >
-                <table>
+            <form action="/designWrite" method="post" name="" id="design_img_upload_form" class="design_form" enctype="multipart/form-data" >
+                <table class="design_table">
                     <fieldset>
+                        <tr>
+                            <td colspan="2" class="design_table_title">포트폴리오 올리기</td>
+                        </tr>
                         <tr>
                             <th>포트폴리오명</th>
                             <td><input type="text" name="design_name" /></td>
@@ -30,19 +33,25 @@
                         <tr>
                             <th>PC메인이미지</th>
                             <td>
-                                <input type="file" name="pc_main" />
+                                <input type="file" name="pc_main" class="design_file_btn" id="design_pc_img_regi_btn" />
+                                <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_pc_img_regi_btn').click();" ><span>찾아보기</span></button>
+                                <span class="upload_file_name_box">이미지가 없습니다.</span>
                             </td>
                         </tr>
                         <tr>
                             <th>모바일 메인이미지</th>
                             <td>
-                                <input type="file" name="mobile_main" />
+                                <input type="file" name="mobile_main" class="design_file_btn" id="design_mobile_img_regi_btn" />
+                                <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_mobile_img_regi_btn').click();" ><span>찾아보기</span></button>
+                                <span class="upload_file_name_box">이미지가 없습니다.</span>
                             </td>
                         </tr>
                         <tr>
                             <th>테블릿 메인이미지</th>
                             <td>
-                                <input type="file" name="tablet_main" />
+                                <input type="file" name="tablet_main" class="design_file_btn" id="design_tablet_img_regi_btn" />
+                                <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_tablet_img_regi_btn').click();" ><span>찾아보기</span></button>
+                                <span class="upload_file_name_box">이미지가 없습니다.</span>
                             </td>
                         </tr>
                     </fieldset>
@@ -52,28 +61,7 @@
             
         </div> <!-- design_contents End -->
     </div> <!-- contents_area End -->
-
-
-    <script>
-
-        function designUploadSubmit(){
-
-            if( $("input[name=design_name]").val() == "" ){
-                alert("포트폴리오명을 입력해주세요.");
-                $("input[name=design_name]").focus();
-            }else if( $("select[name=business_num]").val() == "업종선택" || $("select[name=business_num]").val() == 0 ){
-                alert("업종을 선택하세요.");
-            }else if ( $("input[name=pc_main]").val() == "" && $("input[name=mobile_main]").val() == "" && $("input[name=tablet_main]").val() == "" ){
-                alert("포트폴리오 이미지는 적어도 하나 이상 존재해야 합니다.");
-            }else{
-                document.getElementById("design_img_upload_form").submit();
-            }
-
-        }
     
-    </script>
-
-                
 </div>
 <% include ../footer %>
 <% include ../foot %>

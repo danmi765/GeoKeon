@@ -898,6 +898,30 @@ function connectToServer(url, data, method, callback){
 
 /* 디자인 카테고리 */
 
+// 디자인 등록하기
+function designUploadSubmit(){
+
+    if( $("input[name=design_name]").val() == "" ){
+        alert("포트폴리오명을 입력해주세요.");
+        $("input[name=design_name]").focus();
+    }else if( $("select[name=business_num]").val() == "업종선택" || $("select[name=business_num]").val() == 0 ){
+        alert("업종을 선택하세요.");
+    }else if ( $("input[name=pc_main]").val() == "" && $("input[name=mobile_main]").val() == "" && $("input[name=tablet_main]").val() == "" ){
+        alert("포트폴리오 PC메인 이미지는 반드시 존재해야 합니다.");
+    }else if( $("input[name=pc_main]").val() == "" ){
+        alert("포트폴리오 PC메인 이미지는 반드시 존재해야 합니다.");
+    }else{
+        document.getElementById("design_img_upload_form").submit();
+    }
+
+}
+
+// 디자인 등록, 수정 페이지 이미지 변경 시 
+$(".design_file_btn").change(function(){ 
+    var file_name = $(this).val();
+    $(this).siblings(".upload_file_name_box").html(file_name);
+})
+
 // 리스트 메인이미지 삽입
 for(var i =0; i<img_list_arr.length; i++){
     $(".list_main_img_"+i).attr("src", img_path + "designUploads/" + img_list_arr[i][0]);

@@ -32,7 +32,8 @@ router.get('/designWritePage',  designController.writePage);
 router.post('/designWrite',upload.fields( [{ name: 'pc_main' },{ name: 'mobile_main'},{ name: 'tablet_main'}] ) , designController.write);
 
 /** 디자인 글수정,삭제하기 **/
-router.post('/designDelOrModi', designController.modifyDesign);
 router.get('/designDelOrModi', designController.deleteDesign);
+router.post('/designDelOrModi', designController.modifyDesignPage);
+router.post('/designModi',upload.fields( [{ name: 'pc_main' },{ name: 'mobile_main'},{ name: 'tablet_main'}] ), designController.modifyDesign);
 
 module.exports = router;
