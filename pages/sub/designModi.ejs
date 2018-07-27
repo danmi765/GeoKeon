@@ -17,7 +17,10 @@
                         </tr>
                         <tr>
                             <th>포트폴리오명</th>
-                            <td><input type="text" name="design_name" value="<%= models.portpolio.PORTPOLIO_NAME%>" /></td>
+                            <td>
+                                <input type="text" name="design_name" value="<%= models.portpolio.PORTPOLIO_NAME%>" />
+                                <input type="hidden" name="portpolio_id" value="<%= models.portpolio.PORTPOLIO_ID%>" />
+                            </td>
                         </tr>
                         <tr>
                             <th>업종구분</th>
@@ -36,6 +39,7 @@
                                 <input type="file" name="pc_main" class="design_file_btn" id="design_pc_img_regi_btn" />
                                 <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_pc_img_regi_btn').click();" ><span>찾아보기</span></button>
                                 <span class="upload_file_name_box">이미지가 없습니다.</span>
+                                <input type="hidden" name="pc_origin_name" class="db_origin_name" value="" />
                             </td>
                         </tr>
                         <tr>
@@ -44,6 +48,7 @@
                                 <input type="file" name="mobile_main" class="design_file_btn" id="design_mobile_img_regi_btn" />
                                 <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_mobile_img_regi_btn').click();" ><span>찾아보기</span></button>
                                 <span class="upload_file_name_box">이미지가 없습니다.</span>
+                                <input type="hidden" name="mobile_origin_name" class="db_origin_name" value="" />
                             </td>
                         </tr>
                         <tr>
@@ -52,6 +57,7 @@
                                 <input type="file" name="tablet_main" class="design_file_btn" id="design_tablet_img_regi_btn" />
                                 <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_tablet_img_regi_btn').click();" ><span>찾아보기</span></button>
                                 <span class="upload_file_name_box">이미지가 없습니다.</span>
+                                <input type="hidden" name="tablet_origin_name" class="db_origin_name" value="" />
                             </td>
                         </tr>
                     </fieldset>
@@ -65,6 +71,7 @@
     
 
             <script>
+
 
 
             function designModifySubmit(){
@@ -97,6 +104,9 @@
             var img_arr = db_img.split(",");
             
             for(var i=0; i<3; i++){
+                
+               $(".db_origin_name").eq(i).attr("value", img_arr[i]);
+
                 if(img_arr[i] == " "){
                     img_arr[i] = "이미지가 없습니다.";
                 }

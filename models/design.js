@@ -131,12 +131,54 @@ exports.modifyDesign = function(req, res){
     console.log("design-modify req.body --->" ,req.body);
     console.log("design-modify req.files --->" ,req.files);
 
-    // 포트폴리오명, 업종구분번호, 
-    // 추가된 이미지정보가 들어오면
-    // 기존이미지는 유지하고 혹은 변경하고, 새로입력된 이미지정보는 저장한다.
+    var business_id = req.body.business_num; // 업종구분번호
+    var design_name = req.design_name // 디자인명
+    var portpolio_id = req.body.portpolio_id // 포트폴리오번호
 
-    res.redirect('/design');
+    var origin_img_arr = [
+        req.body.pc_origin_name,  // 기존 PC메인 이미지명
+        req.body.mobile_origin_name, // 기존 mobile메인 이미지명
+        req.body.tablet_origin_name // 기존 tablet메인 이미지명
+    ];
+    var files = req.files; // 업로드된 이미지
 
+    // 업로드 이미지 변경 시 
+    if(files.pc_main){
+        console.log("pc_main exist");
+        origin_img_arr[0] = files.pc_main[0].filename;
+    }
+
+    if(files.mobile_main){
+        console.log("mobile_main exist");
+        origin_img_arr[1] = files.mobile_main[0].filename;
+    }
+
+    if(files.tablet_main){
+        console.log("tablet_main exist");
+        origin_img_arr[2] = files.tablet_main[0].filename;
+    }
+
+    // db업데이트 이미지 조합
+    var update_ime_name = origin_img_arr[0] + "," + origin_img_arr[1] + "," + origin_img_arr[2];
+
+    // update_portpolio
+    dbconn.instance[defaultDB.db].query(queries.update.update_portpolio, [update_ime_name, design_name, business_id,portpolio_id ] , function (error, results, fields) {
+        if (error){
+            console.log('[design img select]error', error);
+            return res.send({'error': error});
+        }
+
+        // 업데이트결과확인
+        console.log("results.affectedRows ---> ", results.affectedRows);
+
+        // 업데이트 오류 시 view표시하기
+
+
+
+        res.redirect('/design');
+
+    });
+   
 };
   
 

@@ -101,6 +101,7 @@ module.exports = {
         'update_user_login_dt' : 'UPDATE GK_USERS SET LOGIN_DATE= ? WHERE USER_ID= ? ',
         'update_user_withdtawal' : 'UPDATE GK_USERS SET STATUS = ? , WITHDRAWAL_REASON = ? WHERE USER_ID = ?',
         'update_user_info' : 'UPDATE GK_USERS SET USER_NAME = ?, USER_PHONE = ? , USER_EMAIL = ? WHERE USER_ID = ?',
-        'update_board_hits' : 'UPDATE BOARD SET HITS= ? WHERE BOARD_ID = ?'
+        'update_board_hits' : 'UPDATE BOARD SET HITS= ? WHERE BOARD_ID = ?',
+        'update_portpolio' : 'UPDATE PORTPOLIO SET PORTPOLIO_IMG= ?, PORTPOLIO_NAME=?, BUSINESS_ID=? WHERE PORTPOLIO_ID=? '
     }
 }
