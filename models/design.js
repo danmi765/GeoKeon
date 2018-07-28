@@ -25,8 +25,9 @@ exports.list = (req, res) => {
             }
 
             console.log("designs results ", results);
+            console.log("designs results length ", results.length);
             
-            return res.render('sub/design', {pages : 'design.ejs', models : {title : '디자인', page_title : '디자인', designs : results, dmoain_list : domain_results, bisuness_domain_num : url_tab } });
+            return res.render('sub/design', {pages : 'design.ejs', models : {title : '디자인', page_title : '디자인', designs_length : results.length, designs : results, dmoain_list : domain_results, bisuness_domain_num : url_tab } });
         });
 
     });
@@ -132,7 +133,7 @@ exports.modifyDesign = function(req, res){
     console.log("design-modify req.files --->" ,req.files);
 
     var business_id = req.body.business_num; // 업종구분번호
-    var design_name = req.design_name // 디자인명
+    var design_name = req.body.design_name // 디자인명
     var portpolio_id = req.body.portpolio_id // 포트폴리오번호
 
     var origin_img_arr = [
@@ -172,10 +173,21 @@ exports.modifyDesign = function(req, res){
         console.log("results.affectedRows ---> ", results.affectedRows);
 
         // 업데이트 오류 시 view표시하기
+        // design페이지로 redirect하며 params로 에러유무 보내기?
 
 
 
         res.redirect('/design');
+
+        // 리다이렉트 시 파라미터 보내기 
+        // res.redirect(url.format({
+        //     pathname:"/",
+        //     query: {
+        //         "a": 1,
+        //         "b": 2,
+        //         "valid":"your string here"
+        //         }
+        // }));
 
     });
    

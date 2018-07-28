@@ -70,17 +70,22 @@
                 <% }); %>
             </ul>
             <ul class="design_thumbnail">
-                    <% models.designs.forEach((design, idx) => { %>
-                        <li>
-                            <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
-                            <div class="design_thumbnail_cover"></div>
-                            <div class="design_title" ppId="<%= design.PORTPOLIO_ID %>">디자인 <%= design.PORTPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</div>
-                        </li>
-                        <script>
-                            // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
-                            img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));    
-                        </script>
-                    <% }); %>
+                <!-- 
+                    <%= models.designs_length%>  가 0 일 때
+                    <li>no design</li>           처리하기.
+
+                -->
+                        <% models.designs.forEach((design, idx) => { %>
+                            <li>
+                                <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
+                                <div class="design_thumbnail_cover"></div>
+                                <div class="design_title" ppId="<%= design.PORTPOLIO_ID %>">디자인 <%= design.PORTPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</div>
+                            </li>
+                            <script>
+                                // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
+                                img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));    
+                            </script>
+                        <% }); %>
             </ul> <!-- design_thumbnail End -->
             <!-- <div class="design_thumbnail_more_btn"></div> -->
         </div> <!-- design_contents End -->
