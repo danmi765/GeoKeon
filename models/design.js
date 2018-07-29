@@ -3,10 +3,17 @@ const dbconn = require('../dbconn/conn');
 const queries = require('../dbconn/queries');
 const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
+const url = require('url');  
 
 
 
 exports.list = (req, res) => {
+
+    // 디자인 등록, 수정, 삭제 성공유무
+    let query_success_status = req.query.success;
+    if(!query_success_status ){
+        query_success_status = "n";
+    }
 
     let url_tab = req.query.tab;
     if(!url_tab){ 
@@ -27,7 +34,13 @@ exports.list = (req, res) => {
             console.log("designs results ", results);
             console.log("designs results length ", results.length);
             
-            return res.render('sub/design', {pages : 'design.ejs', models : {title : '디자인', page_title : '디자인', designs_length : results.length, designs : results, dmoain_list : domain_results, bisuness_domain_num : url_tab } });
+            return res.render('sub/design', {pages : 'design.ejs', 
+                                            models : {title : '디자인', page_title : '디자인', designs_length : results.length, designs : results, 
+                                            dmoain_list : domain_results, bisuness_domain_num : url_tab, query_success_status : query_success_status } });
+                                                                                                        // query_success_status view에서 표시해야함.
+                                                                                                        // t : success 
+                                                                                                        // f : fail
+                                                                                                        // n : no insert ro update
         });
 
     });
@@ -41,6 +54,7 @@ exports.writePage = function(req, res){
 };
 
 exports.write = function(req, res){
+    var success_status; // 디자인등록 성공유무
 
     var files = req.files; // 업로드 될 이미지의 내용들
 
@@ -80,14 +94,28 @@ exports.write = function(req, res){
             return res.send({'error': error});
         }
 
+        console.log("design write results ---> ", results.affectedRows); // select 행 확인 0  select 실패, 1 성공
+        if( results.affectedRows == 1 ){
+            success_status = "t";
+        }else{
+            success_status = "f";
+        }
+
         // insert 후 design list로 redirect
-        res.redirect('/design');
+        res.redirect(url.format({
+            pathname:"/design",
+            query: {
+                "success": success_status // 디자인성공유무 url파라미터로 보기
+                }
+        }));
+
 
     });
 
 };
 
 exports.deleteDesign = function(req, res){
+    var success_status;
 
     console.log("req.body.design_id ----> ", req.query);
 
@@ -97,9 +125,21 @@ exports.deleteDesign = function(req, res){
             console.log('[design img delete]error', error);
             return res.send({'error': error});
         }
-        
+
+        console.log("design delete results row --> ", results.affectedRows);
+        if( results.affectedRows == 1 ){
+            success_status = "t";
+        }else{
+            success_status = "f";
+        }
+
         // 디자인 삭제 후 리스트로 이동
-        res.redirect('/design');
+        res.redirect(url.format({
+            pathname:"/design",
+            query: {
+                "success": success_status // 디자인성공유무 url파라미터로 보기
+                }
+        }));
 
     });
 };
@@ -128,6 +168,7 @@ exports.modifyDesignPage = function(req, res){
 
 
 exports.modifyDesign = function(req, res){
+    var success_status;
 
     console.log("design-modify req.body --->" ,req.body);
     console.log("design-modify req.files --->" ,req.files);
@@ -171,23 +212,18 @@ exports.modifyDesign = function(req, res){
 
         // 업데이트결과확인
         console.log("results.affectedRows ---> ", results.affectedRows);
+        if( results.affectedRows == 1 ){
+            success_status = "t";
+        }else{
+            success_status = "f";
+        }
 
-        // 업데이트 오류 시 view표시하기
-        // design페이지로 redirect하며 params로 에러유무 보내기?
-
-
-
-        res.redirect('/design');
-
-        // 리다이렉트 시 파라미터 보내기 
-        // res.redirect(url.format({
-        //     pathname:"/",
-        //     query: {
-        //         "a": 1,
-        //         "b": 2,
-        //         "valid":"your string here"
-        //         }
-        // }));
+        res.redirect(url.format({
+            pathname:"/design",
+            query: {
+                "success": success_status
+                }
+        }));
 
     });
    
