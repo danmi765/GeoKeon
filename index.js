@@ -46,7 +46,6 @@ app.use(function(req, res, next) {
     next();
 });
 
-
 // 주소 입력을 통해 서버 내부 특정 폴더경로에 접근 가능하게 설정
 app.use(express.static('pages'));
 
@@ -117,6 +116,12 @@ app.post('/upload*', uploadSetting.single('upload'), function(req, res) {
             return renameFS(tmpPath, findFileName)
         }
     }
+    /**
+     * @author geoseong
+     * @description 임시로 저장된 파일명 및 경로 변경
+     * @param {*} tmpPath 
+     * @param {*} fileName 
+     */
     function renameFS(tmpPath, fileName){
         /* CKEditor가 발급한 random한 파일명을 변경하는 작업 */
         fs.rename(tmpPath, uploadPath + fileName, function (err) {

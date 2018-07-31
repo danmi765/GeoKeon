@@ -23,16 +23,16 @@ router.get('/comm_modify/:commName&:commId', commBoardController.modifyPage);
 router.post('/comm_modify_ajax/:commName&:commId', commBoardController.modifyAjax);
 /** 게시판 글수정하기 **/
 router.post('/comm_modify/:commName&:commId', commBoardController.modify);
-/** 게시판 글삭제하기 **/
+/** (ajax)게시판 글삭제하기 **/
 // router.post('/comm_remove/:commName&:commId', commBoardController.remove);
 router.post('/comm_remove', commBoardController.remove);
-/** 게시판 댓글 목록보기 **/
+/** (ajax)게시판 댓글 목록보기 **/
 router.post('/comm_comment_view', commBoardController.listComment);
-/** 게시판 댓글 등록하기 **/
+/** (ajax)게시판 댓글 등록하기 **/
 router.post('/comm_comment_submit', commBoardController.submitComment);
-/** 게시판 댓글 삭제하기 **/
+/** (ajax)게시판 댓글 삭제하기 **/
 router.post('/comm_comment_del', commBoardController.delComment);
-/** 게시판 댓글 수정하기 **/
+/** (ajax)게시판 댓글 수정하기 **/
 router.post('/comm_comment_modify', commBoardController.modifyComment);
 
 module.exports = router;

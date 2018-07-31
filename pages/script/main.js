@@ -658,8 +658,6 @@ function submitComment(writer, comm_name, comm_id){
         return;
     }
     
-    
-    출처: http://h5bak.tistory.com/134 [이준빈은 호박머리]
     var content = {
         commName: comm_name,
         commId: comm_id,

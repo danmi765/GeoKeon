@@ -8,7 +8,10 @@ const { getSessionStorage } = require('../utils/sessionStorage');
 const bcrypt = require('bcrypt');
 const CryptoJS = require("crypto-js");
 
-/** 게시판 목록 리스트 불러오기 **/
+/**
+ * @author geoseong
+ * @description 게시판 목록 리스트 불러오기
+ */
 exports.loadcommlist = function(req, res){
     console.log('[loadcommlist] defaultDB', defaultDB);
     let sql = dbconn.instance[defaultDB.db].query(queries.select.get_board_domain_list, [], function (error, results, fields) {
@@ -20,11 +23,13 @@ exports.loadcommlist = function(req, res){
         res.send(results);
     });
 }
-/** 게시판 리스트 보기 & 검색하기 **/
-/*
+
+/**
+ * @author geoseong
+ * @description 게시판 리스트 보기 & 검색하기
     URL : /comm/:BOARD_DOMAIN_ID
     BOARD_DOMAIN_ID : 기볻 1-공지사항 / 2-문의사항
-*/
+ */
 const list = (req, res) => {
     /* queryString
         @page : 페이지 번호 (http://주소?page=1 할때의 page=1부분이 query이며, {page:1} 형태로 파싱됨)
@@ -141,7 +146,10 @@ const list = (req, res) => {
 }; //end list()
 
 
-/** 게시판 글 보기 **/
+/**
+ * @author geoseong
+ * @description 게시판 글 보기
+ */
 exports.getComm = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
@@ -188,7 +196,10 @@ exports.getComm = function(req, res){
     }); // select dbconn E
 };
 
-/** 게시판 글수정하기 페이지 **/
+/**
+ * @author geoseong
+ * @description 게시판 글수정하기 페이지
+ */
 exports.modifyPage = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
@@ -227,7 +238,10 @@ exports.modifyPage = function(req, res){
     });
 };
 
-/** (ajax)게시판 글수정하기 **/
+/**
+ * @author geoseong
+ * @description (ajax)게시판 글수정하기
+ */
 exports.modifyAjax = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId.replace('amp;','');    //Ajax로 요청하면 params가 &까지 딸려서 온다.
@@ -289,7 +303,10 @@ exports.modifyAjax = function(req, res){
     ); // dbconn E
 };
 
-/** 게시판 글수정하기 **/
+/**
+ * @author geoseong
+ * @description 게시판 글수정하기
+ */
 exports.modify = function(req, res){
     const reqBody = req.body;
     const commId = req.params.commId;
@@ -311,7 +328,10 @@ exports.modify = function(req, res){
 
 };
 
-/** 게시판 글쓰기 페이지 **/
+/**
+ * @author geoseong
+ * @description 게시판 글쓰기 페이지
+ */
 exports.writePage = function(req, res){
     let salt = bcrypt.genSaltSync(10); // salt key 생성
     req.session.joins = salt; // 세션에 저장
@@ -330,7 +350,10 @@ exports.writePage = function(req, res){
 
 };
 
-/** 게시판 글쓰기 **/
+/**
+ * @author geoseong
+ * @description 게시판 글쓰기
+ */
 exports.write = function(req, res){
     console.log('글쓰기', req.body);
     console.log('글쓰기 req.params', req.params);
@@ -372,7 +395,10 @@ exports.write = function(req, res){
 
 };
 
-/** (ajax)게시판 글삭제하기 **/
+/**
+ * @author geoseong
+ * @description (ajax)게시판 글삭제하기
+ */
 exports.remove = function(req, res){
     const reqBody = req.body;
     const commId = reqBody.user_data.commId;
@@ -429,7 +455,10 @@ exports.remove = function(req, res){
     ); //end sql1
 };
 
-/** 게시판 댓글 목록보기 **/
+/**
+ * @author geoseong
+ * @description (ajax)게시판 댓글 목록보기
+ */
 const listComment = (req, res) => {
     const reqBody = req.body;
     const commId = reqBody.commId;
@@ -454,7 +483,11 @@ const listComment = (req, res) => {
         return res.send(comms);
     });
 }
-/** 게시판 댓글 등록하기 **/
+
+/**
+ * @author geoseong
+ * @description (ajax)게시판 댓글 등록하기
+ */
 exports.submitComment = function(req, res){
     const reqBody = req.body;
     const commName = reqBody.commName;
@@ -472,7 +505,11 @@ exports.submitComment = function(req, res){
             return listComment(req, res);
         });
 }
-/** 게시판 댓글 삭제하기 **/
+
+/**
+ * @author geoseong
+ * @description (ajax)게시판 댓글 삭제하기
+ */
 exports.delComment = function(req, res){
     const reqBody = req.body;
     const commName = reqBody.commName; // 게시판 테이블명 대문자로 변환
@@ -492,7 +529,11 @@ exports.delComment = function(req, res){
             return listComment(req, res);
         });
 }
-/** 게시판 댓글 수정하기 **/
+
+/**
+ * @author geoseong
+ * @description 게시판 댓글 수정하기
+ */
 exports.modifyComment = function(req, res){
     const reqBody = req.body;
     const commName = reqBody.commName; // 게시판 테이블명 대문자로 변환

@@ -8,9 +8,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# user uploaded image
-pages/img/upload/
-
 # Runtime data
 pids
 *.pid
@@ -66,5 +63,10 @@ typings/
 # Visual studio code setting file
 .vscode/
 
-# our properties
+# [GeoKeon]user uploaded image
+pages/img/upload/
+# [GeoKeon]our properties
 .prop/*
+# [GeoKeon]SQL 
+db/*.mwb
+db/*.mwb.bak

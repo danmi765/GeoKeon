@@ -46,24 +46,6 @@
             </div>
             <!-- 페이징박스 인클루드 -->
             <% include ../paging %>
-            <!-- <div class="gk_default_paging gk_basic2_paging">
-                <span><a href="">prev</a></span>
-                <ul>
-                    <% 
-                    if(models.comms.length > 0){
-                        for(var i=0; i < Math.ceil(Number(models.comms[0].display_num) / Number(locals.rowsPerPage)) ; i++) { %>
-                            <li><a href="?page=<%= (i+1) %>&comm_search_select=<%=locals.type%>&comm_search_text=<%=locals.query%>" class="selected"><%= (i+1) %></a></li>
-                    <%  
-                        } // end for
-                    }else{ 
-                    %>
-                        <li><a href="" class="selected">1</a></li>
-                    <% 
-                    } // end if
-                    %>
-                </ul>
-                <span><a href="">next</a></span>
-            </div> -->
         </div> <!-- comm_contents -->
     </div> <!-- contents_area End -->
 </div>
