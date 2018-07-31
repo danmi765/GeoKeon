@@ -137,7 +137,7 @@ $(".design_thumbnail_pop_close_btn").click(function(){
 
 /**
  * @author 배건희
- * @description 포트폴리오 메뉴 글쓰기
+ * @description 포트폴리오 글쓰기
  *
  */
 function designUploadSubmit(){
