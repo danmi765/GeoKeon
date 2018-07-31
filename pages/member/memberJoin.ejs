@@ -6,13 +6,13 @@
 
 <script>
     /* saltKey정보가 없으면 loginPage로 redirect */
-<% if (locals.joins) { %>
+ if (locals.joins) { 
         $(window).on("load", function(){
             joins = "<%= locals.joins %>" ;
         })
-<% }else{ %>
+ }else{ 
     location.href = location.origin + '/loginPage';
-<% } %>
+ } 
 </script>
 
                 <h2 class="contents_title"><%= models.page_title%></h2>
@@ -84,5 +84,9 @@
 
 
 </div>
+
+<script src="<%=locals.urls.js_path %>/member.js"></script>
+
+
 <% include ../footer %>
 <% include ../foot %>

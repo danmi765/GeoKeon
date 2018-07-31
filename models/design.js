@@ -40,7 +40,7 @@ exports.list = (req, res) => {
                                                                                                         // query_success_status view에서 표시해야함.
                                                                                                         // t : success 
                                                                                                         // f : fail
-                                                                                                        // n : no insert ro update
+                                                                                                        // n : no insert or update
         });
 
     });
@@ -249,4 +249,6 @@ const domainList = function(callback){
     });
 };
 
+
 exports.domainList = domainList;
+
