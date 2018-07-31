@@ -1,4 +1,36 @@
 
+// 수정페이지 업종select 선택을위한 변수
+var select_business_number = $("select[name=business_num] > option").length 
+
+// 수정페이지 이미지이름 로드
+if(db_img){
+    img_arr = db_img.split(",");
+    for(var i=0; i<3; i++){
+                
+        $(".db_origin_name").eq(i).attr("value", img_arr[i]);
+
+            if(img_arr[i] == " "){
+                img_arr[i] = "이미지가 없습니다.";
+            }
+
+            $(".upload_file_name_box").eq(i).html(img_arr[i]);
+
+    }
+}
+
+// 수정페이지 업종구분 select박스 선택
+if(business_number){
+    for(var i=0; i<select_business_number; i++){
+        if( $("select[name=business_num] > option").eq(i).val() == business_number ){
+            $("select[name=business_num] > option").eq(i).prop("selected",true);
+        }
+    }
+}
+
+// 해당업종번호 불러와서 해당 탭에 css주기
+if(tap_num){
+    $(".design_business_menu > li").eq(Number(tap_num)-1).children("a").css("border","1px solid #000");
+}
 
 // 디자인 등록, 수정 페이지 이미지 변경 시
 $(".design_file_btn").change(function(){ 
@@ -7,8 +39,8 @@ $(".design_file_btn").change(function(){
 })
 
 // 리스트 메인이미지 삽입
-for(var i =0; i<img_list_arr.length; i++){
-    $(".list_main_img_"+i).attr("src", img_path + "designUploads/" + img_list_arr[i][0]);
+for(var i =0; i<design_img_list_arr.length; i++){
+    $(".list_main_img_"+i).attr("src", img_path + "designUploads/" + design_img_list_arr[i][0]);
 }
 
 // 메인이미지 마우스오버 시 디자인타이틀 텍스트 숨김
@@ -40,17 +72,17 @@ $(".design_thumbnail > li > img").click(function(ab){
         var li_idx =  $(ab.target).attr("ab");
 
         // 썸네일 이미지
-        for(var i=0; i<img_list_arr[li_idx].length; i++){
+        for(var i=0; i<design_img_list_arr[li_idx].length; i++){
 
             // 이미지가 없을 경우
-            if(img_list_arr[li_idx][i] == " "){
+            if(design_img_list_arr[li_idx][i] == " "){
                 $(".design_thumbnail_img > li").eq(i).children("img").attr("nimg", "y");
                 console.log(i + " : 이미지가 없습니다.");
 
             // 이미자가 있을 경우
             }else{
-                $(".design_thumbnail_img > li").eq(i).children("img").attr("src", img_path + "designUploads/" + img_list_arr[li_idx][i]);
-                console.log(i + " : " + img_list_arr[li_idx][i]);
+                $(".design_thumbnail_img > li").eq(i).children("img").attr("src", img_path + "designUploads/" + design_img_list_arr[li_idx][i]);
+                console.log(i + " : " + design_img_list_arr[li_idx][i]);
             }
         }
 
@@ -125,4 +157,45 @@ function designUploadSubmit(){
 
 }
 
+/**
+ * @author 배건희
+ * @description 포트폴리오수정 유효성검사
+ */
+function designModifySubmit(){
 
+    if( $("input[name=design_name]").val() == "" ){
+        alert("포트폴리오명을 입력해주세요.");
+        $("input[name=design_name]").focus();
+    }else if( $("select[name=business_num]").val() == "업종선택" || $("select[name=business_num]").val() == 0 ){
+        alert("업종을 선택하세요.");
+    }else{
+        document.getElementById("design_img_modify_form").submit();
+    }
+
+}
+
+
+
+/**
+ * @author 배건희
+ * @description 디자인 삭제
+ */
+function designDelete(){
+    if( confirm('삭제하시겠습니까?') ){
+
+        $("#design_del_or_modi_from").attr("method","get");
+        $("#design_del_or_modi_from").attr("action","/designDelOrModi?design_id="+$("input[name=design_id]").val() );
+        document.getElementById('design_del_or_modi_from').submit();
+    }
+}
+
+
+/**
+ * @author 배건희
+ * @description 디자인 수정
+ */
+function designModify(){
+
+    $("#design_del_or_modi_from").attr("method","post");
+       document.getElementById('design_del_or_modi_from').submit();
+}

@@ -1,12 +1,4 @@
 
-<script>
-
- var img_list_arr = []; // design 카테고리에서 사용될 db에 저장된 이미지정보를 저장 할 배열.
-
-
-</script>
-
-
 <% include ../head %>
 <% include ../header %>
 <div role="main" class="contets_wrapper">
@@ -36,27 +28,6 @@
         </div>
     </div>
 
-    <script>
-    
-    //디자인 삭제
-    function designDelete(){
-        if( confirm('삭제하시겠습니까?') ){
-
-            $("#design_del_or_modi_from").attr("method","get");
-            $("#design_del_or_modi_from").attr("action","/designDelOrModi?design_id="+$("input[name=design_id]").val() );
-            document.getElementById('design_del_or_modi_from').submit();
-        }
-    }
-
-    //디자인 수정
-    function designModify(){
-
-         $("#design_del_or_modi_from").attr("method","post");
-            document.getElementById('design_del_or_modi_from').submit();
-    }
-    
-    </script>
-
 
     <!-- 본문 -->
     <h2 class="contents_title"><%= models.page_title%></h2>
@@ -84,7 +55,7 @@
                             </li>
                             <script>
                                 // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
-                                img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));    
+                                design_img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));    
                             </script>
                         <% }); %>
             </ul> <!-- design_thumbnail End -->
@@ -93,18 +64,12 @@
     </div> <!-- contents_area End -->
 
 
-    <script>
-        // 해당업종번호 불러와서 해당 탭에 css주기
-        var tap_num = "<%=models.bisuness_domain_num%>";
-    
-        $(".design_business_menu > li").eq(Number(tap_num)-1).children("a").css("border","1px solid #000");
-
-        
-    </script>
-                
-
 </div>
 
+
+<script>     
+    tap_num = "<%=models.bisuness_domain_num%>";// 현재 탭 업종번호 
+</script>
 <script src="<%=locals.urls.js_path %>/design.js"></script>
 
 <% include ../footer %>

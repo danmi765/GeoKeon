@@ -160,7 +160,7 @@ exports.modifyDesignPage = function(req, res){
 
             console.log("get_portpolio_for_portpolio_id results ---> ", results[0]);
 
-            return res.render('sub/designModi', {pages : 'design.ejs', models : {title : '디자인-수정하기', page_title : '디자인-수정하기', dmoain_list : domain_results, portpolio : results[0] }  });
+            return res.render('sub/designModi', {models : {title : '디자인-수정하기', page_title : '디자인-수정하기', dmoain_list : domain_results, portpolio : results[0] }  });
         });
 
     });
