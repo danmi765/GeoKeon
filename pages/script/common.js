@@ -6,6 +6,19 @@ var joins; // 암호화를 위함 key
 loadBoardDomainList();  // (로드 될때마다 실행)게시판 목록 불러오기
 
 
+// delete, insert, update 쿼리 row가 0일 때 에러창 띄움
+if(queryError == "f" ){
+    $(".qe_wrapper").css("display", "flex");
+    $(".qe_box").css("opacity", "0");
+
+    $(".qe_box").stop().animate({"opacity" : "1"}, 1000, function(){
+        $(".qe_box").stop().animate({"opacity" : "0"}, 500, function(){
+            $(".qe_wrapper").css("display", "none");
+        });
+    });
+}
+
+
 /**
  * @author 배건희
  * @description 서브메뉴 드롭다운

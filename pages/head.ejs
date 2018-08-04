@@ -58,6 +58,7 @@
     var r_sub_path = "<%=locals.urls.r_sub_path %>";
     var img_path = "<%=locals.urls.img_path %>";
     var upload_img_path = "<%=locals.urls.upload_img_path %>";
+    var queryError = "<%=models.query_success_status%>"; // update, insert, update 실행row가 0 일 때 에러창 띄우기위함 변수
 
     // design 카테고리
      var design_img_list_arr = []; // 불러온 db에 저장된 이미지정보를 저장 할 배열.
@@ -67,11 +68,19 @@
 
 </script>
 
+    <% if(models.find_pw == '1'){  %>
+        <script>
+            alert('비밀번호를 이메일로 발송하였습니다.');
+        </script>        
+    <% } %>
 
-        <% if(models.find_pw == '1'){  %>
-            <script>
-                alert('비밀번호를 이메일로 발송하였습니다.');
-            </script>        
-        <% } %>
     <!-- 페이지 전체를 감싸는 부분 -->
     <div id="comm_page" class="wrapper">
+
+    <!-- update, insert, delete 실행 후 row가 0일 경우 띄우는 에러메세지 -->
+    <div class="qe_wrapper">
+        <div class="qe_box">
+            <p>작업도중 문제가 발생했습니다.</p>
+            <p>잠시 후 다시 시도 해주세요.</p>
+        </div>
+    </div>

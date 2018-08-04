@@ -155,7 +155,7 @@ function designUploadSubmit(){
         document.getElementById("design_img_upload_form").submit();
     }
 
-}
+}  
 
 /**
  * @author 배건희

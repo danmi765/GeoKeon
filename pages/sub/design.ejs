@@ -42,22 +42,29 @@
                 <% }); %>
             </ul>
             <ul class="design_thumbnail">
-                <!-- 
-                    <%= models.designs_length%>  가 0 일 때
-                    <li>no design</li>           처리하기.
+                <%
+                console.log("models.designs_length ----> ",  models.designs_length );
+                console.log("models.designs.length ----> ",  models.designs.length );
 
-                -->
-                        <% models.designs.forEach((design, idx) => { %>
-                            <li>
-                                <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
-                                <div class="design_thumbnail_cover"></div>
-                                <div class="design_title" ppId="<%= design.PORTPOLIO_ID %>">디자인 <%= design.PORTPOLIO_ID %> 보기(<%= design.PORTPOLIO_NAME %> / <%= design.PORTPOLIO_BUSINESS %>)</div>
-                            </li>
-                            <script>
-                                // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
-                                design_img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));    
-                            </script>
-                        <% }); %>
+                if( models.designs.length == 0 ){ %>
+
+                    <li>디자인이 없습니다.</li>
+
+                <% }else{
+
+                    models.designs.forEach((design, idx) => { %>
+                    <li>
+                        <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
+                        <div class="design_thumbnail_cover"></div>
+                        <div class="design_title" ppId="<%= design.PORTPOLIO_ID %>"><%= design.PORTPOLIO_NAME %></div>
+                    </li>
+                    <script>
+                        // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
+                        design_img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));    
+                    </script>
+                <% }); 
+                
+                } %>
             </ul> <!-- design_thumbnail End -->
             <!-- <div class="design_thumbnail_more_btn"></div> -->
         </div> <!-- design_contents End -->
