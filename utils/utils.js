@@ -1,3 +1,5 @@
+
+
 /* '2018-04-21T15:00:00.000Z' 의 Date형을 '2018-04-18 00:00' 형태로 바꿔드림 */
 exports.getFormmatedDt = (formattedDtBefore) => {
     let set2Length = (val) => {return (val<10)?"0" + val:val;}
@@ -22,4 +24,6 @@ exports.getFormmatedDtForImage = (formattedDtBefore) => {
     
     return {datetime: formattedDatetimeAfter};
 }
+
+
 

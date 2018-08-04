@@ -1,28 +1,59 @@
+/*
+
+<< update, insert, delete 실행row 0 사용 >>
+
+메소드 실행 첫줄 삽입 
+
+        var success_status; // 쿼리 성공유무
+
+쿼리 실행 후 삽입
+
+        // 실행된 쿼리의 행 수가 0일 경우 
+        if(results.affectedRows == 0){
+            success_status = "f";
+        }
+
+리다이렉트
+
+        res.redirect(url.format({
+            pathname:"/design", // redirect url
+            query: {
+                "s": success_status // 디자인성공유무 url파라미터
+                // 그 외 필요 파라미터 전송
+                }
+        }));
+
+리다이렉트 후
+
+        models.query_success_status = req.query.s; // update, insert, delete 성공유무
+
+*/
+
 'use strict';
 const dbconn = require('../dbconn/conn');
 const queries = require('../dbconn/queries');
 const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
 const url = require('url');  
+const util = require('../utils/utils');  
+
+// render시 보낼 models
+const models = {
+    title : 'GeoKeon',
+    page_title : 'GeoKeon'
+};
 
 
 
 exports.list = (req, res) => {
 
-    // 디자인 등록, 수정, 삭제 성공유무
-    let query_success_status = req.query.success;
-    if(!query_success_status ){
-        query_success_status = "n";
-    }
-
+    // 탭메뉴 번호
     let url_tab = req.query.tab;
     if(!url_tab){ 
         url_tab = "1";
     }
-    console.log("url_tab ----> ", url_tab);
 
     domainList((domain_results) => {
-        console.log('bisiness domain list results', domain_results);
 
         // 업종 별 포트폴리오 받아오기
         dbconn.instance[defaultDB.db].query(queries.select.list_portpolio, [url_tab] , function (error, results, fields) {
@@ -31,16 +62,16 @@ exports.list = (req, res) => {
                 return res.send({'error': error});
             }
 
-            console.log("designs results ", results);
-            console.log("designs results length ", results.length);
+            // 페이지로 보낼 값들 입력
+            models.title = '디자인'; // 페이지 탭 타이틀
+            models.page_title = '디자인'; // 페이지 상단 타이틀
+            models.dmoain_list = domain_results; // 탭 메뉴 리스트
             
-            return res.render('sub/design', {pages : 'design.ejs', 
-                                            models : {title : '디자인', page_title : '디자인', designs_length : results.length, designs : results, 
-                                            dmoain_list : domain_results, bisuness_domain_num : url_tab, query_success_status : query_success_status } });
-                                                                                                        // query_success_status view에서 표시해야함.
-                                                                                                        // t : success 
-                                                                                                        // f : fail
-                                                                                                        // n : no insert or update
+            models.designs = results; // 리스트 내용물
+            models.bisuness_domain_num = url_tab; // 탭 메뉴 번호 
+            models.query_success_status = req.query.s; // update, insert, delete 성공유무
+
+            return res.render('sub/design', {models : models} );
         });
 
     });
@@ -49,13 +80,18 @@ exports.list = (req, res) => {
 exports.writePage = function(req, res){
 
     domainList((domain_results) => {
-        return res.render('sub/designWrite', {pages : 'design.ejs', models : {title : '디자인-글쓰기', page_title : '디자인-글쓰기', dmoain_list : domain_results} });
+
+        // 페이지로 보낼 값들 입력
+        models.title = '디자인-글쓰기'; // 페이지 탭 타이틀
+        models.page_title = '디자인-글쓰기'; // 페이지 상단 타이틀
+        models.dmoain_list = domain_results; // 탭 메뉴 리스트
+
+        return res.render('sub/designWrite', { models : models });
     });
 };
 
 exports.write = function(req, res){
-    var success_status; // 디자인등록 성공유무
-
+    var success_status; // 쿼리 성공유무
     var files = req.files; // 업로드 될 이미지의 내용들
 
     // DB저장하기 위한 파일명 ( 파일이 없을 땐 공백으로 입력함 )
@@ -63,11 +99,6 @@ exports.write = function(req, res){
     var mobile_main_img = " ";
     var tablet_main_img = " ";
     var db_img;
-    
-    console.log("req.body --->", req.body );
-    console.log("req.body design name --->", req.body.design_name ); // 포트폴리오명
-    console.log("req.body business num --->", req.body.business_num ); // 업종구분번호
-    console.log("files --->", files ); 
 
     // 해당이미지가 들어왔을 경우
     if(files.pc_main){
@@ -79,25 +110,19 @@ exports.write = function(req, res){
     if(files.tablet_main){
         tablet_main_img = files.tablet_main[0].filename;
     }
-    console.log("pc_main_img -- >", pc_main_img);
-    console.log("mobile_main_img -- >", mobile_main_img);
-    console.log("tablet_main_img -- >", tablet_main_img);
 
     // DB에 저장하기 위해 이미지명 ,를 구분자로 붙이기
     db_img = pc_main_img + "," + mobile_main_img + "," + tablet_main_img;
     console.log("db_img --- >", db_img);
 
-    // add_portpolio
     dbconn.instance[defaultDB.db].query(queries.insert.add_portpolio, [db_img, req.body.design_name, req.body.business_num ] , function (error, results, fields) {
         if (error){
             console.log('[design img input]error', error);
             return res.send({'error': error});
         }
-
-        console.log("design write results ---> ", results.affectedRows); // select 행 확인 0  select 실패, 1 성공
-        if( results.affectedRows == 1 ){
-            success_status = "t";
-        }else{
+        
+        // 실행된 쿼리의 행 수가 0일 경우 
+        if(results.affectedRows == 0){
             success_status = "f";
         }
 
@@ -105,7 +130,8 @@ exports.write = function(req, res){
         res.redirect(url.format({
             pathname:"/design",
             query: {
-                "success": success_status // 디자인성공유무 url파라미터로 보기
+                "s": success_status, // 디자인성공유무 url파라미터로 보기
+                "tab" : req.body.business_num
                 }
         }));
 
@@ -115,31 +141,26 @@ exports.write = function(req, res){
 };
 
 exports.deleteDesign = function(req, res){
-    var success_status;
+    var success_status; // 쿼리 성공유무
 
-    console.log("req.body.design_id ----> ", req.query);
-
-    //delete_design
     dbconn.instance[defaultDB.db].query(queries.delete.delete_design, [req.query.design_id ] , function (error, results, fields) {
         if (error){
             console.log('[design img delete]error', error);
             return res.send({'error': error});
         }
 
-        console.log("design delete results row --> ", results.affectedRows);
-        if( results.affectedRows == 1 ){
-            success_status = "t";
-        }else{
+        // 실행된 쿼리의 행 수가 0일 경우 
+        if(results.affectedRows == 0){
             success_status = "f";
         }
-
+    
         // 디자인 삭제 후 리스트로 이동
-        res.redirect(url.format({
+         res.redirect(url.format({
             pathname:"/design",
             query: {
-                "success": success_status // 디자인성공유무 url파라미터로 보기
+                "s": success_status // 디자인성공유무 url파라미터로 보기
                 }
-        }));
+        })); 
 
     });
 };
@@ -158,9 +179,14 @@ exports.modifyDesignPage = function(req, res){
                 return res.send({'error': error});
             }
 
-            console.log("get_portpolio_for_portpolio_id results ---> ", results[0]);
+            // 페이지로 보낼 값들 입력
+            models.title = '디자인-수정하기'; // 페이지 탭 타이틀
+            models.page_title = '디자인-수정하기'; // 페이지 상단 타이틀
+            models.dmoain_list = domain_results; // 탭 메뉴 리스트
 
-            return res.render('sub/designModi', {models : {title : '디자인-수정하기', page_title : '디자인-수정하기', dmoain_list : domain_results, portpolio : results[0] }  });
+            models.portpolio = results[0]; // 수정할 디자인 정보
+
+            return res.render('sub/designModi', {models : models  });
         });
 
     });
@@ -168,11 +194,7 @@ exports.modifyDesignPage = function(req, res){
 
 
 exports.modifyDesign = function(req, res){
-    var success_status;
-
-    console.log("design-modify req.body --->" ,req.body);
-    console.log("design-modify req.files --->" ,req.files);
-
+    var success_status; // 쿼리 성공유무
     var business_id = req.body.business_num; // 업종구분번호
     var design_name = req.body.design_name // 디자인명
     var portpolio_id = req.body.portpolio_id // 포트폴리오번호
@@ -189,12 +211,10 @@ exports.modifyDesign = function(req, res){
         console.log("pc_main exist");
         origin_img_arr[0] = files.pc_main[0].filename;
     }
-
     if(files.mobile_main){
         console.log("mobile_main exist");
         origin_img_arr[1] = files.mobile_main[0].filename;
     }
-
     if(files.tablet_main){
         console.log("tablet_main exist");
         origin_img_arr[2] = files.tablet_main[0].filename;
@@ -203,25 +223,22 @@ exports.modifyDesign = function(req, res){
     // db업데이트 이미지 조합
     var update_ime_name = origin_img_arr[0] + "," + origin_img_arr[1] + "," + origin_img_arr[2];
 
-    // update_portpolio
     dbconn.instance[defaultDB.db].query(queries.update.update_portpolio, [update_ime_name, design_name, business_id,portpolio_id ] , function (error, results, fields) {
         if (error){
             console.log('[design img select]error', error);
             return res.send({'error': error});
         }
 
-        // 업데이트결과확인
-        console.log("results.affectedRows ---> ", results.affectedRows);
-        if( results.affectedRows == 1 ){
-            success_status = "t";
-        }else{
+        // 실행된 쿼리의 행 수가 0일 경우 
+        if(results.affectedRows == 0){
             success_status = "f";
         }
 
         res.redirect(url.format({
             pathname:"/design",
             query: {
-                "success": success_status
+                "s": success_status,
+                "tab" : business_id
                 }
         }));
 
@@ -229,8 +246,6 @@ exports.modifyDesign = function(req, res){
    
 };
   
-
-
 
 // ■■■■■■■■■■■■■■■■■■■
 //      공통쿼리
@@ -251,4 +266,3 @@ const domainList = function(callback){
 
 
 exports.domainList = domainList;
-
