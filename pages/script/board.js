@@ -1,6 +1,6 @@
 
 /**
- * @author 박태성
+ * @author geoseong
  * @description 게시판 팝업 내용 변경하고 띄우기
  * @param {string} title 
  * @param {string} message 
@@ -24,7 +24,7 @@ function loadCommPopup(title, message, callback){
 
 
 /**
- * @author 박태성   
+ * @author geoseong   
  * @description 게시판 팝업 에러메시지 세팅 후 비추기
  * @param {string} message 
  * @param {Function} callback 
@@ -38,7 +38,7 @@ function setCommPopupError(message, callback){
 
 
 /**
- * @author 박태성
+ * @author geoseong
  * @description 게시판 팝업 감추기
  * @param {Function} callback 
  */
@@ -52,7 +52,7 @@ function unloadCommPopup(callback){
 
 
 /**
- * @author 박태성
+ * @author geoseong
  * @description 댓글 작성하기
  * @param {string} writer 
  * @param {string} comm_name 
@@ -107,7 +107,7 @@ function submitComment(writer, comm_name, comm_id){
 
 
 /**
- * @author 박태성
+ * @author geoseong
  * @description 댓글 목록보기
  * @param {string} authId 
  * @param {string} comm_name 
@@ -145,7 +145,7 @@ function listComment(authId, comm_name, comm_id){
 
 
 /**
- * @author 박태성
+ * @author geoseong
  * @description 댓글리스트 렌더링
  * @param {string} authId 
  * @param {string} comm_name 
@@ -199,7 +199,7 @@ function renderComment(authId, comm_name, comm_id, commentlist){
 
 
 /**
- * @author 박태성
+ * @author geoseong
  * @description 댓글 삭제하기
  * @param {string} authId 
  * @param {string} comm_name 
@@ -243,7 +243,7 @@ function removeComment(authId, comm_name, comm_id, commentId){
 
 
 /**
- * @author 박태성
+ * @author geoseong
  * @description 댓글 수정하기
  * @param {string} authId 
  * @param {string} comm_name 

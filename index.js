@@ -1,20 +1,17 @@
 'use strict';
 
-const fs = require('fs');
 const port = 8000;
 const express = require('express');
-const multer = require('multer');
 const app = express();
 const bodyParser = require('body-parser');
-
-const uploadSetting = multer({dest:"pages/img/upload/"});
-
 const dbconn = require('./dbconn/conn');
 const defaultDB = 'mysql';  // 기본 Database 종류 정의. 해당 변수는 다른 곳에 널리 쓰기 위해 최하단의 exports 문법에서 다시 사용됨.
 const session = require('express-session');
-
 const { getSessionStorage, setSessionStorage } = require('./utils/sessionStorage');
 const queries = require('./dbconn/queries');
+// const fs = require('fs');
+// const multer = require('multer');
+// const uploadSetting = multer({dest:"pages/img/upload/"});
 
 app.use(session({
     secret : 'keyboard cat',
@@ -25,10 +22,13 @@ app.use(session({
     }
 }));
 
-const r = "http://127.0.0.1:8000/";
-
-// 세션을 전역으로 사용할 수 있도록 함
+/**
+ * @name app.use
+ * @description 서버 전체 전역변수 설정하는 영역
+ * @description req.session을 전역으로 사용할 수 있음
+ */
 app.use(function(req, res, next) {
+    const r = `http://127.0.0.1:${port}/`;
     res.locals = req.session;   /* 로그인 할때 authId와 loggedDt속성이 추가로 들어간다 */
     res.locals = {
         ...res.locals,
@@ -53,103 +53,34 @@ app.use(express.static('pages'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
-
+// Static Page 경로와 View engine 설정하기
 app.set('views', __dirname + '/pages'); // 루트폴더 설정
 app.set('view engine', 'ejs');  // set the view engine to ejs
 // app.engine('html', require('ejs').renderFile); // HTML 형식으로 변환시키는 모듈
 
-
-/* ■■■■■■■■■■■■페이지 라우팅 시작■■■■■■■■■■■■ */
-
-// const urls = {
-//     sub_dir : "sub/" ,
-//     sub_img : ""
-// }
-
-
-// GET index
+// [라우팅] GET index
 app.get('/', function(req, res) {
     res.render('sub/main', { pages : 'main.ejs', models : { title : '메인' }});
 });
-
-// GET intro
-app.get('/intro', function(req, res) {
-    res.render('sub/intro',  {pages : 'intro.ejs' ,models : { title : '소개', page_title : '소개'}});
-});
-
-/* Ajax통신 시 에러떴을 때 내뱉는 에러 페이지 */
-// POST error
+// [라우팅] POST error: Ajax통신 시 에러떴을 때 내뱉는 에러 페이지
 app.post('/error', function(req, res) {
     return res.render('error/error', {msg: req.body.msg, mode: 'ajax'});
 });
-
-// design_collention
+// [라우팅] design_collention
 app.get('/design_collection', function(req, res) {
     res.render('sub/design_collection');
 });
 
-
-/* ■■■■■■■■■■■■페이지 라우팅 끝■■■■■■■■■■■■ */
-
-
-/* 이미지 업로드 */
-app.post('/upload*', uploadSetting.single('upload'), function(req, res) {
-    const tmpPath = req.file.path;
-    const uploadPath = "pages/img/upload/";
-    let findFileName = req.file.originalname;
-    let idx = 1;
-    
-    while(true){
-        const isFileExist = fs.existsSync(uploadPath+findFileName);
-        if(isFileExist){
-            /* 파일명이 중복될 때 */
-            /* 파일명 + 1 로 네이밍 한다. 그리고 네이밍한 파일명1도 중복되었는 지 확인하고 중복이 되었다면 파일명2로 하는 로직을 반복.. */
-            let dotIdx = findFileName.lastIndexOf('.');
-            let fileIdx = findFileName.substring(0, dotIdx).match(/\d+/);
-            let fileDuplicateIdx = (fileIdx != null)?Number(fileIdx[0])+1 : 1;   //중복되는 파일의 인덱스값을 숫자로 추출.
-            let fileNameExceptNum = (fileIdx != null)?findFileName.indexOf(Number(fileIdx[0])) : dotIdx;
-
-            /* 파일이름을 재정의하고 다시 loop돌려서 변경된 파일이름과 중복되는 파일이 있는지 재확인 */
-            findFileName = findFileName.substring(0, fileNameExceptNum) + fileDuplicateIdx + findFileName.substring(dotIdx);
-        }else{
-            /* 파일명이 중복된 게 없을 때 */
-            return renameFS(tmpPath, findFileName)
-        }
-    }
-    /**
-     * @author geoseong
-     * @description 임시로 저장된 파일명 및 경로 변경
-     * @param {*} tmpPath 
-     * @param {*} fileName 
-     */
-    function renameFS(tmpPath, fileName){
-        /* CKEditor가 발급한 random한 파일명을 변경하는 작업 */
-        fs.rename(tmpPath, uploadPath + fileName, function (err) {
-            if (err) {
-                console.log('-----renameFS error', err);
-                return res.send({
-                    "uploaded": 0,
-                    "error": {
-                        "message": "파일 전송 중 오류가 발생하였습니다."
-                    }
-                }); 
-            }
-            return res.send({
-                "uploaded": 1,
-                "fileName": fileName,
-                "url": `../img/upload/${fileName}`
-            });
-        });
-    }
-});
-
-
+/* ■■■■■■■■■■■■소개 페이지 라우팅■■■■■■■■■■■■ */
+app.use('/', require('./routes/intro'));
 /* ■■■■■■■■■■■■커뮤니티 게시판 라우팅■■■■■■■■■■■■ */
 app.use('/', require('./routes/commboard'));
 /* ■■■■■■■■■■■■디자인 메뉴 라우팅■■■■■■■■■■■■ */
 app.use('/', require('./routes/design'));
 /* ■■■■■■■■■■■■로그인/가입 라우팅■■■■■■■■■■■■ */
 app.use('/', require('./routes/account'));
+/* ■■■■■■■■■■■■파일 업로드■■■■■■■■■■■■ */
+app.use('/', require('./routes/upload'));
 
 // Express 서버 시작.
 app.listen(port, () => {
