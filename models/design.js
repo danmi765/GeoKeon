@@ -5,8 +5,6 @@ const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
 const url = require('url');  
 
-
-
 exports.list = (req, res) => {
 
     // 디자인 등록, 수정, 삭제 성공유무

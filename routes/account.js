@@ -46,9 +46,4 @@ router.get('/logout', function(req, res) {
  router.post('/changePw', accountController.changePw );
  router.post('/withdrawal', accountController.withdrawal);
 
-/** 쿼리 테스트 **/
-router.post('/query', accountController.query);
-/** 이벤트로그 일괄제거 **/
-// router.delete('/deleteEventLog', dbController.deleteEventLog);
-
 module.exports = router;
