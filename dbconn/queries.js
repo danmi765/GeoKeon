@@ -49,7 +49,8 @@ module.exports = {
             WHERE T.PAGE = ?
             ORDER BY T.ROWNUM DESC
         `,
-        'list_portpolio' : 'SELECT * FROM PORTPOLIO WHERE BUSINESS_ID = ? ORDER BY PORTPOLIO_ID DESC',
+        //'list_portpolio' : 'SELECT * FROM PORTPOLIO WHERE BUSINESS_ID = ? ORDER BY PORTPOLIO_ID DESC',
+        'list_portpolio' : 'select * from portpolio order by business_id asc , portpolio_id desc',
         'list_business_domain' : 'SELECT * FROM BUSINESS_DOMAIN',
         'get_comm_board' : 'SELECT * FROM BOARD WHERE BOARD_ID = ?',
         'get_comm_board_for_user_id' : `
