@@ -103,6 +103,8 @@
     .file_upload_btn{position: absolute;left:10px;top:5px;}
     .upload_file_name_box{position: absolute;left:100px;}
 
+
+    .seleted_page_num{font-size:2em;}
     .design_regi_btn{position: absolute;top:0;right:50px;}
     .design_thumbnail_delete_btn{position: absolute;bottom:10px;right:10px;}
 

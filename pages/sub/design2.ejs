@@ -45,35 +45,47 @@
                 </select>
             </div>
             <div class="thumbnail_box">
-                <% for(var i=1; i < models.tap_length+1; i++){ %>
-                    <ul class="tap_<%=i%> design_thumbnail close_ul">
-                        <%models.designs.forEach((design, idx) => { 
-                            if( design.BUSINESS_ID == i ){ 
-                                
-                        %>
-                                <li>
-                                    <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
-                                    <div class="design_thumbnail_cover"></div>
-                                    <div class="design_title" ppId="<%= design.PORTPOLIO_ID %>"><%= design.PORTPOLIO_NAME %></div>
-                                </li>
-                                <script>
-                                    // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
-                                    design_img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));
-                                </script>
-                            <% }   
-                        });%>
-                        <li class="paging_li">
-                            <p><a href="">prev</a></p>
-                            <p>
-                                <a href="">1</a>
-                            </p>
-                            <p><a href="">next</a></p>
-                        </li>
-                    </ul>
-                <% } %>
+
+                <script>
+                    var design_arr = new Object(); // 포트폴리오 json
+                    var tap_length = "<%=models.tap_length%>"; // tap length
+                    var pp_oj = JSON.parse('<%- JSON.stringify(models.designs) %>'); // portpolio json
+                    var pp_length = pp_oj.length;
+
+                    var m; // design_arr depth2의 키값
+                    // 1차 loop
+                    for(var i=1; i < Number(tap_length)+1; i++ ){ 
+                        design_arr[i] = {}; // 자료넣을 json depth 1 생성
+                        $(".thumbnail_box").append("<ul id='tap_"+i+"' class='design_thumbnail close_ul'>");
+                        m = 1; // 초기화
+
+                        // 2차 loop
+                        for(var n=0; n < pp_length; n++){ 
+                            // design_arr의 1depth의 키 값과 business_id가 같은것끼리 묶어서 design_arr depth2에 넣음
+                            if(i == pp_oj[n]["BUSINESS_ID"] ){
+                                design_arr[i][m] = pp_oj[n];
+                                m++; // 증가
+    
+                                var content = 
+                                  '<li>'                                                              
+                                +    '<img class="list_main_img_'+ n +'" ab="'+ n +'" src="" alt="" >'
+                                +    '<div class="design_thumbnail_cover"></div>'
+                                +    '<div class="design_title" ppId="'+ pp_oj[n].PORTPOLIO_ID +'">'+ pp_oj[n].PORTPOLIO_NAME +'</div>'
+                                + '</li> '      ;
+                               
+                                $(".thumbnail_box > ul").eq(i-1).append(content);
+
+                                // 이미지 저장
+                                design_img_list_arr.push(pp_oj[n].PORTPOLIO_IMG.split(","));
+
+                            }
+                        } // 2차 loop End
+                    } // 1차 loop End
+
+                    
+                </script>
+
             </div>
-
-
             <!-- <div class="design_thumbnail_more_btn"></div> -->
         </div> <!-- design_contents End -->
     </div> <!-- contents_area End -->

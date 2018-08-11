@@ -48,15 +48,15 @@ const models = {
 exports.list = (req, res) => {
 
     // 탭메뉴 번호
-    let url_tab = req.query.tab;
+   /*  let url_tab = req.query.tab;
     if(!url_tab){ 
         url_tab = "1";
-    }
+    } */
 
     domainList((domain_results) => {
 
         // 업종 별 포트폴리오 받아오기
-        dbconn.instance[defaultDB.db].query(queries.select.list_portpolio, [url_tab] , function (error, results, fields) {
+        dbconn.instance[defaultDB.db].query(queries.select.list_portpolio, [] , function (error, results, fields) {
             if (error){
                 console.log('[list]error', error);
                 return res.send({'error': error});
@@ -67,11 +67,12 @@ exports.list = (req, res) => {
             models.page_title = '디자인'; // 페이지 상단 타이틀
             models.dmoain_list = domain_results; // 탭 메뉴 리스트
             
-            models.designs = results; // 리스트 내용물
-            models.bisuness_domain_num = url_tab; // 탭 메뉴 번호 
+            models.designs = results ; // 리스트 내용물
+           // models.bisuness_domain_num = url_tab; // 탭 메뉴 번호 
+           models.tap_length = domain_results.length;
             models.query_success_status = req.query.s; // update, insert, delete 성공유무
 
-            return res.render('sub/design', {models : models} );
+            return res.render('sub/design2', {models : models} );
         });
 
     });
