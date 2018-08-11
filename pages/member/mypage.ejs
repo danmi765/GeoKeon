@@ -33,7 +33,7 @@
                                             <%  models.my_post.forEach((post, idx) => { %>
                                                 <tr>
                                                     <td><%= post['BOARD_NAME'] %></td>
-                                                    <td class="comm_title"><a href="/comm_view/<%= post['BOARD_ID'] %>" target="_blank"><%= post['TITLE'] %></a></td>
+                                                    <td class="comm_title"><a href="/comm_view/<%=post['BOARD_DOMAIN_ID']%>&<%= post['BOARD_ID'] %>" target="_blank"><%= post['TITLE'] %></a></td>
                                                     <td><%= post['USER_ID'] %></td>
                                                     <td><%= post['DATE'] %></td>
                                                     <td><%= post['HITS'] %></td>
