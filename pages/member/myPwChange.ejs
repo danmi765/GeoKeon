@@ -1,0 +1,43 @@
+
+
+<% include ../head %>
+<% include ../header %>
+<div role="main" class="contets_wrapper"></div>
+
+
+
+                <h2 class="contents_title"><%= models.page_title%></h2>
+                <div class="contents_area">
+                    <div class="my_pw_modi_contents">
+                        <table>
+                            <tr>
+                                <th>새로운 비밀번호</th>
+                                <td>
+                                    <input type="password" name="new_user_pw" />
+                                    <span name="new_user_pw"></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>새로운 비밀번호 확인</th>
+                                <td>
+                                    <input type="password" name="new_user_pw_ckh" />
+                                    <span name="new_user_pw_ckh"></span>
+                                </td>
+                                
+                            </tr>
+                            <tr>
+                                <td colspan="2"><button type="button" onclick="return goChangePassword(joins)" title="비밀번호변경하기" class="gk_simple1_btn"><span>변경하기</span></button></td>
+                            </tr>
+                        </table>
+
+                    </div> <!-- my_pw_modi_contents End -->
+                </div> <!-- contents_area End -->
+
+
+            </div>
+
+            <script src="<%=locals.urls.js_path %>/member.js"></script>
+            
+            
+            <% include ../footer %>
+            <% include ../foot %>

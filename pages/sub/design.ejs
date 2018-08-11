@@ -1,0 +1,86 @@
+
+<% include ../head %>
+<% include ../header %>
+
+<div role="main" class="contets_wrapper">
+
+    <!-- 썸네일 팝업 -->
+    <div class="design_thumbnail_pop">
+        <div class="design_thumbnail_pop_img_box">
+            <div class="design_thumbnail_pop_close_btn removeitem">닫기</div>
+            <ul class="design_thumbnail_img">
+                <li><img nimg="" /></li>
+                <li><img nimg="" /></li>
+                <li><img nimg="" /></li>
+                <li>이미지가 없습니다.</li>
+            </ul>
+            <ul class="design_thumbnail_cate_btn">
+                <li aim="0">PC</li>
+                <li aim="1">모바일</li>
+                <li aim="2">테블릿</li>
+            </ul>
+            <div class="design_thumbnail_delete_btn">
+                <form action="/designDelOrModi" id="design_del_or_modi_from" method="">
+                    <button type="button" onclick="designDelete()" class="gk_simple2_btn gk_corner_all"><span>삭제</span></button>
+                    <button type="button" onclick="designModify()" class="gk_simple2_btn gk_corner_all"><span>수정</span></button>
+                    <input type="hidden" name="design_id" value="" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 본문 -->
+    <h2 class="contents_title"><%= models.page_title%></h2>
+    <div class="contents_area">
+        <div class="design_contents">
+            <div class="design_regi_btn">
+                <button type="button" onclick="location.href='/designWritePage'"  class="gk_simple2_btn gk_corner_all" ><span>디자인등록</span></button>
+            </div>
+            <div>
+                <select name="tap" onchange=businessIdChange()>
+                    <% models.dmoain_list.forEach((dmoain_list, idx) => {  %>
+                    <option value="<%=dmoain_list.BUSINESS_ID%>"><%=dmoain_list.BUSINESS_NAME%></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="thumbnail_box">
+                <% for(var i=1; i < models.tap_length+1; i++){ %>
+                    <ul class="tap_<%=i%> design_thumbnail close_ul">
+                        <%models.designs.forEach((design, idx) => { 
+                            if( design.BUSINESS_ID == i ){ 
+                                
+                        %>
+                                <li>
+                                    <img class="list_main_img_<%=idx%>" ab="<%=idx%>" src="" alt="" >
+                                    <div class="design_thumbnail_cover"></div>
+                                    <div class="design_title" ppId="<%= design.PORTPOLIO_ID %>"><%= design.PORTPOLIO_NAME %></div>
+                                </li>
+                                <script>
+                                    // ","로 구분되어있는 정보를 받아 split하여 자바스크립트 배열로 저장
+                                    design_img_list_arr.push("<%=design.PORTPOLIO_IMG%>".split(","));
+                                </script>
+                            <% }   
+                        });%>
+                        <li class="paging_li">
+                            <p><a href="">prev</a></p>
+                            <p>
+                                <a href="">1</a>
+                            </p>
+                            <p><a href="">next</a></p>
+                        </li>
+                    </ul>
+                <% } %>
+            </div>
+
+
+            <!-- <div class="design_thumbnail_more_btn"></div> -->
+        </div> <!-- design_contents End -->
+    </div> <!-- contents_area End -->
+
+
+</div>
+<script src="<%=locals.urls.js_path %>/design.js"></script>
+
+<% include ../footer %>
+<% include ../foot %>

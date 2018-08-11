@@ -1,0 +1,86 @@
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title><%= models.title %></title>
+        <meta name="description" content="An interactive getting started guide for Brackets.">
+
+        <!--[if lt IE 9]>
+         <script type="text/javascript" src="<%=locals.urls.js_path %>respond.min.js"></script>
+         <![endif]-->
+
+        <!-- jQuery Mobile : Local -->
+        <script src="<%=locals.urls.lib_path %>jquery-1.11.1.min.js"></script>
+
+        <!-- Custom Stylesheet -->
+        <link rel="stylesheet" href="<%=locals.urls.css_path %>main.css" />
+        <link rel="stylesheet" href="<%=locals.urls.css_path %>reset.css" />
+        <link rel="stylesheet" href="<%=locals.urls.css_path %>common.css" />
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+        <!-- fadeIn/Out Banner -->
+        <link rel="stylesheet" href="<%=locals.urls.css_path %>slideBanner.css" />
+
+        <!-- CKEditor -->
+        <script src="<%=locals.urls.lib_path %>ckeditor/ckeditor.js"></script>
+
+        <!—- CryptoJS v3.1.2 -—>
+        <script src="<%=locals.urls.lib_path %>CryptoJSv3.1.2/rollups/aes.js"></script>
+        <script src="<%=locals.urls.lib_path %>CryptoJSv3.1.2/components/aes.js"></script>
+        <script src="<%=locals.urls.lib_path %>CryptoJSv3.1.2/rollups/sha256.js"></script>
+        <script src="<%=locals.urls.lib_path %>CryptoJSv3.1.2/components/sha256.js"></script>
+
+        <!-- 에러처리 -->
+        <script src="/error/error.js"></script>
+        
+        <!-- 암호화에 필요한 key 값 저장 -->
+        <% if (locals.joins) { %>
+            <script>
+                $(window).on("load", function(){
+                    joins = "<%= locals.joins %>" ;
+                })
+            </script>
+        <% } %>
+
+
+    </head>
+    <body>
+<script>
+    // 전역으로 사용되는 path
+    var css_path = "<%=locals.urls.css_path %>";
+    var js_path = "<%=locals.urls.js_path %>";
+    var lib_path = "<%=locals.urls.lib_path %>";
+    var sub_path = "<%=locals.urls.sub_path %>";
+    var r_sub_path = "<%=locals.urls.r_sub_path %>";
+    var img_path = "<%=locals.urls.img_path %>";
+    var upload_img_path = "<%=locals.urls.upload_img_path %>";
+    var queryError = "<%=models.query_success_status%>"; // update, insert, update 실행row가 0 일 때 에러창 띄우기위함 변수
+
+    // design 카테고리
+     var design_img_list_arr = []; // 불러온 db에 저장된 이미지정보를 저장 할 배열.
+     var db_img;   
+     var tap_num; // 현재탭의 업종번호 
+     var business_number; // 현재 업종번호
+
+</script>
+
+    <% if(models.find_pw == '1'){  %>
+        <script>
+            alert('비밀번호를 이메일로 발송하였습니다.');
+        </script>        
+    <% } %>
+
+    <!-- 페이지 전체를 감싸는 부분 -->
+    <div id="comm_page" class="wrapper">
+
+    <!-- update, insert, delete 실행 후 row가 0일 경우 띄우는 에러메세지 -->
+    <div class="qe_wrapper">
+        <div class="qe_box">
+            <p>작업도중 문제가 발생했습니다.</p>
+            <p>잠시 후 다시 시도 해주세요.</p>
+        </div>
+    </div>

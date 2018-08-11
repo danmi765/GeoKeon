@@ -1,0 +1,92 @@
+
+
+<% include ../head %>
+<% include ../header %>
+<div role="main" class="contets_wrapper"></div>
+
+<script>
+    /* saltKey정보가 없으면 loginPage로 redirect */
+ if (locals.joins) { 
+        $(window).on("load", function(){
+            joins = "<%= locals.joins %>" ;
+        })
+ }else{ 
+    location.href = location.origin + '/loginPage';
+ } 
+</script>
+
+                <h2 class="contents_title"><%= models.page_title%></h2>
+                <div class="contents_area">
+                    <div class="login_contents">
+                        <div><%= models.msg%></div>
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <td>
+                                        <input type="text" name="user_id" maxlength="10" />
+                                        <button type="button" title="중복확인" onclick="joinIdDupCheck()" class="gk_simple1_btn">중복확인</button>
+                                        <span class="" name="user_id"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>PW</th>
+                                    <td>
+                                        <input type="password" name="user_pw" maxlength="10" />
+                                        <span class="" name="user_pw"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>PW Check</th>
+                                    <td>
+                                        <input type="password" name="user_pw_check" maxlength="10" />
+                                        <span class="" name="user_pw_check"></span>                                        
+                                    </td>
+                                <tr>
+                                    <th>NAME</th>
+                                    <td>
+                                        <input type="text" name="user_name" maxlength="10" />
+                                        <span class="" name="user_name">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>EMAIL</th>
+                                    <td>
+                                        <input type="text" name="user_mail_id" maxlength="20" />
+                                        &#64;
+                                        <select name="user_mail" onchange="chageMailSelect()">
+                                            <option selected="selected" value="naver.com">naver.com</option>
+                                            <option value="hanmail.net">hanmail.net</option>
+                                            <option value="nate.com">nate.com</option>
+                                            <option value="gmail.com">gmail.com</option>
+                                            <option name="dir_entr" value="dir_entr">직접입력</option>
+                                        </select>
+                                        <input type="text" name="user_mail_dir" maxlength="20" value="이메일을 입력하세요" onFocus="this.value='';return true;" onchange="userMailDirChange()" />
+                                        <span class="" name="user_email">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>PHONE</th>
+                                    <td>
+                                        <input type="text" name="user_phone1" maxlength="3" onchange="checkNumber( 'user_phone1' )"/>
+                                        &#45;
+                                        <input type="text" name="user_phone2" maxlength="4" onchange="checkNumber( 'user_phone2' )" />
+                                        &#45;
+                                        <input type="text" name="user_phone3" maxlength="4" onchange="checkNumber( 'user_phone3' )" />
+                                        <span class="" name="user_phone"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2"><button onclick="return goJoin(joins)" type="" title="join" class="gk_simple1_btn"><span>JOIN</span></button></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div> <!-- contents_area End -->
+
+
+</div>
+
+<script src="<%=locals.urls.js_path %>/member.js"></script>
+
+
+<% include ../footer %>
+<% include ../foot %>

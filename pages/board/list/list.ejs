@@ -1,0 +1,57 @@
+<% include ../../head %>
+<% include ../../header %>
+<div role="main" class="contets_wrapper"></div>
+    <h2 class="contents_title"></h2>
+    <div class="contents_area">
+        <div class="comm_contents">
+            <div class="comm_search_bar">
+                <form action="/comm/<%=models.comm_name%>" name="comm_search_form">
+                    <input name="comm_search_text" class="comm_search_text" placeholder="검색내용 입력"  >
+                    <span class="comm_search_btn fa fa-search" onclick="javascript:comm_search_form.submit()"></span>
+                    <select class="comm_search_select" name="comm_search_select">
+                        <option value="t">제목</option>
+                        <option value="w">작성자</option>
+                        <option value="c">내용</option>
+                    </select>
+                </form>
+            </div>
+
+            <table class="gk_default_table gk_th_border_table">
+                <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>제목</th>
+                        <th>작성자</th>
+                        <th>작성일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%  models.comms.forEach((comm, idx) => { %>
+                        <tr>
+                            <th><%= comm['ROWNUM'] %></th>
+                            <td class="comm_title"><a href="/comm_view/<%=comm['BOARD_DOMAIN_ID']%>&<%= comm['BOARD_ID'] %>"><%= comm['TITLE'] %></a></td>
+                            <td><%= comm['USER_ID'] %></td>
+                            <td><%= comm['DATE'] %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table> <!-- comm_table End -->
+            <div class="comm_btn_area">
+                <%
+                    // 로그인 후 세션에 존재하는 userId가 없으면 글쓰기 버튼 노출시키지 않는다.
+                    if(locals.authId){
+                %>
+                <button onclick="location.href='/comm_write/<%= models.comm_name%>'" type="button" title="글쓰기" class="comm_write_btn gk_simple1_btn" ><span>글쓰기</span></button>
+                <%  } %>
+            </div>
+            <!-- 페이징박스 인클루드 -->
+            <% include ../paging %>
+        </div> <!-- comm_contents -->
+    </div> <!-- contents_area End -->
+</div>
+
+<script src="<%=locals.urls.js_path %>/board.js"></script>
+
+
+<% include ../../footer %>
+<% include ../../foot %>

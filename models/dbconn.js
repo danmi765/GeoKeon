@@ -1,5 +1,5 @@
 'use strict';
-const dbconn = require('../db/conn');
+const dbconn = require('../dbconn/conn');
 
 exports.addConn = (req, res) => {
     console.log('/addconn req', req.body);

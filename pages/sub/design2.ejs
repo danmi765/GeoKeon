@@ -1,0 +1,98 @@
+
+<% include ../head %>
+<% include ../header %>
+
+<div role="main" class="contets_wrapper">
+
+    <!-- 썸네일 팝업 -->
+    <div class="design_thumbnail_pop">
+        <div class="design_thumbnail_pop_img_box">
+            <div class="design_thumbnail_pop_close_btn removeitem">닫기</div>
+            <ul class="design_thumbnail_img">
+                <li><img nimg="" /></li>
+                <li><img nimg="" /></li>
+                <li><img nimg="" /></li>
+                <li>이미지가 없습니다.</li>
+            </ul>
+            <ul class="design_thumbnail_cate_btn">
+                <li aim="0">PC</li>
+                <li aim="1">모바일</li>
+                <li aim="2">테블릿</li>
+            </ul>
+            <div class="design_thumbnail_delete_btn">
+                <form action="/designDelOrModi" id="design_del_or_modi_from" method="">
+                    <button type="button" onclick="designDelete()" class="gk_simple2_btn gk_corner_all"><span>삭제</span></button>
+                    <button type="button" onclick="designModify()" class="gk_simple2_btn gk_corner_all"><span>수정</span></button>
+                    <input type="hidden" name="design_id" value="" />
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 본문 -->
+    <h2 class="contents_title"><%= models.page_title%></h2>
+    <div class="contents_area">
+        <div class="design_contents">
+            <div class="design_regi_btn">
+                <button type="button" onclick="location.href='/designWritePage'"  class="gk_simple2_btn gk_corner_all" ><span>디자인등록</span></button>
+            </div>
+            <div>
+                <select name="tap" onchange=businessIdChange()>
+                    <% models.dmoain_list.forEach((dmoain_list, idx) => {  %>
+                    <option value="<%=dmoain_list.BUSINESS_ID%>"><%=dmoain_list.BUSINESS_NAME%></option>
+                    <% }); %>
+                </select>
+            </div>
+            <div class="thumbnail_box">
+
+                <script>
+                    var design_arr = new Object(); // 포트폴리오 json
+                    var tap_length = "<%=models.tap_length%>"; // tap length
+                    var pp_oj = JSON.parse('<%- JSON.stringify(models.designs) %>'); // portpolio json
+                    var pp_length = pp_oj.length;
+
+                    var m; // design_arr depth2의 키값
+                    // 1차 loop
+                    for(var i=1; i < Number(tap_length)+1; i++ ){ 
+                        design_arr[i] = {}; // 자료넣을 json depth 1 생성
+                        $(".thumbnail_box").append("<ul id='tap_"+i+"' class='design_thumbnail close_ul'>");
+                        m = 1; // 초기화
+
+                        // 2차 loop
+                        for(var n=0; n < pp_length; n++){ 
+                            // design_arr의 1depth의 키 값과 business_id가 같은것끼리 묶어서 design_arr depth2에 넣음
+                            if(i == pp_oj[n]["BUSINESS_ID"] ){
+                                design_arr[i][m] = pp_oj[n];
+                                m++; // 증가
+    
+                                var content = 
+                                  '<li>'                                                              
+                                +    '<img class="list_main_img_'+ n +'" ab="'+ n +'" src="" alt="" >'
+                                +    '<div class="design_thumbnail_cover"></div>'
+                                +    '<div class="design_title" ppId="'+ pp_oj[n].PORTPOLIO_ID +'">'+ pp_oj[n].PORTPOLIO_NAME +'</div>'
+                                + '</li> '      ;
+                               
+                                $(".thumbnail_box > ul").eq(i-1).append(content);
+
+                                // 이미지 저장
+                                design_img_list_arr.push(pp_oj[n].PORTPOLIO_IMG.split(","));
+
+                            }
+                        } // 2차 loop End
+                    } // 1차 loop End
+
+                    
+                </script>
+
+            </div>
+            <!-- <div class="design_thumbnail_more_btn"></div> -->
+        </div> <!-- design_contents End -->
+    </div> <!-- contents_area End -->
+
+
+</div>
+<script src="<%=locals.urls.js_path %>/design.js"></script>
+
+<% include ../footer %>
+<% include ../foot %>

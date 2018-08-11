@@ -1,0 +1,139 @@
+<% include ../../head %>
+<% include ../../header %>
+<div role="main" class="contets_wrapper"></div>
+    <h2 class="contents_title"></h2>
+    <div class="contents_area">
+        <div class="comm_contents">
+            <%
+            console.log('models.salt', models.salt);
+
+            if(!models.comms){
+                act = '/comm_write/' + models.comm_name;
+            }else{
+                // ejs 통신
+                // act = '/comm_modify/' + models.comm_name +'&' + models.comms['BOARD_ID'];
+                // Ajax 통신
+                act = '/comm_modify_ajax/' + models.comm_name +'&' + models.comms['BOARD_ID'];
+            }
+            
+            %>
+            <form action="<%=act%>" method="post" name="frm" onsubmit="return chkValidation()">
+                <fieldset>
+                    <table id="comm_write_table">
+                        <tbody>
+                            <tr class="comm_write_pw">
+                                <!-- 가져온 비밀번호 수정하면 서버로 보내 입력된 비밀번호와 일치여부 확인  -->
+                                <th>비밀번호</th>
+                                <td colspan="3">
+                                    <input type="hidden" name="user_id" value="<%= locals.authId%>">
+                                    <input type="password" class="posts_pw_check" name="posts_pw" maxlength="4" value=""/>
+                                </td>
+                            </tr>
+
+                            <tr class="comm_write_title">
+                                <th>제목</th>
+                                <td colspan="3"><input type="text" class="posts_title" name="posts_title" maxlength="20" value="<%=(!models.comms)?'':models.comms['TITLE'] %>"/></td>
+                            </tr>
+
+                            <tr class="comm_write_content">
+                                <td colspan="4" class="posts_textarea"><textarea name="editor1"><%= (!models.comms)?'':models.comms['CONTENT'] %></textarea></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </fieldset>
+                <div class="comm_write_btn_area">
+                    <button type="submit" title="" class="comm_write_wirte_btn gk_simple1_btn" ><span><%=(!models.comms)?'작성':'수정'%></span></button>
+                    <button onclick="location.href='/comm/<%=models.comm_name%>'" type="button" title="취소" class="comm_write_cancel_btn gk_simple1_btn" ><span>취소</span></button>
+                </div>
+            </form>
+        </div> <!-- comm_contents End -->
+    </div> <!-- contents_area End -->
+    <script>
+        /* 게시판 에디터 활성화 */
+        CKEDITOR.replace( 'editor1', {
+            
+            extraPlugins: 'embed,autoembed,uploadimage,image2',
+            
+            /* embed url 삽입 시 실행되는 로직 */
+            embed_provider: '//ckeditor.iframe.ly/api/oembed?url={url}&callback={callback}',
+            
+            /* 업로드 url */
+            filebrowserUploadUrl: '/imgupload',
+
+        });
+
+        /* 작성 잘 되었나 확인하기 */
+        function chkValidation(){
+            if(!confirm('해당 내용으로 게시글 작성하실거에요?')){
+                return false;
+            }
+            var posts_content_html = $('.comm_contents').find('textarea[name="editor1"]').siblings('div').find('iframe').contents().find('body').html();
+            var posts_content_text = $('.comm_contents').find('textarea[name="editor1"]').siblings('div').find('iframe').contents().find('body').text();
+            
+            if(document.frm.posts_pw.value.length == 0){
+                alert('비밀번호가 입력되지 않았습니다.');
+                return false;
+            }else if(document.frm.posts_pw.value.length > 4 || document.frm.posts_pw.value.match(/\d/g).length < 4){
+                alert('비밀번호는 숫자 4자리 로만 입력되어야 합니다.');
+                return false;
+            }
+            
+            if(document.frm.posts_title.value.length == 0){
+                alert('제목이 입력되지 않았습니다.');
+                return false;
+            }
+            if(posts_content_text.length == 0){
+                alert('내용이 입력되지 않았습니다.');
+                return false;
+            }
+            
+            /* (글수정하기) 수정모드일 때에는 Ajax통신을 통하여 게시물 비번을 대조하고, 성공하면 화면을 빠져나가게 한다. */
+            <% if(models.comms){ %>
+                // 암호화 param
+                var board_param = {
+                    posts_title: document.frm.posts_title.value, 
+                    editor1: posts_content_text, 
+                    posts_pw: CryptoJS.AES.encrypt(document.frm.posts_pw.value, '<%= models.salt %>').toString()
+                }
+                console.log('board_pw:', document.frm.posts_pw.value);
+                console.log('board_param:', board_param);
+                // CryptoJS.AES.encrypt(JSON.stringify({posts_pw: document.frm.posts_pw.value}), saltKey).toString();
+                connectToServer('<%=act%>', {user_data: board_param}, 'POST', function(err, res){
+                    if(err){
+                        // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
+                        console.log("서버오류 ---> ", err);
+                        return false;
+                    }
+                    //실패
+                    if(res.error){
+                        /* 
+                            [ res.error.errno ]
+                            1406 ---> Data Too Long
+                            1054 ---> Bad Sql
+                            1062 ---> PK 중복
+                        */
+                        // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
+                        // console.log("DB오류 ---> ", res.error.errno);
+                        alert(res.error);
+                        console.log("DB오류 ---> ", res.error);
+                        return false ;
+                    }
+                    console.log('/<%=act%> result', res);
+                    /* 서버에서 받은 게시판 타입(숫자)를 받아서 redirect하기. */
+                    location.href='/comm/'+res.board_type;
+                });
+                return false;
+            <% }else{ %>
+                // (글쓰기) 암호화
+                document.frm.posts_pw.value = CryptoJS.AES.encrypt(document.frm.posts_pw.value, '<%= models.salt %>').toString()
+            <% } %>
+        } //end chkValidation
+    </script>
+</div>
+
+<script src="<%=locals.urls.js_path %>/board.js"></script>
+
+
+
+<% include ../../footer %>
+<% include ../../foot %>

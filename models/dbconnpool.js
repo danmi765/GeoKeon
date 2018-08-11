@@ -1,5 +1,5 @@
 'use strict';
-const dbconn = require('../db/conn');
+const dbconn = require('../dbconn/conn');
 
 exports.dbpool = (req, res) => {
     dbconn.connPool({db: 'mysql'}, (pool, err)=>{

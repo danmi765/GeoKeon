@@ -1,0 +1,103 @@
+<% include ../head %>
+<% include ../header %>
+
+<div role="main" class="contets_wrapper"></div>
+
+
+
+
+                <h2 class="contents_title"><%= models.page_title%></h2>
+                <div class="contents_area">
+                    <div class="mypage_contents">
+                        <!-- 마이페이지 탭 (내작성글 / 정보수정)-->
+                        <ul class="mypage_contents_menu">
+                            <li><a href="/mypage?lev=1" class="gk_corner_all gk_simple2_btn">내가쓴글</a></li>
+                            <li><a href="/mypage?lev=3&page=1" class="gk_corner_all gk_simple2_btn">내가쓴댓글</a></li>
+                            <li><a href="/mypage?lev=2" class="gk_corner_all gk_simple2_btn">정보변경</a></li>
+                        </ul>
+                        <div class="mypage_local_contents">
+
+                        <% if(models.lev == 1){ %>
+                            <div class="my_post_list"><!-- 내가 작성한 게시글 -->
+                                <table class="gk_th_border_table gk_default_table">
+                                        <thead>
+                                            <tr>
+                                                <th>게시판명</th>
+                                                <th>제목</th>
+                                                <th>작성자</th>
+                                                <th>작성일</th>
+                                                <th>조회수</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <%  models.my_post.forEach((post, idx) => { %>
+                                                <tr>
+                                                    <td><%= post['BOARD_NAME'] %></td>
+                                                    <td class="comm_title"><a href="/comm_view/<%= post['BOARD_ID'] %>" target="_blank"><%= post['TITLE'] %></a></td>
+                                                    <td><%= post['USER_ID'] %></td>
+                                                    <td><%= post['DATE'] %></td>
+                                                    <td><%= post['HITS'] %></td>
+                                                </tr>
+                                            <% }); %>
+                                        </tbody>
+                                    </table> <!-- comm_table End -->
+                            </div>
+                            
+                            <!-- 페이징박스 인클루드 -->
+                            <% include ../board/paging %>
+                            
+                        <% } else if(models.lev == 3){ %>
+
+                            <div class="my_comment_list"><!-- 내가 작성한 댓글 -->
+                            <%  models.my_comment.forEach((post, idx) => { %>
+                                <div class="comm_comment_row" id="<%= post['COMMENT_ID'] %>">
+                                    <div class="comm_comment_writer"><%=post['USER_ID']%></div>
+                                    <div class="comm_comment_date"><%=post['DATE']%></div>
+                                    <div class="comm_comment_content"><%=post['CONTENT']%></div>
+                                    <div class="">원문제목 : '<%=post['TITLE']%>'</div>
+                                </div>
+                            <% }); %>
+                            </div>
+                            
+                            <!-- 페이징박스 인클루드 -->
+                            <% include ../board/paging %>
+
+
+                        <% } else if(models.lev == 2){ %>
+                            <div class="my_info"><!-- 나의 정보 -->
+                                <div>
+                                    <p class="passsword_error_messege">비밀번호를 입력해주세요.</p> 
+                                    <input type="password" name="user_pw" />
+                                </div>
+                                <div><button onclick="return goModiMyInfoPage(joins)" type="button" title="정보수정하기" class="gk_simple1_btn"><span>정보수정</span></button></div>
+                            </div>
+
+                        <% } %>
+
+                        </div> <!-- mypage_local_contents End -->
+                    </div> <!-- mypage_contents End -->
+                </div> <!-- contents_area End -->
+
+
+
+                
+
+<script>
+
+    // 선택된 버튼에 클래스 부여하기 
+    var btn_selected = "<%=models.lev%>";
+
+    switch (btn_selected){
+        case "1" : $(".mypage_contents_menu > li:eq(0) > a").addClass("selected_btn");  ;break;
+        case "3" : $(".mypage_contents_menu > li:eq(1) > a").addClass("selected_btn") ;break;
+        case "2" : $(".mypage_contents_menu > li:eq(2) > a").addClass("selected_btn") ;break;
+    }
+</script>
+
+</div>
+
+<script src="<%=locals.urls.js_path %>/member.js"></script>
+
+
+<% include ../footer %>
+<% include ../foot %>

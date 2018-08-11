@@ -1,0 +1,46 @@
+
+
+        <header class='header_area'>
+            <div class='header_area_wrapper'>
+                <h1 class="header_logo"><a href="/">LOGO</a></h1>
+                <ul class="header_main_menu">
+                    <li><a href='/intro'>소개</a></li>
+                    <li><a href='/design'>디자인</a></li>
+                    <li>
+                        <a href='/comm/1'>커뮤니티</a> <!-- 커뮤니티 클릭하면 공지사항으로  -->
+                        <ul class="header_sub_menu clocking">
+                            <!-- ajax로 게시판 서브메뉴를 가져옴 -->
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="header_local_menu">
+                    <%
+                    if(locals){
+                        console.log('---------------');
+                        console.log('locals.authId:', (locals.authId)?locals.authId:null);
+                        console.log('locals.currentSession:', (locals.authId)?locals[authId]:null);
+                        console.log('locals.sessionStorage:', locals.lastLoginInfo);
+                        console.log('locals.rowsPerPage:', locals.rowsPerPage);
+                        console.log('locals.joins:', locals.joins);
+                        console.log('---------------');
+                    }
+
+                    // 세션 이용 --->  locals.변수명
+                    
+                        // 회원아이디가 존재하지 않으면 or 옛날 세션일 경우 login을 띄우고
+                        if(!locals.authId || (new Date(locals[authId].loginDt) < new Date(locals.lastLoginInfo.loginDt))){
+                    %>
+                        <li><a href="/loginPage">login</a></li>
+
+
+                    <%  // 회원아이디가 존재하면 회원아이디와 logout버튼을 띄운다.
+                        } else{ %>
+
+                        <li><a href="/mypage?lev=1"><%= locals.authId%></a>
+                        <li><a href="/logout">logout</a>
+
+                    <% } %>
+                    <li><a href="/">home</a></li>
+                </ul>
+            </div>
+        </header>

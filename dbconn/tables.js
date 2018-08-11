@@ -1,0 +1,8 @@
+module.exports = {
+    'BOARD': 'BOARD',
+    'BOARD_DOMAIN': 'BOARD_DOMAIN',
+    'BUSINESS_DOMAIN': 'BUSINESS_DOMAIN',
+    'COMMENT': 'COMMENT_INQUIRY',
+    'GK_USERS': 'GK_USERS',
+    'PORTFOLIO': 'PORTFOLIO',
+}

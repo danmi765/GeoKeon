@@ -1,0 +1,59 @@
+
+
+
+<% include ../head %>
+<% include ../header %>
+<div role="main" class="contets_wrapper"></div>
+
+
+<% 
+    if (models.salt) {
+    %>
+    <script>
+        $(window).on("load", function(){            
+            joins = "<%= models.salt %>" ;
+            console.log("joins---> " , joins);
+        });
+
+    </script>
+
+
+<% }
+
+    if(models.find_pw == '1'){  %>
+        <script>
+            alert('비밀번호를 이메일로 발송하였습니다.');
+        </script>
+
+<% }%>
+
+
+                <h2 class="contents_title"><%= models.page_title%></h2>
+                <div class="contents_area">
+                    <div class="login_contents">
+                        <div class="msg_box"></div>
+                        <table>
+                            <tr>
+                                <td><span>id</span></td>
+                                <td><input type="text" maxlength="10" name="user_id" /></td>
+                                <td><button onclick="goLogin(joins)" title="login" class="gk_simple1_btn"><span>login</span></button></td>
+                            </tr>
+                            <tr>
+                                <td><span>password</span></td>
+                                <td><input type="password" maxlength="10" name="user_pw" onkeypress="if(event.keyCode==13) {goLogin(joins); return false;}" /></td>
+                            </tr>
+                        </table>
+                        <ul>
+                            <li><a href="/join">회원가입</a></li>
+                            <li><a href="/findIdPage">아이디찾기</a></li>
+                            <li><a href="findPwPage">비밀번호찾기</a></li>
+                        </ul>
+                    </div>
+                </div> <!-- contents_area End -->
+                
+</div>
+
+<script src="<%=locals.urls.js_path %>/member.js"></script>
+
+<% include ../footer %>
+<% include ../foot %>

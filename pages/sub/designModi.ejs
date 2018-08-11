@@ -1,0 +1,90 @@
+
+<% include ../head %>
+<% include ../header %>
+<div role="main" class="contets_wrapper">
+
+
+    <!-- 본문 -->
+    <h2 class="contents_title"><%= models.page_title%></h2>
+    <div class="contents_area">
+        <div class="design_contents">
+
+            <form action="/designModi" method="post" name="" id="design_img_modify_form" class="design_form" enctype="multipart/form-data" >
+                <table class="design_table">
+                    <fieldset>
+                        <tr>
+                            <td colspan="2" class="design_table_title">포트폴리오 수정하기</td>
+                        </tr>
+                        <tr>
+                            <th>포트폴리오명</th>
+                            <td>
+                                <input type="text" name="design_name" value="<%= models.portpolio.PORTPOLIO_NAME%>" />
+                                <input type="hidden" name="portpolio_id" value="<%= models.portpolio.PORTPOLIO_ID%>" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>업종구분</th>
+                            <td>
+                                <select name="business_num">
+                                    <option vlaue="0">업종선택</option>
+                                    <% models.dmoain_list.forEach((dmoain_list, idx) => {  %>
+                                    <option value="<%=dmoain_list.BUSINESS_ID%>"><%=dmoain_list.BUSINESS_NAME%></option>
+                                    <% }); %>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>PC메인이미지</th>
+                            <td>
+                                <input type="file" name="pc_main" class="design_file_btn" id="design_pc_img_regi_btn" />
+                                <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_pc_img_regi_btn').click();" ><span>찾아보기</span></button>
+                                <span class="upload_file_name_box">이미지가 없습니다.</span>
+                                <input type="hidden" name="pc_origin_name" class="db_origin_name" value="" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>모바일 메인이미지</th>
+                            <td>
+                                <input type="file" name="mobile_main" class="design_file_btn" id="design_mobile_img_regi_btn" />
+                                <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_mobile_img_regi_btn').click();" ><span>찾아보기</span></button>
+                                <span class="upload_file_name_box">이미지가 없습니다.</span>
+                                <input type="hidden" name="mobile_origin_name" class="db_origin_name" value="" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>테블릿 메인이미지</th>
+                            <td>
+                                <input type="file" name="tablet_main" class="design_file_btn" id="design_tablet_img_regi_btn" />
+                                <button type="button" class="file_upload_btn gk_simple2_btn gk_corner_all" onclick="javascript:document.getElementById('design_tablet_img_regi_btn').click();" ><span>찾아보기</span></button>
+                                <span class="upload_file_name_box">이미지가 없습니다.</span>
+                                <input type="hidden" name="tablet_origin_name" class="db_origin_name" value="" />
+                            </td>
+                        </tr>
+                    </fieldset>
+                </table>
+                <button type="button" onclick="designModifySubmit()"  class="gk_simple2_btn gk_corner_all" ><span>저장</span></button>
+            </form>
+            
+        </div> <!-- design_contents End -->
+    </div> <!-- contents_area End -->
+</div>
+
+
+    
+
+<script>
+    /* js파일에 넣어놓으면 문자열로 인식됨 */ 
+    // 업종구분
+    business_number = "<%= models.portpolio.BUSINESS_ID%>";
+    // 이미지
+    db_img = "<%=models.portpolio.PORTPOLIO_IMG%>";
+    var img_arr = db_img.split(",");
+    // 현재 탭 업종번호 
+    tap_num = "<%=models.bisuness_domain_num%>";
+</script>
+
+<script src="<%=locals.urls.js_path %>/design.js"></script>
+
+<% include ../footer %>
+<% include ../foot %>
+            
