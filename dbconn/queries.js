@@ -3,7 +3,8 @@ module.exports = {
         /* 게시글이 하나도 없을 때 처리쿼리 필요 */
         // 'list_comm_board' : `SELECT BOARD.BOARD_ID, BOARD.TITLE, BOARD.CONTENT, BOARD.PASSWORD, BOARD.DATE, BOARD.HITS, BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID FROM BOARD WHERE BOARD_DOMAIN_ID = ? ORDER BY DATE DESC`,
         'get_comm_board_length' : `
-            SELECT COUNT(BOARD_ID) AS CNT FROM BOARD WHERE BOARD.BOARD_DOMAIN_ID = ?
+            SELECT COUNT(BOARD_ID) AS CNT FROM BOARD 
+            WHERE BOARD.BOARD_DOMAIN_ID = ? AND BOARD.?? LIKE ?
         `,
         'list_comm_board' : `
             SELECT 
@@ -81,13 +82,15 @@ module.exports = {
                                             ORDER BY T.ROWNUM DESC`,
         'get_commet_all_cnt_for_user_id' : 'SELECT COUNT(*) AS CNT FROM COMMENT WHERE USER_ID = ? ',
         'get_board_domain_list' : 'SELECT * FROM BOARD_DOMAIN',
-        'get_portpolio_for_portpolio_id' : 'SELECT * FROM PORTPOLIO WHERE PORTPOLIO_ID = ?'
+        'get_portpolio_for_portpolio_id' : 'SELECT * FROM PORTPOLIO WHERE PORTPOLIO_ID = ?',
+        'get_intro' : `SELECT INTRO_ID, INTRO_CONTENT, ADDED_DT, USER_ID FROM INTRO ORDER BY ADDED_DT DESC LIMIT 1`,
     },
     'insert' : {
         'add_board_post' : 'INSERT INTO board (`TITLE`, `CONTENT`, `PASSWORD`, `DATE`, `HITS`, `USER_ID`, `BOARD_DOMAIN_ID`) VALUES (?, ?, ?, ?, ?, ?, ? )',
         'add_user' : 'INSERT INTO GK_USERS (`USER_ID`, `USER_PW`, `USER_NAME`, `USER_PHONE`, `USER_EMAIL`, `JOIN_DATE`, `STATUS`) VALUES (? , ? , ? , ? , ? , ? , ?)',
         'add_comment' : 'INSERT INTO COMMENT (`CONTENT`, `DATE`, `USER_ID`, `BOARD_ID`) VALUES (?, ?, ?, ?)',
-        'add_portpolio' : 'INSERT INTO PORTPOLIO (`PORTPOLIO_IMG`, `PORTPOLIO_NAME`, `BUSINESS_ID`) VALUES (?, ?, ?)'
+        'add_portpolio' : 'INSERT INTO PORTPOLIO (`PORTPOLIO_IMG`, `PORTPOLIO_NAME`, `BUSINESS_ID`) VALUES (?, ?, ?)',
+        'add_intro' : 'INSERT INTO INTRO (`INTRO_CONTENT`, `ADDED_DT`, `USER_ID`) VALUES (?, NOW(), ?)',
     },
     'delete' : {
         'delete_comm_board' : 'DELETE FROM BOARD WHERE BOARD_ID = ? AND PASSWORD = ?',

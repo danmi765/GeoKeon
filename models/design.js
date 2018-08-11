@@ -34,7 +34,7 @@ const dbconn = require('../dbconn/conn');
 const queries = require('../dbconn/queries');
 const tables = require('../dbconn/tables');
 const defaultDB = require('../index');
-const url = require('url');  
+const url = require('url');
 const util = require('../utils/utils');  
 
 // render시 보낼 models

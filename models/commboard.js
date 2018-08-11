@@ -49,8 +49,9 @@ const list = (req, res) => {
             'c' : 'CONTENT'
         },
         search_query = reqQuery.comm_search_text;  /* SQL 검색 관련 변수 */
-    let query_params, query;  /* SQL Query 지정하는 변수 */
-    
+    let query_params, query, query_cnt_params;  /* SQL Query & 파라미터 지정하는 변수 */
+    let query_string;   /* 페이징 링크에 들어갈 쿼리스트링 */
+
     /* 페이징에 쓰일 변수 */
     let pageNo = (reqQuery.page!==undefined)?reqQuery.page:1;
     if(!c_page){
@@ -80,15 +81,24 @@ const list = (req, res) => {
         query_params = [
             commName, search_column[search_type], '%'+search_query+'%', c_page
         ];
+        query_cnt_params = [
+            commName, search_column[search_type], '%'+search_query+'%'
+        ];
+        query_string = `comm_search_text=${search_query}&comm_search_select=${search_type}`;
     }else{  /* 검색분류가 지정 안 되었을 때 */
         query = queries.select.list_comm_board;
         query_params = [
             commName, c_page
         ];
+        query_cnt_params = [
+            commName, search_column['t'], '%%'
+        ];
+        query_string = ''
     }
 
     // 해당 게시판의 총 길이 계산
-    const getTotalCntQuery = dbconn.instance[defaultDB.db].query(queries.select.get_comm_board_length, commName, function (error, totalCnt, fields) {
+    const getTotalCntQuery = dbconn.instance[defaultDB.db].query(queries.select.get_comm_board_length, query_cnt_params, function (error, totalCnt, fields) {
+        console.log('[getTotalCntQuery]actual sql', getTotalCntQuery.sql);
         // 예외처리
         if (error) {
             console.log('[list]error', error);
@@ -120,12 +130,13 @@ const list = (req, res) => {
             if(prev_page == 0){
                 prev_page = "1";
             }
+            /* param : comm_search_text=1234&comm_search_select=t */
             var paging_var = {
                 totalCnt : totalCnt[0].CNT, // 총 게시글 수
                 totalPages : Math.ceil(totalCnt[0].CNT / v_cnt), // 총 페이지 수
                 nowPage : c_page, // 현재 페이지
-                next_url : `/comm/${commName}?page=${next_page}`, // 다음페이지
-                prev_url : `/comm/${commName}?page=${prev_page}`, // 이전페이지
+                next_url : `/comm/${commName}?page=${next_page}&${query_string}`, // 다음페이지
+                prev_url : `/comm/${commName}?page=${prev_page}&${query_string}`, // 이전페이지
                 url : `/comm/${commName}?page=`  //이동 시 사용할 url
             }
             
