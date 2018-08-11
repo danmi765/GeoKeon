@@ -1,11 +1,7 @@
 
 var tap_num=0; // 탭번호 
 
-
- 
 $(".thumbnail_box > ul").hide(); // 썸네일ul모두제거
-
-
 
 businessIdChange(tap_num); // 셀렉트박스 바꾸면실행
 
@@ -37,13 +33,19 @@ for(var i=0; i<ul_length; i++){
 
 designListPaging(1); // 페이징
 
-// paging
+/**
+ * @author 배건희
+ * @description 디자인페이지 스크립트 페이징 함수
+ * @param {string} n page number
+ * @param {string} btn prev or next button
+ */
 function designListPaging(n, btn){
 
+    
+    var open_ul_id = $(".open_ul").attr("id");  // 현재 보여지는 ul
+    var open_ul_li = $("#"+ open_ul_id).children("li") ; // 현재 보여지는 ul의 자식 li
 
-    var open_ul_id = $(".open_ul").attr("id");
-    var open_ul_li = $("#"+ open_ul_id).children("li") ;
-
+    // 페이지번호가 없을 경우, prev/next버튼이 선택된 경우
     if(n == null){
         if(btn == 'prev'){
             n = curr_page -1;
@@ -55,11 +57,11 @@ function designListPaging(n, btn){
         }
     }
     
+    // 
     $(".page_num").removeClass("seleted_page_num");
     $(".page_num_"+n).addClass("seleted_page_num");
 
-
-    curr_page = n;
+    curr_page = n; // 현재 페이지번호 저장
 
     var start_num = (n-1) * 9 ; 
     var end_num = n * 9 ;
@@ -79,7 +81,13 @@ function designListPaging(n, btn){
 }
 
 // select박스 선택 시 해당 썸네일공개
+/**
+ * @author 배건희
+ * @description 디자인 페이지 select박스 변경 시 사용되는 함수.
+ * @param {string} n 선택된 탭번호
+ */
 function businessIdChange(n){
+    // 선택된 탭번호가 없을 경우
     if(!n){
         tap_num = $("select[name=tap]").val();
     }else{
@@ -103,8 +111,6 @@ function businessIdChange(n){
         design_ul.html("<li>");
         design_ul.children("li").append("디자인이 없습니다.");
     }
-
-
 }
 
 // 수정페이지 업종select 선택을위한 변수
