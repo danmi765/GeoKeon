@@ -4,5 +4,6 @@ module.exports = {
     'BUSINESS_DOMAIN': 'BUSINESS_DOMAIN',
     'COMMENT': 'COMMENT_INQUIRY',
     'GK_USERS': 'GK_USERS',
-    'PORTFOLIO': 'PORTFOLIO',
+    'PORTPOLIO': 'PORTPOLIO',
+    'INTRO': 'INTRO',
 }

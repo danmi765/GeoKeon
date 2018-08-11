@@ -5,19 +5,26 @@
     <h2 class="contents_title"><%= models.page_title %></h2>
     <div class="contents_area">
         <div class="intro_contents">
-            <div class="">
+            <div class="intro-align-right">
+                <%
+                    // 로그인 후 세션에 존재하는 userId가 없으면 글쓰기 버튼 노출시키지 않는다.
+                    console.log('[intro.ejs] locals', locals);
+                    if(locals.authId){
+                %>
                 <button type="button" class="gk_simple2_btn gk_corner_all" id="intro-change-modify-mode">
                     <span>수정하기</span>
                 </button>
                 <button type="button" class="gk_simple2_btn gk_corner_all" id="intro-finish-modify-mode">
                     <span>내용 확인하기</span>
                 </button>
+                <%  } %>
             </div>
             <div class="intro-contents-area">
-                <img src="<%=locals.urls.img_path %>pop5.png" alt="" />
+                <!-- <img src="<%=locals.urls.img_path %>pop5.png" alt="" /> -->
+                <%- models.data.INTRO_CONTENT %>
             </div>
             <div class="gk-modify-box gk-clocking">
-                <textarea name="editor_intro"></textarea>
+                <textarea name="editor_intro"><%- models.data.INTRO_CONTENT %></textarea>
                 <div class="intro-btn-grp">
                     <button type="button" class="gk_simple2_btn gk_corner_all" id="intro-submit-modify-mode">
                         <span>제출</span>
@@ -59,13 +66,21 @@
     /* 소개 페이지 내용 제출 */
     $('#intro-submit-modify-mode').off('click').on('click', function(e){
         var posts_content_html = $('.gk-modify-box').find('textarea[name="editor_intro"]').siblings('div').find('iframe').contents().find('body').html();
-        connectToServer('/submit_intro', {contents: posts_content_html}, 'POST', function(err, res){
+        var send_param = {
+            contents: posts_content_html
+        };
+        connectToServer('/submit_intro', send_param, 'POST', function(err, res){
             if(err){
                 // alert('서버에서 에러가 발생했습니다. 잠시 후에 다시 시도 해 주세요.');
                 console.log("서버오류 ---> ", err);
                 return false;
             }
-            console.log('write result', result)
+            console.log('write res', res);
+            if (res.affectedRows == 0){
+                alert('내용 등록에 실패하였습니다.');
+            } else {
+                location.href = 'intro';
+            }
         });
     })
 </script>
