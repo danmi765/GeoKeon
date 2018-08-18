@@ -35,3 +35,5 @@ legend{text-indent: -9999em;position:absolute;}
 button{background:none}
 a:link, a:visited{text-decoration: none;}
 .overflow_hidden_item{overflow:hidden;}
+/* 숨기기 */
+.gk-clocking { display: none; }
