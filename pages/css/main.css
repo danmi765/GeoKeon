@@ -346,9 +346,9 @@
 /* Tablets, Ipads (landscape) */
 @media (min-width: 768px) and (max-width: 1024px) and (orientation: landscape) {
 }
-/* Low Resolution Tablets, Mobiles (Landscape) */
-@media (min-width: 481px) and (max-width: 767px) {
-}
 /* Most of the Smartphones Mobiles (Portrait) */
 @media (min-width: 320px) and (max-width: 480px) {
+}
+/* Low Resolution Tablets, Mobiles (Landscape) */
+@media (min-width: 481px) and (max-width: 767px) {
 }
