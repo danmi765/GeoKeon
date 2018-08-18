@@ -564,6 +564,25 @@ exports.modifyComment = function(req, res){
         });
 }
 
+const latest_list = function(board_id, callback){
+    dbconn.instance[defaultDB.db].query(queries.select.get_board_latest, [board_id, board_id], function (error, results, fields) {
+        if (error){
+            console.log('[loadcommlist]error', error);
+            return res.send({'error': error});
+        }
+        
+        let dateFormat = results.map((data, idx) => {
+            return { 
+                ...data, 
+                DATE : getFormmatedDt(data['DATE']).date
+            }
+        });
+        
+        callback(dateFormat);
+    });
+}
+
 /* EXPORT AREA */
 exports.list = list;
 exports.listComment = listComment;
+exports.latest_list = latest_list;
