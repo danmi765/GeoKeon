@@ -1,5 +1,6 @@
 module.exports = {
     'select' : {
+        'get_board_latest':"select a.*, b.*  from board as a, (select board_name from  board_domain where board_domain_id = ?) as b where board_domain_id = ? order by date desc limit 0,3;",
         /* 게시글이 하나도 없을 때 처리쿼리 필요 */
         // 'list_comm_board' : `SELECT BOARD.BOARD_ID, BOARD.TITLE, BOARD.CONTENT, BOARD.PASSWORD, BOARD.DATE, BOARD.HITS, BOARD.USER_ID, BOARD.BOARD_DOMAIN_ID FROM BOARD WHERE BOARD_DOMAIN_ID = ? ORDER BY DATE DESC`,
         'get_comm_board_length' : `

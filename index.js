@@ -9,6 +9,7 @@ const defaultDB = 'mysql';  // 기본 Database 종류 정의. 해당 변수는 �
 const session = require('express-session');
 const { getSessionStorage, setSessionStorage } = require('./utils/sessionStorage');
 const queries = require('./dbconn/queries');
+const commboard = require('./models/commboard');
 // const fs = require('fs');
 // const multer = require('multer');
 // const uploadSetting = multer({dest:"pages/img/upload/"});
@@ -60,7 +61,15 @@ app.set('view engine', 'ejs');  // set the view engine to ejs
 
 // [라우팅] GET index
 app.get('/', function(req, res) {
-    res.render('sub/main', { pages : 'main.ejs', models : { title : '메인' }});
+
+        commboard.latest_list('1', function(results){
+
+            console.log("results-->", results);
+            res.render('sub/main', { pages : 'main.ejs', models : { title : '메인', latest: results }});
+
+        });
+        
+
 });
 // [라우팅] POST error: Ajax통신 시 에러떴을 때 내뱉는 에러 페이지
 app.post('/error', function(req, res) {
