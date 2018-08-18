@@ -23,11 +23,14 @@ if(queryError == "f" ){
  * @author 배건희
  * @description 서브메뉴 드롭다운
  */
+var ul_height, height;
 $(".header_main_menu > li > a, .header_sub_menu").hover(function(e){
-    $(".header_area_wrapper").stop().animate({"height" : "175px"}, 400, function(){});
+    ul_height = $(".header_sub_menu").height();
+    height = Number(ul_height)+50 ;
+    $(".header_area_wrapper").stop().animate({"height" : height+"px"}, 400, function(){});
     $(".header_sub_menu").removeClass("gk-clocking");
 }, function(){
-    $(".header_area_wrapper").stop().animate({"height" : "70px"}, 400, function(){});
+    $(".header_area_wrapper").stop().animate({"height" : "50px"}, 400, function(){});
     $(".header_sub_menu").addClass("gk-clocking");
 });
 

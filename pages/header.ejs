@@ -30,7 +30,7 @@
                         // 회원아이디가 존재하지 않으면 or 옛날 세션일 경우 login을 띄우고
                         if(!locals.authId || (new Date(locals[authId].loginDt) < new Date(locals.lastLoginInfo.loginDt))){
                     %>
-                        <li><a href="/loginPage">login</a></li>
+                       <li class="head_login_btn"><a href="/loginPage"><i class="fas fa-user"></i></a></li>
 
 
                     <%  // 회원아이디가 존재하면 회원아이디와 logout버튼을 띄운다.
@@ -40,7 +40,6 @@
                         <li><a href="/logout">logout</a>
 
                     <% } %>
-                    <li><a href="/">home</a></li>
                 </ul>
             </div>
         </header>
