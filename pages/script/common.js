@@ -26,11 +26,11 @@ if(queryError == "f" ){
 var ul_height, height;
 $(".header_main_menu > li > a, .header_sub_menu").hover(function(e){
     ul_height = $(".header_sub_menu").height();
-    height = Number(ul_height)+50 ;
+    height = Number(ul_height)+70 ;
     $(".header_area_wrapper").stop().animate({"height" : height+"px"}, 400, function(){});
     $(".header_sub_menu").removeClass("gk-clocking");
 }, function(){
-    $(".header_area_wrapper").stop().animate({"height" : "50px"}, 400, function(){});
+    $(".header_area_wrapper").stop().animate({"height" : "70px"}, 400, function(){});
     $(".header_sub_menu").addClass("gk-clocking");
 });
 

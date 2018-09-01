@@ -21,7 +21,18 @@
                 </ul>
             </div>
             <div class="main_contents_wrapper">
-                <% include ../board/list/latest %>
+                <div class="latest_wrap_box">
+                    <%- include('../board/list/latest', {num:5}); %>
+                </div>
+                <div class="design_thumb_wrpa_box">
+                    <div class="design_thumb_box">
+                        <ul>
+                            <li>
+                                <a href="#"><img src="" alt="" /></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
             </div> <!-- main_contents_wrapper End -->
         </div><!-- /end .contets_wrapper -->
 <% include ../footer %>
