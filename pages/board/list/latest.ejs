@@ -2,10 +2,14 @@
     <p><%=models.latest[0].board_name%></p>
     <p><a href="/comm/<%=models.latest[0].board_domain_id%>">+</a></p>
     <ul>
-        <%  models.latest.forEach((latest, idx) => { %>
-        <li><a href="/comm_view/<%=latest['BOARD_DOMAIN_ID']%>&<%=latest['BOARD_ID']%>"><%=latest['TITLE']%></a></li>
-        <li><%=latest['DATE']%></li>
-        <li><%=latest['USER_ID']%></li>
-        <% }); %>
+        <%  models.latest.forEach((latest, idx) => { 
+            if(idx+1 <= num){%>
+        <li>   
+            <p><a href="/comm_view/<%=latest['BOARD_DOMAIN_ID']%>&<%=latest['BOARD_ID']%>"><%=latest['TITLE']%></a></p>
+            <p><%=latest['USER_ID']%></p>
+            <p><%=latest['DATE']%></p>
+        </li>
+        <% }
+            });%>
     </ul>
 </div>
