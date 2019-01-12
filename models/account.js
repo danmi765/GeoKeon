@@ -11,7 +11,7 @@ const CryptoJS = require("crypto-js");
 const randomstring = require("randomstring"); // 비밀번호 생성을 위한 랜덤문자열 
 const nodemailer = require('nodemailer'); // 비밀번호 이메일 발송
 const split = require('node-split').split;
-
+require('dotenv').config();
 
 // 로그인
 exports.loginPage = function(req, res){
@@ -224,13 +224,13 @@ exports.findPw = function(req, res){
             var transporter = nodemailer.createTransport({              
                 service: 'Gmail',
                 auth: {
-                    user: 'bizentrotspark@gmail.com',
-                    pass: 'geokeon2018'
+                    user: process.env.ADMIN_MAIL_ADDR,
+                    pass: process.env.ADMIN_MAIL_PW,
                 }
             });
 
             var mailOptions = {  
-                from: '관리자 <bizentrotspark@gmail.com>',
+                from: `관리자 <${process.env.ADMIN_MAIL_ADDR}>`,
                 to: results[0].USER_EMAIL,
                 subject: '새로운 비밀번호를 발송하였습니다.',
                 text: '새로운 비밀번호는 [ ' + new_password + ' ]입니다. 로그인 후 비밀번호를 변경해 주세요.'
