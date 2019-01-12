@@ -217,7 +217,7 @@ exports.findPw = function(req, res){
             var new_password = 
                 randomstring.generate({
                     length: 10,
-                    charset: 'geokeon8991'
+                    charset: process.env.RANDOM_CHARSET,
                 });
 
             // 사용자  email로 전송
